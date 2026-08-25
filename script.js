@@ -434,6 +434,23 @@ function updatePresence(d) {
             if (timeEl) timeEl.textContent = "";
         }
         
+        // Buttons
+        const buttonsContainer = document.getElementById('rp-buttons');
+        if (gameActivity.buttons && gameActivity.buttons.length > 0) {
+            if (buttonsContainer) {
+                buttonsContainer.classList.remove('hidden');
+                buttonsContainer.innerHTML = '';
+                gameActivity.buttons.slice(0, 2).forEach(btnText => {
+                    const btn = document.createElement('div');
+                    btn.className = 'rp-button';
+                    btn.textContent = btnText;
+                    buttonsContainer.appendChild(btn);
+                });
+            }
+        } else {
+            if (buttonsContainer) buttonsContainer.classList.add('hidden');
+        }
+        
     } else {
         // No Activity -> Hide Card
         activityCard.classList.add('hidden');
