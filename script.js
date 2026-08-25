@@ -12,6 +12,10 @@ const bgmCurrent = document.getElementById('bgm-current');
 const bgmDuration = document.getElementById('bgm-duration');
 const bgmProgressFill = document.getElementById('bgm-progress-fill');
 const bgmProgressContainer = document.getElementById('bgm-progress-container');
+const volumeSlider = document.getElementById('bgm-volume');
+const visualizerCanvas = document.getElementById('audio-visualizer');
+const visCtx = visualizerCanvas.getContext('2d');
+let audioContext, analyser, source, dataArray;
 
 function formatTime(seconds) {
     if (isNaN(seconds)) return "0:00";
@@ -24,8 +28,23 @@ entryScreen.addEventListener('click', () => {
     entryScreen.classList.add('hidden');
     mainContent.classList.remove('hidden');
     bgmPlayer.classList.add('visible', 'playing');
-    audio.volume = 0.3;
-    audio.play().catch(e => console.log("Audio play blocked by browser", e));
+    audio.volume = volumeSlider.value;
+    
+    // Init Audio Visualizer
+    if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        analyser = audioContext.createAnalyser();
+        source = audioContext.createMediaElementSource(audio);
+        source.connect(analyser);
+        analyser.connect(audioContext.destination);
+        analyser.fftSize = 64;
+        const bufferLength = analyser.frequencyBinCount;
+        dataArray = new Uint8Array(bufferLength);
+        drawVisualizer();
+    }
+    if (audioContext.state === 'suspended') audioContext.resume();
+    
+    audio.play().catch(e => console.log("Audio play blocked", e));
 });
 
 bgmPlayPause.addEventListener('click', () => {
@@ -64,6 +83,36 @@ bgmProgressContainer.addEventListener('click', (e) => {
     const percent = (e.clientX - rect.left) / rect.width;
     audio.currentTime = percent * audio.duration;
 });
+
+volumeSlider.addEventListener('input', (e) => {
+    audio.volume = e.target.value;
+    audio.muted = e.target.value == 0;
+    if(audio.muted) bgmMute.classList.replace('fa-volume-high', 'fa-volume-xmark');
+    else bgmMute.classList.replace('fa-volume-xmark', 'fa-volume-high');
+});
+
+function drawVisualizer() {
+    requestAnimationFrame(drawVisualizer);
+    if(!analyser) return;
+    
+    // Resize canvas dynamically to match CSS size
+    visualizerCanvas.width = visualizerCanvas.clientWidth;
+    visualizerCanvas.height = visualizerCanvas.clientHeight;
+    
+    analyser.getByteFrequencyData(dataArray);
+    visCtx.clearRect(0, 0, visualizerCanvas.width, visualizerCanvas.height);
+    
+    const barWidth = (visualizerCanvas.width / dataArray.length) * 1.5;
+    let barHeight;
+    let x = 0;
+    
+    for(let i = 0; i < dataArray.length; i++) {
+        barHeight = dataArray[i] / 2;
+        visCtx.fillStyle = '#b4befe';
+        visCtx.fillRect(x, visualizerCanvas.height - barHeight, barWidth, barHeight);
+        x += barWidth + 1;
+    }
+}
 
 // --- Hacker Text Scramble Effect ---
 const quotes = [
@@ -134,63 +183,92 @@ document.addEventListener('mouseleave', () => {
     setTimeout(() => cardTilt.style.transition = 'none', 500);
 });
 
-// --- Mouse Canvas Trail (Ribbon/Stars) ---
+// --- Custom Cursor ---
+const cursorDot = document.getElementById('cursor-dot');
+const cursorRing = document.getElementById('cursor-ring');
+let mouseX = 0, mouseY = 0;
+let ringX = 0, ringY = 0;
+
+window.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    cursorDot.style.left = `${mouseX}px`;
+    cursorDot.style.top = `${mouseY}px`;
+});
+
+function animateCursor() {
+    // Lerp (smooth follow)
+    ringX += (mouseX - ringX) * 0.15;
+    ringY += (mouseY - ringY) * 0.15;
+    cursorRing.style.left = `${ringX}px`;
+    cursorRing.style.top = `${ringY}px`;
+    requestAnimationFrame(animateCursor);
+}
+animateCursor();
+
+// --- Sakura Particles ---
 const canvas = document.getElementById('mouse-canvas');
 const ctx = canvas.getContext('2d');
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-let particlesArray = [];
-const mouse = { x: null, y: null };
+let sakuraArray = [];
+for (let i = 0; i < 40; i++) {
+    sakuraArray.push(new Sakura());
+}
 
-window.addEventListener('mousemove', (e) => {
-    mouse.x = e.x;
-    mouse.y = e.y;
-    for (let i = 0; i < 2; i++) {
-        particlesArray.push(new Particle());
-    }
-});
 window.addEventListener('resize', () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 });
 
-class Particle {
-    constructor() {
-        this.x = mouse.x;
-        this.y = mouse.y;
-        this.size = Math.random() * 3 + 1;
-        this.speedX = Math.random() * 3 - 1.5;
-        this.speedY = Math.random() * 3 - 1.5;
-        // Lavender & Blue hues
-        this.color = Math.random() > 0.5 ? '#b4befe' : '#89b4fa';
-    }
-    update() {
-        this.x += this.speedX;
-        this.y += this.speedY;
-        if (this.size > 0.1) this.size -= 0.05;
-    }
-    draw() {
-        ctx.fillStyle = this.color;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill();
+function Sakura() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height - canvas.height;
+    this.size = Math.random() * 3 + 2;
+    this.speedY = Math.random() * 1 + 0.5;
+    this.speedX = Math.random() * 2 - 1;
+    this.angle = Math.random() * 360;
+    this.spin = Math.random() * 0.05 - 0.025;
+    // Sakura petal colors (red/pink/white)
+    const colors = ['#f38ba8', '#f5c2e7', '#ffffff'];
+    this.color = colors[Math.floor(Math.random() * colors.length)];
+}
+
+Sakura.prototype.update = function() {
+    this.y += this.speedY;
+    this.x += this.speedX + Math.sin(this.angle) * 0.5;
+    this.angle += this.spin;
+    
+    if (this.y > canvas.height) {
+        this.y = -10;
+        this.x = Math.random() * canvas.width;
     }
 }
 
-function animateCanvas() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    for (let i = 0; i < particlesArray.length; i++) {
-        particlesArray[i].update();
-        particlesArray[i].draw();
-        if (particlesArray[i].size <= 0.1) {
-            particlesArray.splice(i, 1);
-            i--;
-        }
-    }
-    requestAnimationFrame(animateCanvas);
+Sakura.prototype.draw = function() {
+    ctx.save();
+    ctx.translate(this.x, this.y);
+    ctx.rotate(this.angle);
+    ctx.fillStyle = this.color;
+    ctx.beginPath();
+    // Draw a petal shape
+    ctx.moveTo(0, 0);
+    ctx.bezierCurveTo(-this.size, -this.size, -this.size, this.size, 0, this.size);
+    ctx.bezierCurveTo(this.size, this.size, this.size, -this.size, 0, 0);
+    ctx.fill();
+    ctx.restore();
 }
-animateCanvas();
+
+function animateSakura() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (let i = 0; i < sakuraArray.length; i++) {
+        sakuraArray[i].update();
+        sakuraArray[i].draw();
+    }
+    requestAnimationFrame(animateSakura);
+}
+animateSakura();
 
 // --- Lanyard API ---
 const statusColors = { online: '#a6da95', idle: '#f9e2af', dnd: '#f38ba8', offline: '#a6adc8' };

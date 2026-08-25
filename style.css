@@ -25,7 +25,37 @@ body {
     height: 100vh; width: 100vw;
     overflow: hidden;
     user-select: none;
-    cursor: default; /* Eboy style usually disables selecting */
+    cursor: none; /* Custom Cursor */
+}
+
+/* =========================================
+   CUSTOM CURSOR
+========================================= */
+#cursor-dot {
+    position: fixed; top: 0; left: 0;
+    width: 6px; height: 6px;
+    background: var(--c-sapphire);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 10000;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px var(--c-sapphire);
+}
+#cursor-ring {
+    position: fixed; top: 0; left: 0;
+    width: 30px; height: 30px;
+    border: 2px solid rgba(116, 199, 236, 0.4);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: width 0.2s, height 0.2s, border-color 0.2s;
+}
+/* When hovering over clickable things */
+a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
+    width: 50px; height: 50px;
+    border-color: var(--c-lavender);
+    background: rgba(180, 190, 254, 0.1);
 }
 
 /* =========================================
@@ -354,28 +384,33 @@ body {
 ========================================= */
 .bgm-player {
     position: absolute;
-    bottom: 30px; left: 30px;
+    bottom: 25px; left: 50%;
     z-index: 50;
-    background: rgba(30, 30, 46, 0.6);
+    background: rgba(30, 30, 46, 0.7);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--border-color);
-    border-radius: 50px;
-    padding: 8px 20px 8px 8px;
+    border-radius: 20px;
+    padding: 12px 25px 12px 12px;
     display: flex; align-items: center; gap: 15px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    opacity: 0; transition: opacity 1s ease, transform 0.3s ease;
-    pointer-events: none; /* hidden until entered */
+    opacity: 0; transition: opacity 1s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    pointer-events: none;
+    transform: translateX(-50%) translateY(20px);
+    width: 450px; max-width: 90vw;
+    overflow: hidden; /* For visualizer */
 }
 .bgm-player.visible {
     opacity: 1; pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
 }
-.bgm-player:hover { transform: scale(1.05); }
+.bgm-player:hover { transform: translateX(-50%) scale(1.02); }
 
 .bgm-cover {
-    width: 40px; height: 40px;
+    width: 45px; height: 45px;
     border-radius: 50%; position: relative;
-    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    z-index: 2;
 }
 .bgm-spin {
     width: 100%; height: 100%;
@@ -392,7 +427,7 @@ body {
     border-radius: 50%;
 }
 
-.bgm-info { display: flex; flex-direction: column; justify-content: center; min-width: 150px; }
+.bgm-info { display: flex; flex-direction: column; justify-content: center; flex: 1; z-index: 2; }
 .bgm-title-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
 .bgm-title {
     font-size: 0.8rem; font-weight: 700; color: #fff;
@@ -407,6 +442,19 @@ body {
 }
 .bgm-controls i:hover { color: var(--c-lavender); }
 
+.volume-slider {
+    -webkit-appearance: none;
+    width: 60px; height: 4px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+    outline: none; cursor: pointer;
+}
+.volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 10px; height: 10px;
+    border-radius: 50%; background: var(--c-lavender);
+}
+
 .bgm-timeline { display: flex; align-items: center; gap: 8px; width: 100%; }
 .bgm-time { font-size: 0.65rem; color: var(--text-muted); font-variant-numeric: tabular-nums; }
 .bgm-progress-bar {
@@ -417,5 +465,14 @@ body {
 .bgm-progress-fill {
     width: 0%; height: 100%; background: var(--c-lavender);
     border-radius: 2px; transition: width 0.1s linear;
+}
+
+#audio-visualizer {
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 1;
+    opacity: 0.4;
+    pointer-events: none;
 }
 

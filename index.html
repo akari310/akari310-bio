@@ -13,7 +13,11 @@
     <div class="bg-layer" style="background-image: url('bg.jpg');"></div>
     <div class="grid-overlay"></div>
 
-    <!-- Mouse Canvas -->
+    <!-- Custom Cursor -->
+    <div id="cursor-dot"></div>
+    <div id="cursor-ring"></div>
+
+    <!-- Mouse Canvas Trail -->
     <canvas id="mouse-canvas"></canvas>
 
     <!-- Entry Screen -->
@@ -37,6 +41,7 @@
                 <div class="bgm-controls">
                     <i class="fa-solid fa-pause" id="bgm-play-pause"></i>
                     <i class="fa-solid fa-volume-high" id="bgm-mute"></i>
+                    <input type="range" id="bgm-volume" min="0" max="1" step="0.01" value="0.3" class="volume-slider">
                 </div>
             </div>
             <div class="bgm-timeline">
@@ -47,6 +52,8 @@
                 <span class="bgm-time" id="bgm-duration">0:00</span>
             </div>
         </div>
+        <!-- Audio Visualizer Canvas -->
+        <canvas id="audio-visualizer"></canvas>
     </div>
 
     <!-- Main Content -->
