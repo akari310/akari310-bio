@@ -173,15 +173,17 @@ updateViews();
 const cardTilt = document.getElementById('card');
 document.addEventListener('mousemove', (e) => {
     if (mainContent.classList.contains('hidden')) return;
-    const xAxis = (window.innerWidth / 2 - e.pageX) / 40;
-    const yAxis = (window.innerHeight / 2 - e.pageY) / 40;
-    cardTilt.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg) translateZ(20px)`;
+    const centerX = window.innerWidth / 2;
+    const centerY = window.innerHeight / 2;
+    const xAxis = (centerX - e.pageX) / 40;
+    const yAxis = (centerY - e.pageY) / 40;
+    cardTilt.style.transform = `perspective(1000px) rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
 });
 
 // Reset tilt on mouseleave
 document.addEventListener('mouseleave', () => {
     cardTilt.style.transition = 'transform 0.5s ease';
-    cardTilt.style.transform = `rotateY(0deg) rotateX(0deg) translateZ(0px)`;
+    cardTilt.style.transform = `perspective(1000px) rotateY(0deg) rotateX(0deg) translateZ(0px)`;
     setTimeout(() => cardTilt.style.transition = 'none', 500);
 });
 
