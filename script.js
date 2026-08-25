@@ -364,6 +364,14 @@ function updatePresence(d) {
         
         // Large Image
         const lImg = document.getElementById('rp-large-img');
+        lImg.onerror = function() {
+            if (gameActivity.application_id && !this.src.includes('dcdn.dstn.to')) {
+                this.src = `https://dcdn.dstn.to/app-icons/${gameActivity.application_id}?size=256`;
+            } else if (this.src !== av) {
+                this.src = av;
+            }
+        };
+
         if (gameActivity.assets?.large_image) {
             let assetId = gameActivity.assets.large_image;
             if (assetId.startsWith('mp:external/')) {
@@ -379,6 +387,8 @@ function updatePresence(d) {
         
         // Small Image
         const sImg = document.getElementById('rp-small-img');
+        sImg.onerror = function() { this.classList.add('hidden'); };
+        
         if (gameActivity.assets?.small_image) {
             sImg.classList.remove('hidden');
             let sAssetId = gameActivity.assets.small_image;
@@ -394,17 +404,29 @@ function updatePresence(d) {
         // Timer
         if (window.rpInterval) clearInterval(window.rpInterval);
         const timeEl = document.getElementById('rp-time');
-        if (gameActivity.timestamps?.start) {
-            const startMs = gameActivity.timestamps.start;
+        
+        if (gameActivity.timestamps?.end || gameActivity.timestamps?.start) {
+            const hasEnd = !!gameActivity.timestamps?.end;
+            const targetMs = hasEnd ? gameActivity.timestamps.end : gameActivity.timestamps.start;
+            
             const updateTime = () => {
-                const diff = Math.floor((Date.now() - startMs) / 1000);
-                const h = Math.floor(diff / 3600);
-                const m = Math.floor((diff % 3600) / 60);
-                const s = diff % 60;
+                let diffSeconds = 0;
+                if (hasEnd) {
+                    diffSeconds = Math.max(0, Math.floor((targetMs - Date.now()) / 1000));
+                } else {
+                    diffSeconds = Math.max(0, Math.floor((Date.now() - targetMs) / 1000));
+                }
+                
+                const h = Math.floor(diffSeconds / 3600);
+                const m = Math.floor((diffSeconds % 3600) / 60);
+                const s = diffSeconds % 60;
                 let txt = '';
                 if (h > 0) txt += `${h}:`;
                 txt += `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
-                if (timeEl) timeEl.textContent = `${txt} elapsed`;
+                
+                if (timeEl) {
+                    timeEl.textContent = hasEnd ? `${txt} left` : `${txt} elapsed`;
+                }
             };
             updateTime();
             window.rpInterval = setInterval(updateTime, 1000);
