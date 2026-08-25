@@ -329,8 +329,8 @@ function updatePresence(d) {
     const spotifyBox = document.getElementById('spotify-box');
     const gameBox = document.getElementById('game-box');
     
-    // Find a game/app activity
-    const gameActivity = d.activities?.find(a => a.type === 0 || a.type === 1 || a.type === 3);
+    // Find a game/app activity (ignore Custom Status type 4)
+    const gameActivity = d.activities?.find(a => a.type !== 4);
 
     if (d.spotify) {
         // Show Spotify
@@ -348,7 +348,17 @@ function updatePresence(d) {
         gameBox.classList.remove('hidden');
         spotifyBox.classList.add('hidden');
         
-        document.getElementById('rp-name').textContent = gameActivity.name || "Unknown Game";
+        // Dynamic Header based on Activity Type
+        const rpHeader = document.getElementById('rp-header');
+        let headerHTML = '<i class="fa-solid fa-gamepad"></i> PLAYING A GAME';
+        if (gameActivity.type === 1) headerHTML = '<i class="fa-solid fa-video"></i> STREAMING';
+        else if (gameActivity.type === 2) headerHTML = '<i class="fa-solid fa-music"></i> LISTENING TO MUSIC';
+        else if (gameActivity.type === 3) headerHTML = '<i class="fa-solid fa-tv"></i> WATCHING';
+        else if (gameActivity.type === 5) headerHTML = '<i class="fa-solid fa-trophy"></i> COMPETING';
+        
+        rpHeader.innerHTML = headerHTML;
+        
+        document.getElementById('rp-name').textContent = gameActivity.name || "Unknown";
         document.getElementById('rp-details').textContent = gameActivity.details || "";
         document.getElementById('rp-state').textContent = gameActivity.state || "";
         
