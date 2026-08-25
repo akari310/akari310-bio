@@ -115,7 +115,10 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     display: flex; flex-direction: column; justify-content: center;
     min-width: 0;
 }
-.time-elapsed { margin-top: 4px; font-variant-numeric: tabular-nums; }
+.time-elapsed {
+    margin-top: 4px; font-variant-numeric: tabular-nums;
+    font-size: 0.8rem; color: var(--text-muted);
+}
 
 .rp-buttons {
     display: flex; gap: 8px; margin-top: 12px; width: 100%;
@@ -128,7 +131,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     border-radius: 6px;
     padding: 6px 10px;
     color: #fff; font-size: 0.75rem; font-weight: 600;
-    text-align: center; cursor: not-allowed;
+    text-align: center; cursor: pointer; text-decoration: none;
     transition: background 0.2s;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }

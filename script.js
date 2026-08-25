@@ -441,9 +441,25 @@ function updatePresence(d) {
                 buttonsContainer.classList.remove('hidden');
                 buttonsContainer.innerHTML = '';
                 gameActivity.buttons.slice(0, 2).forEach(btnText => {
-                    const btn = document.createElement('div');
+                    const btn = document.createElement('a');
                     btn.className = 'rp-button';
                     btn.textContent = btnText;
+                    btn.target = "_blank";
+                    
+                    let url = null;
+                    const textLower = btnText.toLowerCase();
+                    if (textLower.includes("listen") || textLower.includes("play") || textLower.includes("watch")) {
+                        url = gameActivity.details_url || gameActivity.state_url;
+                    } else if (textLower.includes("artist") || textLower.includes("channel") || textLower.includes("creator")) {
+                        url = gameActivity.state_url || gameActivity.details_url;
+                    }
+                    
+                    if (url) {
+                        btn.href = url;
+                    } else {
+                        btn.onclick = () => alert("This button's link is hidden by Discord API.");
+                    }
+                    
                     buttonsContainer.appendChild(btn);
                 });
             }
