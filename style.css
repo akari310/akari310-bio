@@ -314,6 +314,17 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     min-height: 20px; /* prevent layout shift */
     letter-spacing: 2px;
 }
+.user-note {
+    font-size: 0.9rem;
+    color: #fff;
+    margin-top: 6px;
+    font-weight: 500;
+}
+.member-since {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+}
 .badges {
     display: flex; justify-content: center; gap: 8px;
     margin: 8px 0;
