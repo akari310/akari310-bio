@@ -95,6 +95,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 .game-assets {
     position: relative;
     width: 60px; height: 60px;
+    flex-shrink: 0;
 }
 .rp-large {
     width: 100%; height: 100%;
@@ -112,6 +113,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 .game-info {
     flex: 1;
     display: flex; flex-direction: column; justify-content: center;
+    min-width: 0;
 }
 .time-elapsed { margin-top: 4px; font-variant-numeric: tabular-nums; }
 
