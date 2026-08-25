@@ -1,5 +1,5 @@
 const DISCORD_ID = "834722078489968680";
-const COUNTER_URL = "https://api.counterapi.dev/v1/accakari310/bio/up";
+const COUNTER_URL = "https://api.counterapi.dev/v1/akari310/v2/up";
 
 // --- Entry Screen & Audio ---
 const entryScreen = document.getElementById('entry');
