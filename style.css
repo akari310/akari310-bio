@@ -1,0 +1,411 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap');
+
+:root {
+    --bg-dark: #11111b;
+    --card-bg: rgba(30, 30, 46, 0.45);
+    --border-color: rgba(255, 255, 255, 0.05);
+    --text-main: #cdd6f4;
+    --text-muted: #a6adc8;
+    
+    /* Catppuccin Colors for gradients */
+    --c-mauve: #cba6f7;
+    --c-pink: #f5c2e7;
+    --c-lavender: #b4befe;
+    --c-sapphire: #74c7ec;
+    --c-green: #a6e3a1;
+    --c-yellow: #f9e2af;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    color: var(--text-main);
+    background-color: var(--bg-dark);
+    height: 100vh; width: 100vw;
+    overflow: hidden;
+    user-select: none;
+    cursor: default; /* Eboy style usually disables selecting */
+}
+
+/* =========================================
+   BACKGROUND & EFFECTS
+========================================= */
+.bg-layer {
+    position: absolute; inset: 0;
+    background-size: cover; background-position: center;
+    filter: blur(4px) brightness(0.4);
+    z-index: 1;
+}
+
+/* Scanline / Grid Overlay */
+.grid-overlay {
+    position: absolute; inset: 0; z-index: 2;
+    background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-size: 20px 20px;
+    pointer-events: none;
+}
+
+/* Canvas Mouse Trail */
+#mouse-canvas {
+    position: absolute; inset: 0; z-index: 3;
+    pointer-events: none;
+}
+
+/* =========================================
+   ENTRY SCREEN
+========================================= */
+.entry-screen {
+    position: absolute; inset: 0; z-index: 9999;
+    background: #000;
+    display: flex; flex-direction: column; justify-content: center; align-items: center;
+    cursor: pointer;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+}
+.entry-screen.hidden {
+    opacity: 0; visibility: hidden;
+}
+
+.entry-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 2rem; font-weight: 700;
+    color: var(--text-main);
+    text-shadow: 0 0 10px var(--c-mauve), 0 0 20px var(--c-pink);
+    letter-spacing: 4px;
+    margin-bottom: 20px;
+    animation: glitch 3s infinite;
+}
+
+.entry-prompt {
+    font-size: 0.9rem; color: var(--text-muted);
+    letter-spacing: 1px;
+    animation: blink 1.5s infinite;
+}
+
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0.2; } }
+
+/* =========================================
+   MAIN CONTENT & 3D TILT
+========================================= */
+.main-content {
+    position: absolute; inset: 0; z-index: 10;
+    display: flex; justify-content: center; align-items: center;
+    opacity: 1; transition: opacity 1s ease;
+}
+.main-content.hidden { opacity: 0; pointer-events: none; }
+
+.card-tilt {
+    transform-style: preserve-3d;
+    perspective: 1000px;
+    /* transition is handled by JS for smooth return */
+}
+
+/* ANIMATED GRADIENT BORDER */
+.card-border {
+    position: relative;
+    padding: 2px; /* Border thickness */
+    border-radius: 22px;
+    background: linear-gradient(45deg, var(--c-mauve), var(--c-pink), var(--c-lavender), var(--c-sapphire));
+    background-size: 300% 300%;
+    animation: shimmerBorder 6s ease infinite;
+    box-shadow: 0 0 30px rgba(203, 166, 247, 0.3), 0 20px 50px rgba(0,0,0,0.8);
+    transform: translateZ(20px); /* 3D pop out */
+}
+
+@keyframes shimmerBorder {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+.card-inner {
+    width: 380px;
+    background: var(--card-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 20px;
+    padding: 35px 30px 25px;
+    display: flex; flex-direction: column; align-items: center;
+    position: relative;
+}
+
+/* =========================================
+   AVATAR (OVERLAPPING)
+========================================= */
+.avatar-wrapper {
+    position: absolute;
+    top: -50px;
+    width: 100px; height: 100px;
+    border-radius: 50%;
+    padding: 4px;
+    background: linear-gradient(45deg, var(--c-mauve), var(--c-pink));
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+    z-index: 2;
+    animation: float 4s ease-in-out infinite;
+}
+.avatar-img {
+    width: 100%; height: 100%;
+    border-radius: 50%; object-fit: cover;
+    background: #111;
+}
+.status-dot {
+    position: absolute; bottom: 4px; right: 4px;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: var(--text-muted); /* Offline default */
+    border: 3px solid #2a2a3e; /* matches card dark area roughly */
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+}
+
+/* =========================================
+   USER INFO
+========================================= */
+.user-info {
+    margin-top: 40px; /* space for avatar */
+    text-align: center;
+    width: 100%;
+}
+.display-name {
+    font-family: 'Space Mono', monospace;
+    font-size: 1.8rem; font-weight: 700;
+    color: #fff;
+    text-shadow: 0 0 15px rgba(255,255,255,0.4);
+    letter-spacing: -1px;
+    display: flex; justify-content: center; align-items: center; gap: 8px;
+}
+.verified-badge {
+    font-size: 1.1rem; color: var(--c-sapphire);
+    text-shadow: 0 0 10px var(--c-sapphire);
+}
+.scramble-text {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem; color: var(--c-pink);
+    margin-top: 6px; font-weight: 700;
+    min-height: 20px; /* prevent layout shift */
+    letter-spacing: 2px;
+}
+.badges {
+    display: flex; justify-content: center; gap: 8px;
+    margin: 12px 0;
+}
+.badges i { font-size: 1.1rem; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2)); }
+
+
+/* =========================================
+   SOCIALS
+========================================= */
+.social-row {
+    display: flex; justify-content: center; gap: 15px;
+    margin: 20px 0;
+}
+.social-icon {
+    width: 45px; height: 45px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
+    display: flex; justify-content: center; align-items: center;
+    color: var(--text-main); font-size: 1.4rem;
+    text-decoration: none;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.social-icon:hover {
+    background: rgba(255, 255, 255, 0.1);
+    transform: translateY(-5px) scale(1.1);
+    color: var(--c-pink);
+    border-color: var(--c-pink);
+    box-shadow: 0 10px 20px rgba(245, 194, 231, 0.2);
+}
+
+/* =========================================
+   DISCORD PRESENCE / NOTES BOX
+========================================= */
+.activity-box {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 12px;
+}
+.discord-presence {
+    display: flex; align-items: center; gap: 12px;
+}
+.presence-avatar {
+    width: 45px; height: 45px; border-radius: 8px; object-fit: cover;
+}
+.presence-info { flex: 1; overflow: hidden; }
+.presence-name {
+    font-size: 0.85rem; font-weight: 700; color: #fff;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    display: flex; justify-content: space-between; align-items: center;
+}
+.presence-status {
+    font-size: 0.7rem; font-weight: 800; color: var(--c-yellow);
+    background: rgba(249, 226, 175, 0.15);
+    padding: 2px 6px; border-radius: 4px;
+}
+.presence-state {
+    font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+/* =========================================
+   SPOTIFY PLAYER (SPINNING DISC)
+========================================= */
+.music-box {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 15px;
+}
+.music-box.hidden { display: none; }
+.music-header {
+    font-size: 0.7rem; font-weight: 800; color: var(--c-green);
+    margin-bottom: 10px; display: flex; align-items: center; gap: 6px;
+    letter-spacing: 1px;
+}
+
+.music-content {
+    display: flex; align-items: center; gap: 15px;
+}
+
+/* The Vinyl */
+.spinning-disc {
+    position: relative;
+    width: 50px; height: 50px;
+    border-radius: 50%;
+    animation: spin 4s linear infinite;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+    flex-shrink: 0;
+}
+#sp-art {
+    width: 100%; height: 100%; border-radius: 50%; object-fit: cover;
+}
+.disc-hole {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 12px; height: 12px;
+    background: var(--card-bg);
+    border-radius: 50%;
+    border: 1px solid rgba(0,0,0,0.5);
+}
+
+@keyframes spin { 100% { transform: rotate(360deg); } }
+
+.music-info { flex: 1; overflow: hidden; }
+.song-title {
+    font-size: 0.9rem; font-weight: 700; color: #fff;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.song-artist {
+    font-size: 0.8rem; color: var(--text-muted);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    margin-bottom: 6px;
+}
+.music-progress { width: 100%; }
+.progress-bar {
+    width: 100%; height: 4px; background: rgba(255,255,255,0.1);
+    border-radius: 2px; overflow: hidden;
+}
+.progress-fill {
+    width: 45%; height: 100%; background: var(--c-green);
+    border-radius: 2px;
+    animation: progressAnim 2s infinite alternate;
+}
+@keyframes progressAnim { 0%{width:40%} 100%{width:60%} } /* fake visualizer */
+.time-row {
+    display: flex; justify-content: space-between;
+    font-size: 0.65rem; color: var(--text-muted); margin-top: 4px;
+}
+
+/* =========================================
+   FOOTER (VIEWS)
+========================================= */
+.footer-row {
+    width: 100%; display: flex; justify-content: center;
+    margin-top: 10px;
+}
+.views {
+    font-size: 0.8rem; color: var(--text-muted);
+    display: flex; align-items: center; gap: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 4px 10px; border-radius: 12px;
+}
+
+/* =========================================
+   FLOATING BGM PLAYER
+========================================= */
+.bgm-player {
+    position: absolute;
+    bottom: 30px; left: 30px;
+    z-index: 50;
+    background: rgba(30, 30, 46, 0.6);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border-color);
+    border-radius: 50px;
+    padding: 8px 20px 8px 8px;
+    display: flex; align-items: center; gap: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    opacity: 0; transition: opacity 1s ease, transform 0.3s ease;
+    pointer-events: none; /* hidden until entered */
+}
+.bgm-player.visible {
+    opacity: 1; pointer-events: auto;
+}
+.bgm-player:hover { transform: scale(1.05); }
+
+.bgm-cover {
+    width: 40px; height: 40px;
+    border-radius: 50%; position: relative;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+.bgm-spin {
+    width: 100%; height: 100%;
+    border-radius: 50%; object-fit: cover;
+    animation: spin 4s linear infinite;
+    animation-play-state: paused;
+}
+.bgm-player.playing .bgm-spin { animation-play-state: running; }
+.bgm-hole {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 10px; height: 10px;
+    background: #1e1e2e;
+    border-radius: 50%;
+}
+
+.bgm-info { display: flex; flex-direction: column; justify-content: center; min-width: 150px; }
+.bgm-title-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.bgm-title {
+    font-size: 0.8rem; font-weight: 700; color: #fff;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.bgm-controls {
+    display: flex; gap: 12px; align-items: center;
+    color: var(--text-muted);
+}
+.bgm-controls i {
+    font-size: 0.9rem; cursor: pointer; transition: color 0.2s;
+}
+.bgm-controls i:hover { color: var(--c-pink); }
+
+.bgm-timeline { display: flex; align-items: center; gap: 8px; width: 100%; }
+.bgm-time { font-size: 0.65rem; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+.bgm-progress-bar {
+    flex: 1; height: 4px; background: rgba(255,255,255,0.1);
+    border-radius: 2px; overflow: hidden; cursor: pointer;
+    position: relative;
+}
+.bgm-progress-fill {
+    width: 0%; height: 100%; background: var(--c-mauve);
+    border-radius: 2px; transition: width 0.1s linear;
+}
+

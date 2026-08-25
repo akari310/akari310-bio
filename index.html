@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>akari310</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+</head>
+<body>
+    <!-- Background & Grid Overlay -->
+    <div class="bg-layer" style="background-image: url('bg.jpg');"></div>
+    <div class="grid-overlay"></div>
+
+    <!-- Mouse Canvas -->
+    <canvas id="mouse-canvas"></canvas>
+
+    <!-- Entry Screen -->
+    <div class="entry-screen" id="entry">
+        <h1 class="entry-title">[ akari310 ]</h1>
+        <p class="entry-prompt">click anywhere to enter</p>
+    </div>
+
+    <!-- Audio Element -->
+    <audio id="bg-audio" src="bgm.webm" loop></audio>
+
+    <!-- Floating Media Player -->
+    <div class="bgm-player" id="bgm-player">
+        <div class="bgm-cover">
+            <img src="https://img.youtube.com/vi/ys7Gc6j_iG4/hqdefault.jpg" alt="Cover" class="bgm-spin" id="bgm-cover-img">
+            <div class="bgm-hole"></div>
+        </div>
+        <div class="bgm-info">
+            <div class="bgm-title-row">
+                <p class="bgm-title">Moshi Moshi Remix</p>
+                <div class="bgm-controls">
+                    <i class="fa-solid fa-pause" id="bgm-play-pause"></i>
+                    <i class="fa-solid fa-volume-high" id="bgm-mute"></i>
+                </div>
+            </div>
+            <div class="bgm-timeline">
+                <span class="bgm-time" id="bgm-current">0:00</span>
+                <div class="bgm-progress-bar" id="bgm-progress-container">
+                    <div class="bgm-progress-fill" id="bgm-progress-fill"></div>
+                </div>
+                <span class="bgm-time" id="bgm-duration">0:00</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content hidden" id="main">
+        <!-- 3D Tilt Container -->
+        <div class="card-tilt" id="card">
+            <!-- Animated Gradient Border Wrapper -->
+            <div class="card-border">
+                <div class="card-inner">
+                    
+                    <!-- Avatar -->
+                    <div class="avatar-wrapper">
+                        <img id="avatar" src="avatar.jpg" alt="Avatar" class="avatar-img">
+                        <div class="status-dot" id="status-dot"></div>
+                    </div>
+
+                    <!-- User Info -->
+                    <div class="user-info">
+                        <h1 class="display-name">akari <i class="fa-solid fa-circle-check verified-badge"></i></h1>
+                        <p class="scramble-text" id="scramble-text"></p>
+                        <div class="badges">
+                            <i class="fa-solid fa-bolt" style="color:#faa81a" title="Nitro"></i>
+                            <i class="fa-solid fa-shield-halved" style="color:#9b84ec" title="HypeSquad"></i>
+                            <i class="fa-solid fa-code" style="color:#43b581" title="Developer"></i>
+                        </div>
+                    </div>
+
+                    <!-- Socials -->
+                    <div class="social-row">
+                        <a href="https://discord.com/users/834722078489968680" target="_blank" class="social-icon"><i class="fa-brands fa-discord"></i></a>
+                        <a href="https://open.spotify.com/user/31wv74q4et5pkxf3s4i52of6cqxi" target="_blank" class="social-icon"><i class="fa-brands fa-spotify"></i></a>
+                        <a href="https://github.com/akari310" target="_blank" class="social-icon"><i class="fa-brands fa-github"></i></a>
+                    </div>
+
+                    <!-- Custom Status / Notes (Like guns.lol/mintyeuuoii) -->
+                    <div class="activity-box">
+                        <div class="discord-presence">
+                            <img id="discord-avatar" src="avatar.jpg" class="presence-avatar">
+                            <div class="presence-info">
+                                <p class="presence-name">⋆.˚ Nguyễn Ngọc Anh <span class="presence-status" id="discord-status-text">IDLE</span></p>
+                                <p class="presence-state" id="discord-custom-status">Connecting to Discord...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Spotify / Music Player -->
+                    <div class="music-box hidden" id="spotify-box">
+                        <div class="music-header">
+                            <i class="fa-brands fa-spotify"></i> LISTENING TO SPOTIFY
+                        </div>
+                        <div class="music-content">
+                            <div class="spinning-disc">
+                                <img id="sp-art" src="" alt="Album Art">
+                                <div class="disc-hole"></div>
+                            </div>
+                            <div class="music-info">
+                                <p class="song-title" id="sp-song">Song Title</p>
+                                <p class="song-artist" id="sp-artist">Artist</p>
+                                <div class="music-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill"></div>
+                                    </div>
+                                    <div class="time-row">
+                                        <span>0:00</span>
+                                        <span>-:-</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- View Counter -->
+                    <div class="footer-row">
+                        <div class="views">
+                            <i class="fa-solid fa-eye"></i> <span id="view-count">2,400</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
