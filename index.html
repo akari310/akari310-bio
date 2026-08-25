@@ -58,7 +58,8 @@
 
     <!-- Main Content -->
     <main class="main-content hidden" id="main">
-        <!-- 3D Tilt Container -->
+        <div class="cards-container">
+            <!-- 3D Tilt Container -->
         <div class="card-tilt" id="card">
             <!-- Animated Gradient Border Wrapper -->
             <div class="card-border">
@@ -99,6 +100,21 @@
                         </div>
                     </div>
 
+                    <!-- View Counter -->
+                    <div class="footer-row">
+                        <div class="views">
+                            <i class="fa-solid fa-eye"></i> <span id="view-count">2,400</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Activity Card (Rich Presence) -->
+        <div class="card-tilt hidden" id="activity-card-container">
+            <div class="card-border">
+                <div class="card-inner" id="activity-inner">
                     <!-- Spotify / Music Player -->
                     <div class="music-box hidden" id="spotify-box">
                         <div class="music-header">
@@ -125,15 +141,27 @@
                         </div>
                     </div>
 
-                    <!-- View Counter -->
-                    <div class="footer-row">
-                        <div class="views">
-                            <i class="fa-solid fa-eye"></i> <span id="view-count">2,400</span>
+                    <!-- Game / App Activity -->
+                    <div class="game-box hidden" id="game-box">
+                        <div class="music-header" id="rp-header">
+                            <i class="fa-solid fa-gamepad"></i> PLAYING A GAME
+                        </div>
+                        <div class="game-content">
+                            <div class="game-assets">
+                                <img id="rp-large-img" src="" class="rp-large">
+                                <img id="rp-small-img" src="" class="rp-small hidden">
+                            </div>
+                            <div class="game-info">
+                                <p class="song-title" id="rp-name">Game Name</p>
+                                <p class="song-artist" id="rp-details">Details</p>
+                                <p class="song-artist" id="rp-state">State</p>
+                                <p class="song-artist time-elapsed" id="rp-time">00:00 elapsed</p>
+                            </div>
                         </div>
                     </div>
-
                 </div>
             </div>
+        </div>
         </div>
     </main>
 

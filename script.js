@@ -311,7 +311,7 @@ function updatePresence(d) {
     document.getElementById('discord-status-text').textContent = s.toUpperCase();
     document.getElementById('discord-status-text').style.color = statusColors[s] || statusColors.offline;
 
-    // Custom Status
+    // Custom Status (Type 4)
     const cs = d.activities?.find(a => a.type === 4);
     let txt = '';
     if (cs) {
@@ -320,15 +320,64 @@ function updatePresence(d) {
     }
     document.getElementById('discord-custom-status').textContent = txt || "Just chilling.";
 
-    // Spotify Activity
+    // Rich Presence Logic
+    const activityCard = document.getElementById('activity-card-container');
     const spotifyBox = document.getElementById('spotify-box');
+    const gameBox = document.getElementById('game-box');
+    
+    // Find a game/app activity
+    const gameActivity = d.activities?.find(a => a.type === 0 || a.type === 1 || a.type === 3);
+
     if (d.spotify) {
+        // Show Spotify
+        activityCard.classList.remove('hidden');
         spotifyBox.classList.remove('hidden');
+        gameBox.classList.add('hidden');
+        
         document.getElementById('sp-art').src = d.spotify.album_art_url;
         document.getElementById('sp-song').textContent = d.spotify.song;
         document.getElementById('sp-artist').textContent = d.spotify.artist;
-    } else {
+        
+    } else if (gameActivity) {
+        // Show Game / App
+        activityCard.classList.remove('hidden');
+        gameBox.classList.remove('hidden');
         spotifyBox.classList.add('hidden');
+        
+        document.getElementById('rp-name').textContent = gameActivity.name || "Unknown Game";
+        document.getElementById('rp-details').textContent = gameActivity.details || "";
+        document.getElementById('rp-state').textContent = gameActivity.state || "";
+        
+        // Large Image
+        const lImg = document.getElementById('rp-large-img');
+        if (gameActivity.assets?.large_image) {
+            let assetId = gameActivity.assets.large_image;
+            if (assetId.startsWith('mp:external/')) {
+                lImg.src = `https://media.discordapp.net/external/${assetId.replace('mp:external/', '')}`;
+            } else {
+                lImg.src = `https://cdn.discordapp.com/app-assets/${gameActivity.application_id}/${assetId}.png`;
+            }
+        } else {
+            lImg.src = av; // Fallback to avatar
+        }
+        
+        // Small Image
+        const sImg = document.getElementById('rp-small-img');
+        if (gameActivity.assets?.small_image) {
+            sImg.classList.remove('hidden');
+            let sAssetId = gameActivity.assets.small_image;
+            if (sAssetId.startsWith('mp:external/')) {
+                sImg.src = `https://media.discordapp.net/external/${sAssetId.replace('mp:external/', '')}`;
+            } else {
+                sImg.src = `https://cdn.discordapp.com/app-assets/${gameActivity.application_id}/${sAssetId}.png`;
+            }
+        } else {
+            sImg.classList.add('hidden');
+        }
+        
+    } else {
+        // No Activity -> Hide Card
+        activityCard.classList.add('hidden');
     }
 }
 
