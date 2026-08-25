@@ -162,8 +162,8 @@ class Particle {
         this.size = Math.random() * 3 + 1;
         this.speedX = Math.random() * 3 - 1.5;
         this.speedY = Math.random() * 3 - 1.5;
-        // Catppuccin Mauve & Pink hues
-        this.color = Math.random() > 0.5 ? '#cba6f7' : '#f5c2e7';
+        // Lavender & Blue hues
+        this.color = Math.random() > 0.5 ? '#b4befe' : '#89b4fa';
     }
     update() {
         this.x += this.speedX;

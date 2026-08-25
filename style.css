@@ -71,7 +71,7 @@ body {
     font-family: 'Space Mono', monospace;
     font-size: 2rem; font-weight: 700;
     color: var(--text-main);
-    text-shadow: 0 0 10px var(--c-mauve), 0 0 20px var(--c-pink);
+    text-shadow: 0 0 10px var(--c-lavender), 0 0 20px var(--c-sapphire);
     letter-spacing: 4px;
     margin-bottom: 20px;
     animation: glitch 3s infinite;
@@ -104,13 +104,23 @@ body {
 /* ANIMATED GRADIENT BORDER */
 .card-border {
     position: relative;
-    padding: 2px; /* Border thickness */
     border-radius: 22px;
-    background: linear-gradient(45deg, var(--c-mauve), var(--c-pink), var(--c-lavender), var(--c-sapphire));
+    box-shadow: 0 0 30px rgba(180, 190, 254, 0.3), 0 20px 50px rgba(0,0,0,0.8);
+    transform: translateZ(20px); /* 3D pop out */
+}
+.card-border::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 22px;
+    padding: 2px; /* border thickness */
+    background: linear-gradient(45deg, var(--c-lavender), var(--c-sapphire), #89b4fa, var(--c-lavender));
     background-size: 300% 300%;
     animation: shimmerBorder 6s ease infinite;
-    box-shadow: 0 0 30px rgba(203, 166, 247, 0.3), 0 20px 50px rgba(0,0,0,0.8);
-    transform: translateZ(20px); /* 3D pop out */
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
 }
 
 @keyframes shimmerBorder {
@@ -121,10 +131,10 @@ body {
 
 .card-inner {
     width: 380px;
-    background: var(--card-bg);
+    background: rgba(30, 30, 46, 0.45);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border-radius: 20px;
+    border-radius: 22px;
     padding: 35px 30px 25px;
     display: flex; flex-direction: column; align-items: center;
     position: relative;
@@ -139,7 +149,7 @@ body {
     width: 100px; height: 100px;
     border-radius: 50%;
     padding: 4px;
-    background: linear-gradient(45deg, var(--c-mauve), var(--c-pink));
+    background: linear-gradient(45deg, var(--c-lavender), var(--c-sapphire));
     box-shadow: 0 10px 20px rgba(0,0,0,0.5);
     z-index: 2;
     animation: float 4s ease-in-out infinite;
@@ -184,7 +194,7 @@ body {
 }
 .scramble-text {
     font-family: 'Space Mono', monospace;
-    font-size: 0.8rem; color: var(--c-pink);
+    font-size: 0.8rem; color: var(--c-lavender);
     margin-top: 6px; font-weight: 700;
     min-height: 20px; /* prevent layout shift */
     letter-spacing: 2px;
@@ -216,9 +226,9 @@ body {
 .social-icon:hover {
     background: rgba(255, 255, 255, 0.1);
     transform: translateY(-5px) scale(1.1);
-    color: var(--c-pink);
-    border-color: var(--c-pink);
-    box-shadow: 0 10px 20px rgba(245, 194, 231, 0.2);
+    color: var(--c-lavender);
+    border-color: var(--c-lavender);
+    box-shadow: 0 10px 20px rgba(180, 190, 254, 0.2);
 }
 
 /* =========================================
@@ -395,7 +405,7 @@ body {
 .bgm-controls i {
     font-size: 0.9rem; cursor: pointer; transition: color 0.2s;
 }
-.bgm-controls i:hover { color: var(--c-pink); }
+.bgm-controls i:hover { color: var(--c-lavender); }
 
 .bgm-timeline { display: flex; align-items: center; gap: 8px; width: 100%; }
 .bgm-time { font-size: 0.65rem; color: var(--text-muted); font-variant-numeric: tabular-nums; }
@@ -405,7 +415,7 @@ body {
     position: relative;
 }
 .bgm-progress-fill {
-    width: 0%; height: 100%; background: var(--c-mauve);
+    width: 0%; height: 100%; background: var(--c-lavender);
     border-radius: 2px; transition: width 0.1s linear;
 }
 
