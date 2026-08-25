@@ -80,15 +80,12 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 /* Canvas Mouse Trail */
 #mouse-canvas {
     position: absolute; inset: 0; z-index: 3;
-    animation: spin 6s linear infinite;
+    pointer-events: none;
 }
 
 /* Game / App Box */
 .game-box {
-    background: rgba(30, 30, 46, 0.4);
-    border: 1px solid var(--border-color);
-    border-radius: 12px;
-    padding: 12px;
+    padding: 0;
 }
 .game-content {
     display: flex; gap: 15px; align-items: center;

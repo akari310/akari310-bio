@@ -152,18 +152,18 @@ scrambleText();
 // --- View Counter ---
 async function updateViews() {
     const viewCountEl = document.getElementById('view-count');
-    let localViews = parseInt(localStorage.getItem('akari_views') || "2400");
+    let localViews = parseInt(localStorage.getItem('akari_views_v3') || "0");
     try {
         const res = await fetch(COUNTER_URL);
         const data = await res.json();
         let serverCount = typeof data === 'number' ? data : data?.count || data?.value;
         if (serverCount) {
             viewCountEl.textContent = serverCount.toLocaleString();
-            localStorage.setItem('akari_views', serverCount);
+            localStorage.setItem('akari_views_v3', serverCount);
         } else throw new Error("Invalid response");
     } catch (err) {
         localViews++;
-        localStorage.setItem('akari_views', localViews);
+        localStorage.setItem('akari_views_v3', localViews);
         viewCountEl.textContent = localViews.toLocaleString();
     }
 }
