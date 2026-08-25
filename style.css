@@ -121,6 +121,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 .main-content {
     position: absolute; inset: 0; z-index: 10;
     display: flex; justify-content: center; align-items: center;
+    padding-bottom: 80px; /* Space for media player */
     opacity: 1; transition: opacity 1s ease;
 }
 .main-content.hidden { opacity: 0; pointer-events: none; }
@@ -397,7 +398,8 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     opacity: 0; transition: opacity 1s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     pointer-events: none;
     transform: translateX(-50%) translateY(20px);
-    width: 450px; max-width: 90vw;
+    width: 380px; /* Match card width */
+    max-width: 90vw;
     overflow: hidden; /* For visualizer */
 }
 .bgm-player.visible {
@@ -471,8 +473,8 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     position: absolute;
     bottom: 0; left: 0;
     width: 100%; height: 100%;
-    z-index: 1;
-    opacity: 0.4;
+    z-index: 0;
+    opacity: 0.3;
     pointer-events: none;
 }
 
