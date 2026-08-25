@@ -10,8 +10,7 @@ const bgmPlayPause = document.getElementById('bgm-play-pause');
 const bgmMute = document.getElementById('bgm-mute');
 const bgmCurrent = document.getElementById('bgm-current');
 const bgmDuration = document.getElementById('bgm-duration');
-const bgmProgressFill = document.getElementById('bgm-progress-fill');
-const bgmProgressContainer = document.getElementById('bgm-progress-container');
+const timelineSlider = document.getElementById('bgm-progress-slider');
 const volumeSlider = document.getElementById('bgm-volume');
 const visualizerCanvas = document.getElementById('audio-visualizer');
 const visCtx = visualizerCanvas.getContext('2d');
@@ -75,13 +74,16 @@ audio.addEventListener('loadedmetadata', () => {
 audio.addEventListener('timeupdate', () => {
     bgmCurrent.textContent = formatTime(audio.currentTime);
     const percent = (audio.currentTime / audio.duration) * 100;
-    bgmProgressFill.style.width = `${percent}%`;
+    if (!timelineSlider.matches(':active')) {
+        timelineSlider.value = percent || 0;
+        timelineSlider.style.background = `linear-gradient(to right, var(--c-lavender) ${percent}%, rgba(255,255,255,0.1) ${percent}%)`;
+    }
 });
 
-bgmProgressContainer.addEventListener('click', (e) => {
-    const rect = bgmProgressContainer.getBoundingClientRect();
-    const percent = (e.clientX - rect.left) / rect.width;
-    audio.currentTime = percent * audio.duration;
+timelineSlider.addEventListener('input', (e) => {
+    const percent = e.target.value;
+    audio.currentTime = (percent / 100) * audio.duration;
+    timelineSlider.style.background = `linear-gradient(to right, var(--c-lavender) ${percent}%, rgba(255,255,255,0.1) ${percent}%)`;
 });
 
 volumeSlider.addEventListener('input', (e) => {

@@ -513,14 +513,24 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 
 .bgm-timeline { display: flex; align-items: center; gap: 8px; width: 100%; }
 .bgm-time { font-size: 0.65rem; color: var(--text-muted); font-variant-numeric: tabular-nums; }
-.bgm-progress-bar {
-    flex: 1; height: 4px; background: rgba(255,255,255,0.1);
-    border-radius: 2px; overflow: hidden; cursor: pointer;
+.timeline-slider {
+    -webkit-appearance: none;
+    flex: 1; height: 4px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+    outline: none; cursor: pointer;
     position: relative;
+    z-index: 5;
 }
-.bgm-progress-fill {
-    width: 0%; height: 100%; background: var(--c-lavender);
-    border-radius: 2px; transition: width 0.1s linear;
+.timeline-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 0; height: 0; /* Hidden thumb by default, only visible on hover */
+    background: var(--c-lavender);
+    border-radius: 50%;
+    transition: width 0.1s, height 0.1s;
+}
+.timeline-slider:hover::-webkit-slider-thumb {
+    width: 10px; height: 10px;
 }
 
 #audio-visualizer {
