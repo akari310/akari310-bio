@@ -195,7 +195,20 @@ function drawVisualizer() {
     visualizerCanvas.width = visualizerCanvas.clientWidth;
     visualizerCanvas.height = visualizerCanvas.clientHeight;
     
-    analyser.getByteFrequencyData(dataArray);
+    if (currentBgmMode === 'local') {
+        analyser.getByteFrequencyData(dataArray);
+    } else {
+        // Fake visualizer for YouTube
+        const playing = ytPlayer && ytPlayer.getPlayerState() === YT.PlayerState.PLAYING;
+        for(let i=0; i<dataArray.length; i++) {
+            if (playing) {
+                dataArray[i] = Math.max(0, Math.min(255, dataArray[i] + (Math.random() * 40 - 20)));
+            } else {
+                dataArray[i] = Math.max(0, dataArray[i] - 10);
+            }
+        }
+    }
+    
     visCtx.clearRect(0, 0, visualizerCanvas.width, visualizerCanvas.height);
     
     const barWidth = (visualizerCanvas.width / dataArray.length) * 1.5;
