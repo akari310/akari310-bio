@@ -359,6 +359,8 @@ function updatePresence(d) {
             } else {
                 lImg.src = `https://cdn.discordapp.com/app-assets/${gameActivity.application_id}/${assetId}.png`;
             }
+        } else if (gameActivity.application_id) {
+            lImg.src = `https://dcdn.dstn.to/app-icons/${gameActivity.application_id}?size=256`;
         } else {
             lImg.src = av; // Fallback to avatar
         }
@@ -375,6 +377,27 @@ function updatePresence(d) {
             }
         } else {
             sImg.classList.add('hidden');
+        }
+
+        // Timer
+        if (window.rpInterval) clearInterval(window.rpInterval);
+        const timeEl = document.getElementById('rp-time');
+        if (gameActivity.timestamps?.start) {
+            const startMs = gameActivity.timestamps.start;
+            const updateTime = () => {
+                const diff = Math.floor((Date.now() - startMs) / 1000);
+                const h = Math.floor(diff / 3600);
+                const m = Math.floor((diff % 3600) / 60);
+                const s = diff % 60;
+                let txt = '';
+                if (h > 0) txt += `${h}:`;
+                txt += `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+                if (timeEl) timeEl.textContent = `${txt} elapsed`;
+            };
+            updateTime();
+            window.rpInterval = setInterval(updateTime, 1000);
+        } else {
+            if (timeEl) timeEl.textContent = "";
         }
         
     } else {

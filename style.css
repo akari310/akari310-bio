@@ -181,6 +181,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     perspective: 1000px;
     /* transition is handled by JS for smooth return */
 }
+#card { width: 380px; }
 
 /* ANIMATED GRADIENT BORDER */
 .card-border {
@@ -211,7 +212,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 }
 
 .card-inner {
-    width: 380px;
+    width: 100%;
     background: rgba(30, 30, 46, 0.45);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
