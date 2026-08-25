@@ -31,9 +31,12 @@
 
     <!-- Floating Media Player -->
     <div class="bgm-player" id="bgm-player">
-        <div class="bgm-cover">
+        <div class="bgm-cover" id="bgm-cover-btn">
             <img src="https://img.youtube.com/vi/ys7Gc6j_iG4/hqdefault.jpg" alt="Cover" class="bgm-spin" id="bgm-cover-img">
             <div class="bgm-hole"></div>
+            <div class="bgm-cover-overlay" id="bgm-cover-overlay">
+                <i class="fa-solid fa-pause" id="bgm-play-pause"></i>
+            </div>
         </div>
         <audio id="bgm-audio" loop>
             <source src="bgm.mp3" type="audio/mpeg">
@@ -45,7 +48,6 @@
                     <p class="bgm-title">Moshi Moshi Remix</p>
                 </div>
                 <div class="bgm-controls">
-                    <i class="fa-solid fa-pause" id="bgm-play-pause"></i>
                     <i class="fa-solid fa-volume-high" id="bgm-mute"></i>
                     <input type="range" id="bgm-volume" min="0" max="1" step="0.01" value="0.3" class="volume-slider">
                 </div>

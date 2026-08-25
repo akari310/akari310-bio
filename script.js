@@ -118,7 +118,8 @@ const ytScript = document.createElement('script');
 ytScript.src = "https://www.youtube.com/iframe_api";
 document.head.appendChild(ytScript);
 
-bgmPlayPause.addEventListener('click', () => {
+const bgmCoverBtn = document.getElementById('bgm-cover-btn');
+bgmCoverBtn.addEventListener('click', () => {
     if (currentBgmMode === 'local') {
         if (audio.paused) {
             audio.play();
