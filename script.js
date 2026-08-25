@@ -46,32 +46,117 @@ entryScreen.addEventListener('click', () => {
     audio.play().catch(e => console.log("Audio play blocked", e));
 });
 
-bgmPlayPause.addEventListener('click', () => {
-    if (audio.paused) {
-        audio.play();
-        bgmPlayPause.classList.replace('fa-play', 'fa-pause');
-        bgmPlayer.classList.add('playing');
+function extractVideoID(url) {
+    const regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+    const match = url.match(regExp);
+    return (match && match[2].length === 11) ? match[2] : null;
+}
+
+function playYouTubeAudio(vid, activity) {
+    currentBgmMode = 'youtube';
+    if (!audio.paused) audio.pause();
+    
+    document.querySelector('.bgm-title').textContent = activity.details || activity.name;
+    const coverSrc = document.getElementById('rp-large-img').src;
+    document.getElementById('bgm-cover-img').src = coverSrc;
+    
+    if (ytPlayer && ytPlayer.loadVideoById) {
+        ytPlayer.loadVideoById(vid);
     } else {
-        audio.pause();
-        bgmPlayPause.classList.replace('fa-pause', 'fa-play');
-        bgmPlayer.classList.remove('playing');
+        const check = setInterval(() => {
+            if (ytPlayer && ytPlayer.loadVideoById) {
+                clearInterval(check);
+                ytPlayer.loadVideoById(vid);
+            }
+        }, 500);
+    }
+}
+
+let ytPlayer = null;
+let currentBgmMode = 'local';
+let ytDuration = 0;
+let ytInterval = null;
+
+function onYouTubeIframeAPIReady() {
+    ytPlayer = new YT.Player('yt-player-container', {
+        height: '0', width: '0',
+        videoId: '',
+        playerVars: { 'autoplay': 0, 'controls': 0, 'disablekb': 1, 'fs': 0 },
+        events: {
+            'onReady': (e) => {
+                e.target.setVolume(volumeSlider.value * 100);
+            },
+            'onStateChange': (e) => {
+                if (currentBgmMode !== 'youtube') return;
+                
+                if (e.data === YT.PlayerState.PLAYING) {
+                    bgmPlayPause.classList.replace('fa-play', 'fa-pause');
+                    bgmPlayer.classList.add('playing');
+                    ytDuration = ytPlayer.getDuration();
+                    bgmDuration.textContent = formatTime(ytDuration);
+                    
+                    if (ytInterval) clearInterval(ytInterval);
+                    ytInterval = setInterval(() => {
+                        if (currentBgmMode === 'youtube' && !timelineSlider.matches(':active')) {
+                            const cur = ytPlayer.getCurrentTime() || 0;
+                            bgmCurrent.textContent = formatTime(cur);
+                            const percent = ytDuration ? (cur / ytDuration) * 100 : 0;
+                            timelineSlider.value = percent;
+                            timelineSlider.style.background = `linear-gradient(to right, var(--c-lavender) ${percent}%, rgba(255,255,255,0.1) ${percent}%)`;
+                        }
+                    }, 500);
+                } else if (e.data === YT.PlayerState.PAUSED || e.data === YT.PlayerState.ENDED) {
+                    bgmPlayPause.classList.replace('fa-pause', 'fa-play');
+                    bgmPlayer.classList.remove('playing');
+                }
+            }
+        }
+    });
+}
+
+const ytScript = document.createElement('script');
+ytScript.src = "https://www.youtube.com/iframe_api";
+document.head.appendChild(ytScript);
+
+bgmPlayPause.addEventListener('click', () => {
+    if (currentBgmMode === 'local') {
+        if (audio.paused) {
+            audio.play();
+            bgmPlayPause.classList.replace('fa-play', 'fa-pause');
+            bgmPlayer.classList.add('playing');
+        } else {
+            audio.pause();
+            bgmPlayPause.classList.replace('fa-pause', 'fa-play');
+            bgmPlayer.classList.remove('playing');
+        }
+    } else if (currentBgmMode === 'youtube' && ytPlayer) {
+        const state = ytPlayer.getPlayerState();
+        if (state === YT.PlayerState.PLAYING) ytPlayer.pauseVideo();
+        else ytPlayer.playVideo();
     }
 });
 
 bgmMute.addEventListener('click', () => {
-    audio.muted = !audio.muted;
-    if (audio.muted) {
-        bgmMute.classList.replace('fa-volume-high', 'fa-volume-xmark');
-    } else {
-        bgmMute.classList.replace('fa-volume-xmark', 'fa-volume-high');
+    if (currentBgmMode === 'local') {
+        audio.muted = !audio.muted;
+        bgmMute.className = audio.muted ? 'fa-solid fa-volume-xmark' : 'fa-solid fa-volume-high';
+    } else if (currentBgmMode === 'youtube' && ytPlayer) {
+        if (ytPlayer.isMuted()) {
+            ytPlayer.unMute();
+            bgmMute.className = 'fa-solid fa-volume-high';
+        } else {
+            ytPlayer.mute();
+            bgmMute.className = 'fa-solid fa-volume-xmark';
+        }
     }
 });
 
 audio.addEventListener('loadedmetadata', () => {
-    bgmDuration.textContent = formatTime(audio.duration);
+    if (currentBgmMode === 'local') bgmDuration.textContent = formatTime(audio.duration);
 });
 
 audio.addEventListener('timeupdate', () => {
+    if (currentBgmMode !== 'local') return;
     bgmCurrent.textContent = formatTime(audio.currentTime);
     const percent = (audio.currentTime / audio.duration) * 100;
     if (!timelineSlider.matches(':active')) {
@@ -82,15 +167,24 @@ audio.addEventListener('timeupdate', () => {
 
 timelineSlider.addEventListener('input', (e) => {
     const percent = e.target.value;
-    audio.currentTime = (percent / 100) * audio.duration;
     timelineSlider.style.background = `linear-gradient(to right, var(--c-lavender) ${percent}%, rgba(255,255,255,0.1) ${percent}%)`;
+    if (currentBgmMode === 'local') {
+        audio.currentTime = (percent / 100) * audio.duration;
+    } else if (currentBgmMode === 'youtube' && ytPlayer) {
+        ytPlayer.seekTo((percent / 100) * ytDuration, true);
+    }
 });
 
 volumeSlider.addEventListener('input', (e) => {
-    audio.volume = e.target.value;
-    audio.muted = e.target.value == 0;
-    if(audio.muted) bgmMute.classList.replace('fa-volume-high', 'fa-volume-xmark');
-    else bgmMute.classList.replace('fa-volume-xmark', 'fa-volume-high');
+    const vol = e.target.value;
+    if (currentBgmMode === 'local') {
+        audio.volume = vol;
+        audio.muted = vol == 0;
+    } else if (currentBgmMode === 'youtube' && ytPlayer) {
+        ytPlayer.setVolume(vol * 100);
+        if (vol == 0) ytPlayer.mute(); else ytPlayer.unMute();
+    }
+    bgmMute.className = vol == 0 ? 'fa-solid fa-volume-xmark' : 'fa-solid fa-volume-high';
 });
 
 function drawVisualizer() {
@@ -448,7 +542,8 @@ function updatePresence(d) {
                     
                     let url = null;
                     const textLower = btnText.toLowerCase();
-                    if (textLower.includes("listen") || textLower.includes("play") || textLower.includes("watch")) {
+                    const isListen = textLower.includes("listen") || textLower.includes("play") || textLower.includes("watch");
+                    if (isListen) {
                         url = gameActivity.details_url || gameActivity.state_url;
                     } else if (textLower.includes("artist") || textLower.includes("channel") || textLower.includes("creator")) {
                         url = gameActivity.state_url || gameActivity.details_url;
@@ -456,6 +551,15 @@ function updatePresence(d) {
                     
                     if (url) {
                         btn.href = url;
+                        if (isListen) {
+                            const vid = extractVideoID(url);
+                            if (vid) {
+                                btn.onclick = (e) => {
+                                    e.preventDefault();
+                                    playYouTubeAudio(vid, gameActivity);
+                                };
+                            }
+                        }
                     } else {
                         btn.onclick = () => alert("This button's link is hidden by Discord API.");
                     }
