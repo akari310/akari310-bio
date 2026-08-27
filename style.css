@@ -529,7 +529,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     padding: 4px;
     background: linear-gradient(45deg, var(--c-lavender), var(--c-sapphire));
     box-shadow: 0 10px 20px rgba(0,0,0,0.5);
-    z-index: 2;
+    z-index: 10;
     animation: float 4s ease-in-out infinite;
 }
 .avatar-img {
