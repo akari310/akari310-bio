@@ -105,7 +105,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 
 /* Canvas Mouse Trail */
 #mouse-canvas {
-    position: absolute; inset: 0; z-index: 3;
+    position: absolute; inset: 0; z-index: 9998;
     pointer-events: none;
 }
 
@@ -165,7 +165,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
    ENTRY SCREEN
 ========================================= */
 .entry-screen {
-    position: absolute; inset: 0; z-index: 9999;
+    position: absolute; inset: 0; z-index: 9000;
     background: #000;
     display: flex; flex-direction: column; justify-content: center; align-items: center;
     cursor: pointer;

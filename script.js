@@ -449,12 +449,39 @@ if (anonForm) {
         submitBtn.disabled = true;
         submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Sending...`;
 
-        setTimeout(() => {
+        const WEBHOOK_URL = "https://discord.com/api/webhooks/1542556758122307686/4qSMem2xrifH9w3ieLaQATkV7MK-T06g9YpTszFIEP5ujXSVltGoOUq7Xcsnf4HZLGFd";
+        
+        const payload = {
+            embeds: [{
+                title: "💌 Thư nặc danh mới!",
+                color: 13346551, // Hex 0xcba6f7 (Catppuccin Mauve)
+                fields: [
+                    { name: "👤 Người gửi", value: name, inline: true },
+                    { name: "⏰ Thời gian", value: new Date().toLocaleString('vi-VN'), inline: true },
+                    { name: "💬 Lời nhắn", value: msg }
+                ],
+                footer: { text: "Gửi từ akari310 bio-link" }
+            }]
+        };
+
+        fetch(WEBHOOK_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+        }).then(res => {
             submitBtn.disabled = false;
             submitBtn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> Send Message`;
-            anonForm.reset();
-            showToast(`💌 Thank you <b>${name}</b>, your note was sent!`);
-        }, 800);
+            if (res.ok) {
+                anonForm.reset();
+                showToast(`💌 Thank you <b>${name}</b>, your note was sent!`);
+            } else {
+                showToast(`❌ Oops! Something went wrong.`);
+            }
+        }).catch(err => {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> Send Message`;
+            showToast(`❌ Network Error! Cannot reach the server.`);
+        });
     });
 }
 
