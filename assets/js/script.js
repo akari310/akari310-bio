@@ -232,6 +232,8 @@ audio.addEventListener('play', () => {
     if (currentBgmMode === 'local') {
         bgmPlayPause.classList.replace('fa-play', 'fa-pause');
         bgmPlayer.classList.add('playing');
+        const spinner = document.querySelector('.bgm-spin');
+        if(spinner) spinner.style.animationPlayState = 'running';
     }
 });
 
@@ -239,6 +241,8 @@ audio.addEventListener('pause', () => {
     if (currentBgmMode === 'local') {
         bgmPlayPause.classList.replace('fa-pause', 'fa-play');
         bgmPlayer.classList.remove('playing');
+        const spinner = document.querySelector('.bgm-spin');
+        if(spinner) spinner.style.animationPlayState = 'paused';
     }
 });
 
