@@ -83,6 +83,21 @@ function loadTrack(index, autoPlay = true) {
     bgmCurrent.textContent = "0:00";
     timelineSlider.style.background = `linear-gradient(to right, var(--c-lavender) 0%, rgba(255,255,255,0.1) 0%)`;
 
+    if ('mediaSession' in navigator) {
+        let artist = "akari310";
+        let parsedTitle = track.title;
+        if (track.title.includes(" - ")) {
+            const parts = track.title.split(" - ");
+            parsedTitle = parts[0];
+            artist = parts[1];
+        }
+        navigator.mediaSession.metadata = new MediaMetadata({
+            title: parsedTitle,
+            artist: artist,
+            artwork: [{ src: track.cover, sizes: '512x512', type: 'image/jpeg' }]
+        });
+    }
+
     if (track.type === 'local') {
         if (ytPlayer && ytPlayer.pauseVideo) ytPlayer.pauseVideo();
         audio.src = track.src;
@@ -114,6 +129,19 @@ function loadTrack(index, autoPlay = true) {
 
 if (bgmPrev) bgmPrev.addEventListener('click', () => loadTrack(currentTrackIndex - 1, true));
 if (bgmNext) bgmNext.addEventListener('click', () => loadTrack(currentTrackIndex + 1, true));
+
+if ('mediaSession' in navigator) {
+    navigator.mediaSession.setActionHandler('play', () => {
+        if (currentBgmMode === 'local') audio.play();
+        else if (ytPlayer) ytPlayer.playVideo();
+    });
+    navigator.mediaSession.setActionHandler('pause', () => {
+        if (currentBgmMode === 'local') audio.pause();
+        else if (ytPlayer) ytPlayer.pauseVideo();
+    });
+    navigator.mediaSession.setActionHandler('previoustrack', () => loadTrack(currentTrackIndex - 1, true));
+    navigator.mediaSession.setActionHandler('nexttrack', () => loadTrack(currentTrackIndex + 1, true));
+}
 
 function extractVideoID(url) {
     const regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
