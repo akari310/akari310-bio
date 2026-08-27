@@ -23,11 +23,20 @@ function formatTime(seconds) {
     return `${m}:${s.toString().padStart(2, '0')}`;
 }
 
-entryScreen.addEventListener('click', () => {
+// Restore Saved Volume
+const savedVol = localStorage.getItem('akari_bgm_volume');
+if (savedVol !== null) {
+    volumeSlider.value = savedVol;
+    audio.volume = savedVol;
+    if (savedVol == 0) bgmMute.className = 'fa-solid fa-volume-xmark';
+}
+
+entryScreen.addEventListener('click', (e) => {
     entryScreen.classList.add('hidden');
     mainContent.classList.remove('hidden');
     bgmPlayer.classList.add('visible', 'playing');
     audio.volume = volumeSlider.value;
+    createSparkles(e.clientX, e.clientY);
     
     // Init Audio Visualizer
     if (!audioContext) {
@@ -177,6 +186,7 @@ timelineSlider.addEventListener('input', (e) => {
 
 volumeSlider.addEventListener('input', (e) => {
     const vol = e.target.value;
+    localStorage.setItem('akari_bgm_volume', vol);
     if (currentBgmMode === 'local') {
         audio.volume = vol;
         audio.muted = vol == 0;
@@ -382,12 +392,93 @@ function tickSakura() {
     }
 }
 
+// --- Click Sparkles Particles ---
+let sparkleArray = [];
+class Sparkle {
+    constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        const angle = Math.random() * Math.PI * 2;
+        const speed = Math.random() * 4 + 2;
+        this.vx = Math.cos(angle) * speed;
+        this.vy = Math.sin(angle) * speed;
+        this.size = Math.random() * 3 + 2;
+        this.alpha = 1;
+        this.decay = Math.random() * 0.03 + 0.02;
+        const colors = ['#cba6f7', '#b4befe', '#74c7ec', '#f5c2e7', '#ffffff'];
+        this.color = colors[Math.floor(Math.random() * colors.length)];
+    }
+    update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.vy += 0.08; // light gravity
+        this.alpha -= this.decay;
+        this.size *= 0.95;
+    }
+    draw() {
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, this.alpha);
+        ctx.fillStyle = this.color;
+        ctx.shadowColor = this.color;
+        ctx.shadowBlur = 8;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, Math.max(0.5, this.size), 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+    }
+}
+
+function createSparkles(x, y) {
+    for (let i = 0; i < 18; i++) {
+        sparkleArray.push(new Sparkle(x, y));
+    }
+}
+
+window.addEventListener('click', (e) => {
+    createSparkles(e.clientX, e.clientY);
+});
+
+function tickSparkles() {
+    for (let i = sparkleArray.length - 1; i >= 0; i--) {
+        sparkleArray[i].update();
+        sparkleArray[i].draw();
+        if (sparkleArray[i].alpha <= 0 || sparkleArray[i].size <= 0.5) {
+            sparkleArray.splice(i, 1);
+        }
+    }
+}
+
+// --- Toast Notification & Click-to-Copy ---
+const toast = document.getElementById('toast');
+let toastTimeout;
+function showToast(message) {
+    if (!toast) return;
+    toast.innerHTML = `<i class="fa-solid fa-circle-check" style="color: var(--c-green);"></i> ${message}`;
+    toast.classList.add('show');
+    clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(() => {
+        toast.classList.remove('show');
+    }, 2500);
+}
+
+document.querySelectorAll('.social-icon[data-copy]').forEach(icon => {
+    icon.addEventListener('click', (e) => {
+        const textToCopy = icon.getAttribute('data-copy');
+        if (textToCopy) {
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                showToast(`Copied <b>${textToCopy}</b> to clipboard!`);
+            }).catch(() => {});
+        }
+    });
+});
+
 // --- Main Animation Loop ---
 function mainLoop() {
     requestAnimationFrame(mainLoop);
     tickVisualizer();
     tickCursor();
     tickSakura();
+    tickSparkles();
 }
 mainLoop();
 
@@ -449,18 +540,34 @@ function updatePresence(d) {
             if (el.style.height) el.style.height = 'auto';
         });
 
-        // Custom Status (Type 4)
+        // Custom Status (Type 4) with Custom Emoji support
         const cs = d.activities?.find(a => a.type === 4);
-        let txt = '';
+        const customStatusEl = document.getElementById('discord-custom-status');
         if (cs) {
-            if (cs.emoji?.name) txt += cs.emoji.name + ' ';
-            if (cs.state) txt += cs.state;
+            let html = '';
+            if (cs.emoji) {
+                if (cs.emoji.id) {
+                    const ext = cs.emoji.animated ? 'gif' : 'webp';
+                    html += `<img src="https://cdn.discordapp.com/emojis/${cs.emoji.id}.${ext}?size=48&quality=lossless" class="custom-status-emoji" alt="${cs.emoji.name}"> `;
+                } else if (cs.emoji.name) {
+                    html += cs.emoji.name + ' ';
+                }
+            }
+            if (cs.state) {
+                const textSpan = document.createElement('span');
+                textSpan.textContent = cs.state;
+                html += textSpan.innerHTML;
+            }
+            customStatusEl.innerHTML = html || "Just chilling.";
+        } else {
+            customStatusEl.textContent = "Just chilling.";
         }
-        document.getElementById('discord-custom-status').textContent = txt || "Just chilling.";
 
         // Rich Presence Logic
         // Find a game/app activity (ignore Custom Status type 4)
         const gameActivity = d.activities?.find(a => a.type !== 4);
+
+    if (window.spotifyInterval) clearInterval(window.spotifyInterval);
 
     if (d.spotify) {
         // Show Spotify
@@ -471,6 +578,28 @@ function updatePresence(d) {
         document.getElementById('sp-art').src = d.spotify.album_art_url;
         document.getElementById('sp-song').textContent = d.spotify.song;
         document.getElementById('sp-artist').textContent = d.spotify.artist;
+        
+        // Real-time Spotify Progress
+        const spFill = document.getElementById('sp-progress-fill');
+        const spCurrent = document.getElementById('sp-time-current');
+        const spTotal = document.getElementById('sp-time-total');
+        
+        if (d.spotify.timestamps?.start && d.spotify.timestamps?.end) {
+            const startMs = d.spotify.timestamps.start;
+            const endMs = d.spotify.timestamps.end;
+            const totalSec = Math.max(0, Math.floor((endMs - startMs) / 1000));
+            if (spTotal) spTotal.textContent = formatTime(totalSec);
+            
+            const updateSpotify = () => {
+                const now = Date.now();
+                const currentSec = Math.max(0, Math.min(totalSec, Math.floor((now - startMs) / 1000)));
+                const percent = totalSec > 0 ? (currentSec / totalSec) * 100 : 0;
+                if (spCurrent) spCurrent.textContent = formatTime(currentSec);
+                if (spFill) spFill.style.width = `${percent}%`;
+            };
+            updateSpotify();
+            window.spotifyInterval = setInterval(updateSpotify, 1000);
+        }
         
     } else if (gameActivity) {
         // Show Game / App

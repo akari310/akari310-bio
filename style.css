@@ -645,3 +645,62 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     pointer-events: none;
 }
 
+/* =========================================
+   TOAST NOTIFICATION & EMOJI
+========================================= */
+.toast {
+    position: fixed;
+    bottom: 90px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: rgba(30, 30, 46, 0.85);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--c-lavender);
+    color: var(--text-main);
+    padding: 10px 22px;
+    border-radius: 14px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.6), 0 0 15px rgba(180, 190, 254, 0.3);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 100000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+.custom-status-emoji {
+    width: 18px;
+    height: 18px;
+    vertical-align: -3px;
+    object-fit: contain;
+    margin-right: 4px;
+}
+
+#sp-progress-fill {
+    animation: none;
+    width: 0%;
+    transition: width 0.3s linear;
+}
+
+/* =========================================
+   REDUCED MOTION SUPPORT
+========================================= */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    .avatar-wrapper { animation: none; }
+    .spinning-disc { animation: none; }
+    .bgm-spin { animation: none; }
+}
+
