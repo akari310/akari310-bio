@@ -442,6 +442,13 @@ function updatePresence(d) {
         document.getElementById('discord-status-text').textContent = s.toUpperCase();
         document.getElementById('discord-status-text').style.color = statusColors[s] || statusColors.offline;
 
+        // Remove skeleton loader classes
+        document.querySelectorAll('.skeleton').forEach(el => {
+            el.classList.remove('skeleton');
+            if (el.style.width) el.style.width = 'auto';
+            if (el.style.height) el.style.height = 'auto';
+        });
+
         // Custom Status (Type 4)
         const cs = d.activities?.find(a => a.type === 4);
         let txt = '';
