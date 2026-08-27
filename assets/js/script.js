@@ -463,8 +463,8 @@ if (anonForm) {
         submitBtn.disabled = true;
         submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Sending...`;
 
-        const p1 = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTU0MjU1Njc1ODEyMjMwNzY4Ng==";
-        const p2 = "LzRxU01lbTJycmlmSDl3M2llTGFRQVRrVjdNSy1UMDZnOVlwVHN6RklFUDV1alhTVmx0R29PVXE3WGNzbmY0SFpMR0Zk";
+        const p1 = "aHR0cHM6Ly9kaXNjb3JkLmNvbS9hcGkvd2ViaG9va3MvMTU0MjU2NzI1NzIwNzQ3NjI3Ng==";
+        const p2 = "L3Y2VFVXTkltRGhCWTdCLVNpdVBSalNpVHJZTnVvMm9IendTaWVzSjE1cTdYa0pjMTZya2NIelRZX2NrVFhxZnBvOERY";
         const WEBHOOK_URL = atob(p1) + atob(p2);
         
         const payload = {
