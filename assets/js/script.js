@@ -718,7 +718,7 @@ function updatePresence(d) {
 
     setTimeout(() => {
         // Avatar
-        const av = u.avatar ? `https://cdn.discordapp.com/avatars/${u.id}/${u.avatar}.${u.avatar.startsWith('a_') ? 'gif' : 'png'}?size=256` : `assets/img/avatar.jpg`;
+        const av = u.avatar ? `https://cdn.discordapp.com/avatars/${u.id}/${u.avatar}.${u.avatar.startsWith('a_') ? 'gif' : 'png'}?size=256` : `https://cdn.discordapp.com/embed/avatars/0.png`;
         document.getElementById('avatar').src = av;
         document.getElementById('discord-avatar').src = av;
 
