@@ -648,7 +648,7 @@ const toast = document.getElementById('toast');
 let toastTimeout;
 function showToast(message) {
     if (!toast) return;
-    toast.innerHTML = `<i class="fa-solid fa-circle-check" style="color: var(--c-green);"></i> ${message}`;
+    toast.innerHTML = message;
     toast.classList.add('show');
     clearTimeout(toastTimeout);
     toastTimeout = setTimeout(() => {
@@ -661,7 +661,7 @@ document.querySelectorAll('.social-icon[data-copy]').forEach(icon => {
         const textToCopy = icon.getAttribute('data-copy');
         if (textToCopy) {
             navigator.clipboard.writeText(textToCopy).then(() => {
-                showToast(`Copied <b>${textToCopy}</b> to clipboard!`);
+                showToast(`<i class="fa-solid fa-circle-check" style="color: var(--c-green);"></i> Copied <b>${textToCopy}</b> to clipboard!`);
             }).catch(() => {});
         }
     });

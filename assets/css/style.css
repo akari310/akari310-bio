@@ -812,20 +812,12 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 .bgm-title-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; min-width: 0; }
 .marquee-container {
     flex: 1;
-    overflow: hidden;
-    white-space: nowrap;
-    position: relative;
     min-width: 0;
 }
 .bgm-title {
-    font-size: 0.8rem; font-weight: 700; color: #fff;
-    display: inline-block;
-    padding-left: 100%;
-    animation: marquee 8s linear infinite;
-}
-@keyframes marquee {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-100%); }
+    font-size: 0.85rem; font-weight: 700; color: #fff;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    display: block;
 }
 
 .bgm-controls {
