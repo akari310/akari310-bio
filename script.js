@@ -39,7 +39,6 @@ entryScreen.addEventListener('click', () => {
         analyser.fftSize = 64;
         const bufferLength = analyser.frequencyBinCount;
         dataArray = new Uint8Array(bufferLength);
-        drawVisualizer();
     }
     if (audioContext.state === 'suspended') audioContext.resume();
     
@@ -188,8 +187,7 @@ volumeSlider.addEventListener('input', (e) => {
     bgmMute.className = vol == 0 ? 'fa-solid fa-volume-xmark' : 'fa-solid fa-volume-high';
 });
 
-function drawVisualizer() {
-    requestAnimationFrame(drawVisualizer);
+function tickVisualizer() {
     if(!analyser) return;
     
     // Resize canvas dynamically to match CSS size
@@ -279,21 +277,27 @@ updateViews();
 
 // --- 3D Tilt Effect ---
 const cardTilt = document.getElementById('card');
-document.addEventListener('mousemove', (e) => {
+function handleTilt(e) {
     if (mainContent.classList.contains('hidden')) return;
+    const clientX = e.touches ? e.touches[0].clientX : e.pageX;
+    const clientY = e.touches ? e.touches[0].clientY : e.pageY;
     const centerX = window.innerWidth / 2;
     const centerY = window.innerHeight / 2;
-    const xAxis = (centerX - e.pageX) / 40;
-    const yAxis = (centerY - e.pageY) / 40;
+    const xAxis = (centerX - clientX) / 40;
+    const yAxis = (centerY - clientY) / 40;
     cardTilt.style.transform = `perspective(1000px) rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
-});
+}
+document.addEventListener('mousemove', handleTilt);
+document.addEventListener('touchmove', handleTilt);
 
-// Reset tilt on mouseleave
-document.addEventListener('mouseleave', () => {
+// Reset tilt on mouseleave or touchend
+function resetTilt() {
     cardTilt.style.transition = 'transform 0.5s ease';
     cardTilt.style.transform = `perspective(1000px) rotateY(0deg) rotateX(0deg) translateZ(0px)`;
     setTimeout(() => cardTilt.style.transition = 'none', 500);
-});
+}
+document.addEventListener('mouseleave', resetTilt);
+document.addEventListener('touchend', resetTilt);
 
 // --- Custom Cursor ---
 const cursorDot = document.getElementById('cursor-dot');
@@ -308,15 +312,13 @@ window.addEventListener('mousemove', (e) => {
     cursorDot.style.top = `${mouseY}px`;
 });
 
-function animateCursor() {
+function tickCursor() {
     // Lerp (smooth follow)
     ringX += (mouseX - ringX) * 0.15;
     ringY += (mouseY - ringY) * 0.15;
     cursorRing.style.left = `${ringX}px`;
     cursorRing.style.top = `${ringY}px`;
-    requestAnimationFrame(animateCursor);
 }
-animateCursor();
 
 // --- Sakura Particles ---
 const canvas = document.getElementById('mouse-canvas');
@@ -372,15 +374,22 @@ Sakura.prototype.draw = function() {
     ctx.restore();
 }
 
-function animateSakura() {
+function tickSakura() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     for (let i = 0; i < sakuraArray.length; i++) {
         sakuraArray[i].update();
         sakuraArray[i].draw();
     }
-    requestAnimationFrame(animateSakura);
 }
-animateSakura();
+
+// --- Main Animation Loop ---
+function mainLoop() {
+    requestAnimationFrame(mainLoop);
+    tickVisualizer();
+    tickCursor();
+    tickSakura();
+}
+mainLoop();
 
 // --- Lanyard API ---
 const statusColors = { online: '#a6da95', idle: '#f9e2af', dnd: '#f38ba8', offline: '#a6adc8' };
@@ -412,33 +421,39 @@ function updatePresence(d) {
     if (!d?.discord_user) return;
     const u = d.discord_user;
 
-    // Avatar
-    const av = u.avatar ? `https://cdn.discordapp.com/avatars/${u.id}/${u.avatar}.${u.avatar.startsWith('a_') ? 'gif' : 'png'}?size=256` : `avatar.jpg`;
-    document.getElementById('avatar').src = av;
-    document.getElementById('discord-avatar').src = av;
-
-    // Status Dot & Text
-    const s = d.discord_status || 'offline';
-    document.getElementById('status-dot').style.backgroundColor = statusColors[s] || statusColors.offline;
-    document.getElementById('discord-status-text').textContent = s.toUpperCase();
-    document.getElementById('discord-status-text').style.color = statusColors[s] || statusColors.offline;
-
-    // Custom Status (Type 4)
-    const cs = d.activities?.find(a => a.type === 4);
-    let txt = '';
-    if (cs) {
-        if (cs.emoji?.name) txt += cs.emoji.name + ' ';
-        if (cs.state) txt += cs.state;
-    }
-    document.getElementById('discord-custom-status').textContent = txt || "Just chilling.";
-
-    // Rich Presence Logic
     const activityCard = document.getElementById('activity-card-container');
     const spotifyBox = document.getElementById('spotify-box');
     const gameBox = document.getElementById('game-box');
-    
-    // Find a game/app activity (ignore Custom Status type 4)
-    const gameActivity = d.activities?.find(a => a.type !== 4);
+    const infoBox = document.querySelector('.activity-box');
+
+    // Add fade out transition
+    if (activityCard) activityCard.classList.add('fade-transition');
+    if (infoBox) infoBox.classList.add('fade-transition');
+
+    setTimeout(() => {
+        // Avatar
+        const av = u.avatar ? `https://cdn.discordapp.com/avatars/${u.id}/${u.avatar}.${u.avatar.startsWith('a_') ? 'gif' : 'png'}?size=256` : `avatar.jpg`;
+        document.getElementById('avatar').src = av;
+        document.getElementById('discord-avatar').src = av;
+
+        // Status Dot & Text
+        const s = d.discord_status || 'offline';
+        document.getElementById('status-dot').style.backgroundColor = statusColors[s] || statusColors.offline;
+        document.getElementById('discord-status-text').textContent = s.toUpperCase();
+        document.getElementById('discord-status-text').style.color = statusColors[s] || statusColors.offline;
+
+        // Custom Status (Type 4)
+        const cs = d.activities?.find(a => a.type === 4);
+        let txt = '';
+        if (cs) {
+            if (cs.emoji?.name) txt += cs.emoji.name + ' ';
+            if (cs.state) txt += cs.state;
+        }
+        document.getElementById('discord-custom-status').textContent = txt || "Just chilling.";
+
+        // Rich Presence Logic
+        // Find a game/app activity (ignore Custom Status type 4)
+        const gameActivity = d.activities?.find(a => a.type !== 4);
 
     if (d.spotify) {
         // Show Spotify
@@ -589,6 +604,13 @@ function updatePresence(d) {
         // No Activity -> Hide Card
         activityCard.classList.add('hidden');
     }
+
+    // Remove fade out transition to show updated content
+    requestAnimationFrame(() => {
+        if (activityCard) activityCard.classList.remove('fade-transition');
+        if (infoBox) infoBox.classList.remove('fade-transition');
+    });
+    }, 300); // 300ms transition time
 }
 
 initLanyard();
