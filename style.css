@@ -320,7 +320,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     padding: 4px;
     border-radius: 12px;
     border: 1px solid var(--border-color);
-    margin-top: 15px;
+    margin-top: 55px;
     width: 100%;
 }
 .tab-btn {
@@ -555,7 +555,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
    USER INFO
 ========================================= */
 .user-info {
-    margin-top: 25px; /* space for avatar */
+    margin-top: 5px; /* avatar space handled by tab-nav */
     text-align: center;
     width: 100%;
 }
