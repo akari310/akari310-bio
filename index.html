@@ -11,14 +11,14 @@
     <meta property="og:url" content="https://akari.is-a.dev/">
     <meta name="theme-color" content="#cba6f7">
     <meta name="twitter:card" content="summary_large_image">
-    <link rel="icon" href="logo.png" type="image/png">
-    <link rel="stylesheet" href="style.css?v=2.8">
+    <link rel="icon" href="assets/img/logo.png" type="image/png">
+    <link rel="stylesheet" href="assets/css/style.css?v=3.0">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
     <!-- Background & Grid Overlay -->
-    <div class="bg-layer" style="background-image: url('bg.jpg');"></div>
+    <div class="bg-layer" style="background-image: url('assets/img/bg.jpg');"></div>
     <div class="grid-overlay"></div>
 
     <!-- Custom Cursor -->
@@ -35,7 +35,7 @@
     </div>
 
     <!-- Audio Element -->
-    <audio id="bg-audio" src="bgm.webm" loop></audio>
+    <audio id="bg-audio" src="assets/audio/bgm.webm" loop></audio>
 
     <!-- Floating Media Player -->
     <div class="bgm-player" id="bgm-player">
@@ -47,7 +47,7 @@
             </div>
         </div>
         <audio id="bgm-audio" loop>
-            <source src="bgm.mp3" type="audio/mpeg">
+            <source src="assets/audio/bgm.webm" type="audio/webm">
         </audio>
         <div id="yt-player-container" class="hidden"></div>
         <div class="bgm-info">
@@ -83,7 +83,7 @@
                 
                 <!-- Avatar -->
                 <div class="avatar-wrapper" id="avatar-wrapper" title="Click 5 times for a surprise!">
-                    <img id="avatar" src="avatar.jpg" alt="Avatar" class="avatar-img">
+                    <img id="avatar" src="assets/img/avatar.jpg" alt="Avatar" class="avatar-img">
                     <div class="status-dot" id="status-dot"></div>
                 </div>
 
@@ -105,9 +105,9 @@
                             <p class="user-note">Nai wa~~</p>
                             <p class="member-since">Member since Apr 22, 2021</p>
                             <div class="badges">
-                                <img src="assets/nitro.svg" alt="Nitro" title="Nitro" class="badge-icon">
-                                <img src="assets/hypesquad_bravery.svg" alt="HypeSquad Bravery" title="HypeSquad Bravery" class="badge-icon">
-                                <img src="assets/active_developer.svg" alt="Active Developer" title="Active Developer" class="badge-icon">
+                                <img src="assets/img/nitro.svg" alt="Nitro" title="Nitro" class="badge-icon">
+                                <img src="assets/img/hypesquad_bravery.svg" alt="HypeSquad Bravery" title="HypeSquad Bravery" class="badge-icon">
+                                <img src="assets/img/active_developer.svg" alt="Active Developer" title="Active Developer" class="badge-icon">
                             </div>
                         </div>
 
@@ -272,6 +272,6 @@
     <!-- Toast Notification -->
     <div id="toast" class="toast"></div>
 
-    <script src="script.js?v=2.8"></script>
+    <script src="assets/js/script.js?v=3.0"></script>
 </body>
 </html>
