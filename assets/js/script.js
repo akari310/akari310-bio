@@ -51,7 +51,19 @@ entryScreen.addEventListener('click', (e) => {
     }
     if (audioContext.state === 'suspended') audioContext.resume();
     
-    audio.play().catch(e => console.log("Audio play blocked", e));
+    audio.play().then(() => {
+        const spinner = document.querySelector('.bgm-spin');
+        if(spinner) spinner.style.animationPlayState = 'running';
+        // Set Media Session for first track
+        if ('mediaSession' in navigator) {
+            const track = playlist[0];
+            navigator.mediaSession.metadata = new MediaMetadata({
+                title: track.title,
+                artist: 'akari310',
+                artwork: [{ src: track.cover, sizes: '512x512', type: 'image/jpeg' }]
+            });
+        }
+    }).catch(e => console.log("Audio play blocked", e));
 });
 
 // --- Playlist & Audio System ---
