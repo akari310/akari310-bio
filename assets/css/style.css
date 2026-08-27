@@ -778,9 +778,12 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 }
 .bgm-spin {
     width: 100%; height: 100%;
-    border-radius: 50%; object-fit: cover; display: block;
+    border-radius: 50%; display: block;
     animation: spin 4s linear infinite;
     animation-play-state: paused;
+}
+.bgm-cover-img {
+    width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block;
 }
 .bgm-player.playing .bgm-spin { animation-play-state: running; }
 .bgm-hole {

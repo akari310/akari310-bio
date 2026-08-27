@@ -228,6 +228,20 @@ audio.addEventListener('loadedmetadata', () => {
     if (currentBgmMode === 'local') bgmDuration.textContent = formatTime(audio.duration);
 });
 
+audio.addEventListener('play', () => {
+    if (currentBgmMode === 'local') {
+        bgmPlayPause.classList.replace('fa-play', 'fa-pause');
+        bgmPlayer.classList.add('playing');
+    }
+});
+
+audio.addEventListener('pause', () => {
+    if (currentBgmMode === 'local') {
+        bgmPlayPause.classList.replace('fa-pause', 'fa-play');
+        bgmPlayer.classList.remove('playing');
+    }
+});
+
 audio.addEventListener('ended', () => {
     if (currentBgmMode === 'local') loadTrack(currentTrackIndex + 1, true);
 });
