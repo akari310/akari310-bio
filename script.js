@@ -54,6 +54,67 @@ entryScreen.addEventListener('click', (e) => {
     audio.play().catch(e => console.log("Audio play blocked", e));
 });
 
+// --- Playlist & Audio System ---
+const playlist = [
+    { title: "Moshi Moshi Remix", type: "local", src: "bgm.webm", cover: "https://img.youtube.com/vi/ys7Gc6j_iG4/hqdefault.jpg" },
+    { title: "Trên Tình Bạn Dưới Tình Yêu (Lofi)", type: "youtube", vid: "IVOXMTInEoo", cover: "https://img.youtube.com/vi/IVOXMTInEoo/hqdefault.jpg" },
+    { title: "Em Khác Gì Hoa (Lofi)", type: "youtube", vid: "Lacy9EGbH_M", cover: "https://img.youtube.com/vi/Lacy9EGbH_M/hqdefault.jpg" },
+    { title: "Nắng Có Mang Em Về", type: "youtube", vid: "nnJNidtX5fE", cover: "https://img.youtube.com/vi/nnJNidtX5fE/hqdefault.jpg" },
+    { title: "Em Là Hoàng Hôn", type: "youtube", vid: "zuyAOpISnao", cover: "https://img.youtube.com/vi/zuyAOpISnao/hqdefault.jpg" }
+];
+
+let currentTrackIndex = 0;
+const bgmPrev = document.getElementById('bgm-prev');
+const bgmNext = document.getElementById('bgm-next');
+const bgmTitleEl = document.querySelector('.bgm-title');
+const bgmCoverImg = document.getElementById('bgm-cover-img');
+
+function loadTrack(index, autoPlay = true) {
+    if (index < 0) index = playlist.length - 1;
+    if (index >= playlist.length) index = 0;
+    currentTrackIndex = index;
+
+    const track = playlist[currentTrackIndex];
+    currentBgmMode = track.type;
+    bgmTitleEl.textContent = track.title;
+    bgmCoverImg.src = track.cover;
+
+    timelineSlider.value = 0;
+    bgmCurrent.textContent = "0:00";
+    timelineSlider.style.background = `linear-gradient(to right, var(--c-lavender) 0%, rgba(255,255,255,0.1) 0%)`;
+
+    if (track.type === 'local') {
+        if (ytPlayer && ytPlayer.pauseVideo) ytPlayer.pauseVideo();
+        audio.src = track.src;
+        if (autoPlay) {
+            audio.play().then(() => {
+                bgmPlayPause.classList.replace('fa-play', 'fa-pause');
+                bgmPlayer.classList.add('playing');
+            }).catch(e => console.log("Play failed", e));
+        }
+    } else {
+        if (!audio.paused) audio.pause();
+        if (ytPlayer && ytPlayer.loadVideoById) {
+            if (autoPlay) {
+                ytPlayer.loadVideoById(track.vid);
+            } else {
+                ytPlayer.cueVideoById(track.vid);
+            }
+        } else {
+            const check = setInterval(() => {
+                if (ytPlayer && ytPlayer.loadVideoById) {
+                    clearInterval(check);
+                    if (autoPlay) ytPlayer.loadVideoById(track.vid);
+                    else ytPlayer.cueVideoById(track.vid);
+                }
+            }, 300);
+        }
+    }
+}
+
+if (bgmPrev) bgmPrev.addEventListener('click', () => loadTrack(currentTrackIndex - 1, true));
+if (bgmNext) bgmNext.addEventListener('click', () => loadTrack(currentTrackIndex + 1, true));
+
 function extractVideoID(url) {
     const regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
     const match = url.match(regExp);
@@ -64,9 +125,9 @@ function playYouTubeAudio(vid, activity) {
     currentBgmMode = 'youtube';
     if (!audio.paused) audio.pause();
     
-    document.querySelector('.bgm-title').textContent = activity.details || activity.name;
+    bgmTitleEl.textContent = activity.details || activity.name;
     const coverSrc = document.getElementById('rp-large-img').src;
-    document.getElementById('bgm-cover-img').src = coverSrc;
+    bgmCoverImg.src = coverSrc;
     
     if (ytPlayer && ytPlayer.loadVideoById) {
         ytPlayer.loadVideoById(vid);
@@ -113,9 +174,12 @@ function onYouTubeIframeAPIReady() {
                             timelineSlider.style.background = `linear-gradient(to right, var(--c-lavender) ${percent}%, rgba(255,255,255,0.1) ${percent}%)`;
                         }
                     }, 500);
-                } else if (e.data === YT.PlayerState.PAUSED || e.data === YT.PlayerState.ENDED) {
+                } else if (e.data === YT.PlayerState.PAUSED) {
                     bgmPlayPause.classList.replace('fa-pause', 'fa-play');
                     bgmPlayer.classList.remove('playing');
+                } else if (e.data === YT.PlayerState.ENDED) {
+                    // Auto-play next song in playlist
+                    loadTrack(currentTrackIndex + 1, true);
                 }
             }
         }
@@ -162,6 +226,10 @@ bgmMute.addEventListener('click', () => {
 
 audio.addEventListener('loadedmetadata', () => {
     if (currentBgmMode === 'local') bgmDuration.textContent = formatTime(audio.duration);
+});
+
+audio.addEventListener('ended', () => {
+    if (currentBgmMode === 'local') loadTrack(currentTrackIndex + 1, true);
 });
 
 audio.addEventListener('timeupdate', () => {
@@ -285,17 +353,26 @@ async function updateViews() {
 }
 updateViews();
 
-// --- 3D Tilt Effect ---
+// --- 3D Tilt Effect & Hologram Glare ---
 const cardTilt = document.getElementById('card');
+const hologramGlare = document.getElementById('hologram-glare');
+
 function handleTilt(e) {
     if (mainContent.classList.contains('hidden')) return;
     const clientX = e.touches ? e.touches[0].clientX : e.pageX;
     const clientY = e.touches ? e.touches[0].clientY : e.pageY;
     const centerX = window.innerWidth / 2;
     const centerY = window.innerHeight / 2;
-    const xAxis = (centerX - clientX) / 40;
-    const yAxis = (centerY - clientY) / 40;
+    const xAxis = (centerX - clientX) / 35;
+    const yAxis = (centerY - clientY) / 35;
     cardTilt.style.transform = `perspective(1000px) rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+
+    // Move Hologram reflection
+    if (hologramGlare) {
+        const posX = 50 + xAxis * 2.5;
+        const posY = 50 + yAxis * 2.5;
+        hologramGlare.style.backgroundPosition = `${posX}% ${posY}%`;
+    }
 }
 document.addEventListener('mousemove', handleTilt);
 document.addEventListener('touchmove', handleTilt);
@@ -304,10 +381,82 @@ document.addEventListener('touchmove', handleTilt);
 function resetTilt() {
     cardTilt.style.transition = 'transform 0.5s ease';
     cardTilt.style.transform = `perspective(1000px) rotateY(0deg) rotateX(0deg) translateZ(0px)`;
+    if (hologramGlare) hologramGlare.style.backgroundPosition = `50% 50%`;
     setTimeout(() => cardTilt.style.transition = 'none', 500);
 }
 document.addEventListener('mouseleave', resetTilt);
 document.addEventListener('touchend', resetTilt);
+
+// --- Multi-Tabs Switcher ---
+document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('data-tab');
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+
+        btn.classList.add('active');
+        const targetPane = document.getElementById(targetId);
+        if (targetPane) targetPane.classList.add('active');
+    });
+});
+
+// --- Easter Egg: 5 Clicks on Avatar (Rainbow Rave Mode) ---
+const avatarWrapper = document.getElementById('avatar-wrapper');
+const cardBorder = document.getElementById('card-border');
+let avatarClickCount = 0;
+let avatarClickTimer = null;
+
+if (avatarWrapper) {
+    avatarWrapper.addEventListener('click', (e) => {
+        e.stopPropagation();
+        avatarClickCount++;
+        createSparkles(e.clientX, e.clientY);
+
+        clearTimeout(avatarClickTimer);
+        avatarClickTimer = setTimeout(() => {
+            avatarClickCount = 0;
+        }, 2000);
+
+        if (avatarClickCount === 5) {
+            avatarClickCount = 0;
+            if (cardBorder) {
+                cardBorder.classList.add('rainbow-rave');
+                showToast("✨ <b>RAVE MODE ACTIVATED!</b> ✨");
+                for (let i = 0; i < 60; i++) {
+                    setTimeout(() => {
+                        createSparkles(window.innerWidth / 2 + (Math.random() * 300 - 150), window.innerHeight / 2 + (Math.random() * 300 - 150));
+                    }, i * 30);
+                }
+                setTimeout(() => {
+                    cardBorder.classList.remove('rainbow-rave');
+                }, 8000);
+            }
+        }
+    });
+}
+
+// --- Anonymous Message Form Handler ---
+const anonForm = document.getElementById('anonymous-form');
+if (anonForm) {
+    anonForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = document.getElementById('anon-name').value.trim() || "Anonymous";
+        const msg = document.getElementById('anon-msg').value.trim();
+        const submitBtn = document.getElementById('anon-submit-btn');
+
+        if (!msg) return;
+
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Sending...`;
+
+        setTimeout(() => {
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> Send Message`;
+            anonForm.reset();
+            showToast(`💌 Thank you <b>${name}</b>, your note was sent!`);
+        }, 800);
+    });
+}
 
 // --- Custom Cursor ---
 const cursorDot = document.getElementById('cursor-dot');

@@ -56,6 +56,8 @@
                     <p class="bgm-title">Moshi Moshi Remix</p>
                 </div>
                 <div class="bgm-controls">
+                    <i class="fa-solid fa-backward-step" id="bgm-prev" title="Previous Song"></i>
+                    <i class="fa-solid fa-forward-step" id="bgm-next" title="Next Song"></i>
                     <i class="fa-solid fa-volume-high" id="bgm-mute"></i>
                     <input type="range" id="bgm-volume" min="0" max="1" step="0.01" value="0.3" class="volume-slider">
                 </div>
@@ -76,56 +78,134 @@
             <!-- 3D Tilt Container -->
         <div class="card-tilt" id="card">
             <!-- Animated Gradient Border Wrapper -->
-            <div class="card-border">
+            <div class="card-border" id="card-border">
+                <div class="hologram-glare" id="hologram-glare"></div>
                 <div class="card-inner">
                     
                     <!-- Avatar -->
-                    <div class="avatar-wrapper">
+                    <div class="avatar-wrapper" id="avatar-wrapper" title="Click 5 times for a surprise!">
                         <img id="avatar" src="avatar.jpg" alt="Avatar" class="avatar-img">
                         <div class="status-dot" id="status-dot"></div>
                     </div>
 
-                    <!-- User Info -->
-                    <div class="user-info">
-                        <h1 class="display-name">Akari <i class="fa-solid fa-circle-check verified-badge"></i></h1>
-                        <p class="scramble-text" id="scramble-text"></p>
-                        <p class="user-note">Nai wa~~</p>
-                        <p class="member-since">Member since Apr 22, 2021</p>
-                        <div class="badges">
-                            <img src="assets/nitro.svg" alt="Nitro" title="Nitro" class="badge-icon">
-                            <img src="assets/hypesquad_bravery.svg" alt="HypeSquad Bravery" title="HypeSquad Bravery" class="badge-icon">
-                            <img src="assets/active_developer.svg" alt="Active Developer" title="Active Developer" class="badge-icon">
+                    <!-- Navigation Tabs -->
+                    <div class="tab-nav">
+                        <button class="tab-btn active" data-tab="tab-profile"><i class="fa-solid fa-user"></i> Bio</button>
+                        <button class="tab-btn" data-tab="tab-setup"><i class="fa-solid fa-gamepad"></i> Setup</button>
+                        <button class="tab-btn" data-tab="tab-message"><i class="fa-solid fa-paper-plane"></i> Message</button>
+                    </div>
+
+                    <!-- TAB 1: PROFILE / BIO -->
+                    <div class="tab-pane active" id="tab-profile">
+                        <!-- User Info -->
+                        <div class="user-info">
+                            <h1 class="display-name">Akari <i class="fa-solid fa-circle-check verified-badge"></i></h1>
+                            <p class="scramble-text" id="scramble-text"></p>
+                            <p class="user-note">Nai wa~~</p>
+                            <p class="member-since">Member since Apr 22, 2021</p>
+                            <div class="badges">
+                                <img src="assets/nitro.svg" alt="Nitro" title="Nitro" class="badge-icon">
+                                <img src="assets/hypesquad_bravery.svg" alt="HypeSquad Bravery" title="HypeSquad Bravery" class="badge-icon">
+                                <img src="assets/active_developer.svg" alt="Active Developer" title="Active Developer" class="badge-icon">
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Socials -->
-                    <div class="social-row">
-                        <a href="https://discord.com/users/834722078489968680" target="_blank" class="social-icon discord" title="Discord: akari310 (Click to Copy)" data-copy="akari310"><i class="fa-brands fa-discord"></i></a>
-                        <a href="https://open.spotify.com/user/31wv74q4et5pkxf3s4i52of6cqxi" target="_blank" class="social-icon spotify" title="Spotify"><i class="fa-brands fa-spotify"></i></a>
-                        <a href="https://github.com/akari310" target="_blank" class="social-icon github" title="GitHub"><i class="fa-brands fa-github"></i></a>
-                        <a href="https://steamcommunity.com/id/4kari/" target="_blank" class="social-icon steam" title="Steam: Akari"><i class="fa-brands fa-steam"></i></a>
-                        <a href="https://tracker.gg/valorant/profile/riot/Akari%234kari/" target="_blank" class="social-icon riot" title="Valorant: Akari#4kari (Click to Copy)" data-copy="Akari#4kari">
-                            <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="22" height="22">
-                                <path d="M23.792 2.152a.252.252 0 0 0-.098.083c-3.384 4.23-6.769 8.46-10.15 12.69-.107.093-.025.288.119.265 2.439.003 4.877 0 7.316.001a.66.66 0 0 0 .552-.25c.774-.967 1.55-1.934 2.324-2.903a.72.72 0 0 0 .144-.49c-.002-3.077 0-6.153-.003-9.23.016-.11-.1-.206-.204-.167zM.077 2.166c-.077.038-.074.132-.076.205.002 3.074.001 6.15.001 9.225a.679.679 0 0 0 .158.463l7.64 9.55c.12.152.308.25.505.247 2.455 0 4.91.003 7.365 0 .142.02.222-.174.116-.265C10.661 15.176 5.526 8.766.4 2.35c-.08-.094-.174-.272-.322-.184z"/>
-                            </svg>
-                        </a>
-                    </div>
+                        <!-- Socials -->
+                        <div class="social-row">
+                            <a href="https://discord.com/users/834722078489968680" target="_blank" class="social-icon discord" title="Discord: akari310 (Click to Copy)" data-copy="akari310"><i class="fa-brands fa-discord"></i></a>
+                            <a href="https://open.spotify.com/user/31wv74q4et5pkxf3s4i52of6cqxi" target="_blank" class="social-icon spotify" title="Spotify"><i class="fa-brands fa-spotify"></i></a>
+                            <a href="https://github.com/akari310" target="_blank" class="social-icon github" title="GitHub"><i class="fa-brands fa-github"></i></a>
+                            <a href="https://steamcommunity.com/id/4kari/" target="_blank" class="social-icon steam" title="Steam: Akari"><i class="fa-brands fa-steam"></i></a>
+                            <a href="https://tracker.gg/valorant/profile/riot/Akari%234kari/" target="_blank" class="social-icon riot" title="Valorant: Akari#4kari (Click to Copy)" data-copy="Akari#4kari">
+                                <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="22" height="22">
+                                    <path d="M23.792 2.152a.252.252 0 0 0-.098.083c-3.384 4.23-6.769 8.46-10.15 12.69-.107.093-.025.288.119.265 2.439.003 4.877 0 7.316.001a.66.66 0 0 0 .552-.25c.774-.967 1.55-1.934 2.324-2.903a.72.72 0 0 0 .144-.49c-.002-3.077 0-6.153-.003-9.23.016-.11-.1-.206-.204-.167zM.077 2.166c-.077.038-.074.132-.076.205.002 3.074.001 6.15.001 9.225a.679.679 0 0 0 .158.463l7.64 9.55c.12.152.308.25.505.247 2.455 0 4.91.003 7.365 0 .142.02.222-.174.116-.265C10.661 15.176 5.526 8.766.4 2.35c-.08-.094-.174-.272-.322-.184z"/>
+                                </svg>
+                            </a>
+                        </div>
 
-                    <!-- Custom Status / Notes (Like guns.lol/mintyeuuoii) -->
-                    <div class="activity-box">
-                        <div class="discord-presence">
-                            <img id="discord-avatar" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" class="presence-avatar skeleton">
-                            <div class="presence-info">
-                                <p class="presence-name skeleton" id="discord-global-name" style="width: 150px; height: 16px; border-radius: 4px;">Nguyễn Ngọc Anh <span class="presence-status" id="discord-status-text">IDLE</span></p>
-                                <p class="presence-state skeleton" id="discord-custom-status" style="width: 180px; height: 14px; margin-top: 6px; border-radius: 4px;">Connecting to Discord...</p>
+                        <!-- Custom Status / Notes -->
+                        <div class="activity-box">
+                            <div class="discord-presence">
+                                <img id="discord-avatar" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" class="presence-avatar skeleton">
+                                <div class="presence-info">
+                                    <p class="presence-name skeleton" id="discord-global-name" style="width: 150px; height: 16px; border-radius: 4px;">Nguyễn Ngọc Anh <span class="presence-status" id="discord-status-text">IDLE</span></p>
+                                    <p class="presence-state skeleton" id="discord-custom-status" style="width: 180px; height: 14px; margin-top: 6px; border-radius: 4px;">Connecting to Discord...</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- View Counter -->
+                        <div class="footer-row">
+                            <div class="views">
+                                <i class="fa-solid fa-eye"></i> <span id="view-count">2,400</span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- View Counter -->
-                    <div class="footer-row">
-                        <div class="views">
-                            <i class="fa-solid fa-eye"></i> <span id="view-count">2,400</span>
+                    <!-- TAB 2: SETUP & GEAR -->
+                    <div class="tab-pane" id="tab-setup">
+                        <div class="setup-section">
+                            <h3 class="setup-title"><i class="fa-solid fa-crosshairs"></i> Gaming Profile</h3>
+                            <div class="gear-grid">
+                                <div class="gear-item">
+                                    <span class="gear-label"><i class="fa-solid fa-shield-halved"></i> Valorant</span>
+                                    <span class="gear-value highlight">Akari#4kari</span>
+                                </div>
+                                <div class="gear-item">
+                                    <span class="gear-label"><i class="fa-brands fa-steam"></i> Steam</span>
+                                    <span class="gear-value">/id/4kari</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="setup-section">
+                            <h3 class="setup-title"><i class="fa-solid fa-desktop"></i> Battlestation</h3>
+                            <div class="gear-grid">
+                                <div class="gear-item">
+                                    <span class="gear-label"><i class="fa-solid fa-computer-mouse"></i> Mouse</span>
+                                    <span class="gear-value">Wireless Gaming</span>
+                                </div>
+                                <div class="gear-item">
+                                    <span class="gear-label"><i class="fa-solid fa-keyboard"></i> Keyboard</span>
+                                    <span class="gear-value">Custom Mechanical</span>
+                                </div>
+                                <div class="gear-item">
+                                    <span class="gear-label"><i class="fa-solid fa-headphones"></i> Audio</span>
+                                    <span class="gear-value">Studio Monitor</span>
+                                </div>
+                                <div class="gear-item">
+                                    <span class="gear-label"><i class="fa-solid fa-microchip"></i> Platform</span>
+                                    <span class="gear-value">Windows 11</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="setup-section">
+                            <h3 class="setup-title"><i class="fa-solid fa-heart"></i> Favorites</h3>
+                            <div class="tags-container">
+                                <span class="tag-badge"><i class="fa-solid fa-gamepad"></i> FPS / Valorant</span>
+                                <span class="tag-badge"><i class="fa-solid fa-music"></i> J-Pop / Lofi</span>
+                                <span class="tag-badge"><i class="fa-solid fa-tv"></i> Anime</span>
+                                <span class="tag-badge"><i class="fa-solid fa-code"></i> Coding</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 3: MESSAGE ME (GUESTBOOK) -->
+                    <div class="tab-pane" id="tab-message">
+                        <div class="message-box-container">
+                            <p class="message-desc"><i class="fa-solid fa-envelope-open-text"></i> Leave an anonymous note or message for Akari!</p>
+                            <form id="anonymous-form" class="anon-form">
+                                <div class="form-group">
+                                    <input type="text" id="anon-name" placeholder="Your Name or Tag (Optional)" maxlength="30" class="anon-input">
+                                </div>
+                                <div class="form-group">
+                                    <textarea id="anon-msg" placeholder="Type your message here..." required maxlength="300" rows="4" class="anon-textarea"></textarea>
+                                </div>
+                                <button type="submit" id="anon-submit-btn" class="anon-submit-btn">
+                                    <i class="fa-solid fa-paper-plane"></i> Send Message
+                                </button>
+                            </form>
                         </div>
                     </div>
 
