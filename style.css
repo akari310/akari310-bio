@@ -329,7 +329,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     display: flex; justify-content: center; gap: 8px;
     margin: 8px 0;
 }
-.badges i { font-size: 1.1rem; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2)); }
+.badges img { width: 22px; height: 22px; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.4)); object-fit: contain; }
 
 
 /* =========================================
