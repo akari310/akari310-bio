@@ -240,7 +240,6 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     position: relative;
     border-radius: 22px;
     box-shadow: 0 0 30px rgba(180, 190, 254, 0.3), 0 20px 50px rgba(0,0,0,0.8);
-    overflow: hidden;
 }
 .card-border::before {
     content: "";
