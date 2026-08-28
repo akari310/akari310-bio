@@ -830,6 +830,10 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     font-size: 0.9rem; cursor: pointer; transition: color 0.2s;
 }
 .bgm-controls i:hover { color: var(--c-lavender); }
+.bgm-controls i.active {
+    color: var(--c-lavender);
+    text-shadow: 0 0 5px rgba(203, 166, 247, 0.5);
+}
 
 .volume-slider {
     -webkit-appearance: none;

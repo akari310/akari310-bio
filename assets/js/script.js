@@ -76,8 +76,12 @@ const playlist = [
 ];
 
 let currentTrackIndex = 0;
+let isShuffle = false;
+let isRepeatOne = false;
 const bgmPrev = document.getElementById('bgm-prev');
 const bgmNext = document.getElementById('bgm-next');
+const bgmShuffle = document.getElementById('bgm-shuffle');
+const bgmRepeat = document.getElementById('bgm-repeat');
 const bgmTitleEl = document.querySelector('.bgm-title');
 const bgmCoverImg = document.getElementById('bgm-cover-img');
 
@@ -139,8 +143,52 @@ function loadTrack(index, autoPlay = true) {
     }
 }
 
-if (bgmPrev) bgmPrev.addEventListener('click', () => loadTrack(currentTrackIndex - 1, true));
-if (bgmNext) bgmNext.addEventListener('click', () => loadTrack(currentTrackIndex + 1, true));
+function getNextTrackIndex() {
+    if (isShuffle) {
+        let nextIdx;
+        do {
+            nextIdx = Math.floor(Math.random() * playlist.length);
+        } while (nextIdx === currentTrackIndex && playlist.length > 1);
+        return nextIdx;
+    }
+    return currentTrackIndex + 1;
+}
+
+function getPrevTrackIndex() {
+    if (isShuffle) {
+        let prevIdx;
+        do {
+            prevIdx = Math.floor(Math.random() * playlist.length);
+        } while (prevIdx === currentTrackIndex && playlist.length > 1);
+        return prevIdx;
+    }
+    return currentTrackIndex - 1;
+}
+
+if (bgmPrev) bgmPrev.addEventListener('click', () => loadTrack(getPrevTrackIndex(), true));
+if (bgmNext) bgmNext.addEventListener('click', () => loadTrack(getNextTrackIndex(), true));
+
+if (bgmShuffle) {
+    bgmShuffle.addEventListener('click', () => {
+        isShuffle = !isShuffle;
+        bgmShuffle.classList.toggle('active', isShuffle);
+        bgmShuffle.title = isShuffle ? 'Shuffle: On' : 'Shuffle: Off';
+    });
+}
+
+if (bgmRepeat) {
+    bgmRepeat.addEventListener('click', () => {
+        isRepeatOne = !isRepeatOne;
+        bgmRepeat.classList.toggle('active', isRepeatOne);
+        bgmRepeat.title = isRepeatOne ? 'Repeat: One' : 'Repeat: All';
+        bgmRepeat.className = isRepeatOne ? 'fa-solid fa-repeat active' : 'fa-solid fa-repeat';
+        if(isRepeatOne) {
+            bgmRepeat.innerHTML = '<span style="font-size: 0.5em; position: absolute; margin-top: 5px; margin-left: -5px;">1</span>';
+        } else {
+            bgmRepeat.innerHTML = '';
+        }
+    });
+}
 
 if ('mediaSession' in navigator) {
     navigator.mediaSession.setActionHandler('play', () => {
@@ -151,8 +199,8 @@ if ('mediaSession' in navigator) {
         if (currentBgmMode === 'local') audio.pause();
         else if (ytPlayer) ytPlayer.pauseVideo();
     });
-    navigator.mediaSession.setActionHandler('previoustrack', () => loadTrack(currentTrackIndex - 1, true));
-    navigator.mediaSession.setActionHandler('nexttrack', () => loadTrack(currentTrackIndex + 1, true));
+    navigator.mediaSession.setActionHandler('previoustrack', () => loadTrack(getPrevTrackIndex(), true));
+    navigator.mediaSession.setActionHandler('nexttrack', () => loadTrack(getNextTrackIndex(), true));
 }
 
 function extractVideoID(url) {
@@ -210,16 +258,20 @@ function onYouTubeIframeAPIReady() {
                             const cur = ytPlayer.getCurrentTime() || 0;
                             bgmCurrent.textContent = formatTime(cur);
                             const percent = ytDuration ? (cur / ytDuration) * 100 : 0;
-                            timelineSlider.value = percent;
+                            timelineSlider.value = percent || 0;
                             timelineSlider.style.background = `linear-gradient(to right, var(--c-lavender) ${percent}%, rgba(255,255,255,0.1) ${percent}%)`;
                         }
                     }, 500);
-                } else if (e.data === YT.PlayerState.PAUSED) {
+                } else {
                     bgmPlayPause.classList.replace('fa-pause', 'fa-play');
                     bgmPlayer.classList.remove('playing');
-                } else if (e.data === YT.PlayerState.ENDED) {
-                    // Auto-play next song in playlist
-                    loadTrack(currentTrackIndex + 1, true);
+                    if (e.data === YT.PlayerState.ENDED) {
+                        if (isRepeatOne) {
+                            ytPlayer.playVideo();
+                        } else {
+                            loadTrack(getNextTrackIndex(), true);
+                        }
+                    }
                 }
             }
         }
@@ -287,7 +339,13 @@ audio.addEventListener('pause', () => {
 });
 
 audio.addEventListener('ended', () => {
-    if (currentBgmMode === 'local') loadTrack(currentTrackIndex + 1, true);
+    if (currentBgmMode === 'local') {
+        if (isRepeatOne) {
+            loadTrack(currentTrackIndex, true);
+        } else {
+            loadTrack(getNextTrackIndex(), true);
+        }
+    }
 });
 
 audio.addEventListener('timeupdate', () => {
