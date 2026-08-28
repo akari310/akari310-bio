@@ -920,17 +920,4 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     transition: width 0.3s linear;
 }
 
-/* =========================================
-   REDUCED MOTION SUPPORT
-========================================= */
-@media (prefers-reduced-motion: reduce) {
-    * {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-    }
-    .avatar-wrapper { animation: none; }
-    .spinning-disc { animation: none; }
-    .bgm-spin { animation: none; }
-}
 
