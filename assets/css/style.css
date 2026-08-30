@@ -587,7 +587,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     object-fit: cover;
     display: block;
 }
-.user-info { margin-top: 5px; position: relative; z-index: 2; width: 100%; text-align: left; }
+.user-info { margin-top: 5px; position: relative; z-index: 2; width: 100%; text-align: center; }
 .nameplate-container {
     position: relative;
     padding: 0;
@@ -607,6 +607,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 .name-header-row {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
     flex-wrap: wrap;
 }
@@ -672,8 +673,9 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 .username-pronouns-row {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 6px;
-    margin-top: 4px;
+    margin-top: 2px;
     font-size: 0.95rem;
     font-weight: 500;
 }
