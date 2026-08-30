@@ -857,8 +857,12 @@ function updatePresence(d) {
 
         // Avatar Decoration
         const adEl = document.getElementById('avatar-decoration');
-        if (u.avatar_decoration_data && u.avatar_decoration_data.asset) {
-            adEl.src = `https://cdn.discordapp.com/avatar-decoration-presets/${u.avatar_decoration_data.asset}.png`;
+        if (u.avatar_decoration_data) {
+            if (u.avatar_decoration_data.sku_id) {
+                adEl.src = `https://cdn.discordapp.com/media/v1/collectibles-shop/${u.avatar_decoration_data.sku_id}/static`;
+            } else if (u.avatar_decoration_data.asset) {
+                adEl.src = `https://cdn.discordapp.com/avatar-decoration-presets/${u.avatar_decoration_data.asset}.png`;
+            }
             adEl.classList.remove('hidden');
         } else {
             adEl.classList.add('hidden');
