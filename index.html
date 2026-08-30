@@ -12,7 +12,7 @@
     <meta name="theme-color" content="#cba6f7">
     <meta name="twitter:card" content="summary_large_image">
     <link rel="icon" href="assets/img/logo.png" type="image/png">
-    <link rel="stylesheet" href="assets/css/style.css?v=3.9">
+    <link rel="stylesheet" href="assets/css/style.css?v=4.0">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
@@ -78,9 +78,11 @@
 
     <!-- Main Content -->
     <main class="main-content hidden" id="main">
+        <div class="bg-overlay"></div>
         <div class="cards-container">
             <!-- 3D Tilt Container -->
         <div class="card-tilt" id="card">
+            <div class="profile-effect" id="profile-effect"></div>
             <!-- Animated Gradient Border Wrapper -->
             <div class="card-border" id="card-border">
                 <div class="hologram-glare" id="hologram-glare"></div>
@@ -88,6 +90,7 @@
                 <!-- Avatar -->
                 <div class="avatar-wrapper" id="avatar-wrapper" title="Click 5 times for a surprise!">
                     <img id="avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Avatar" class="avatar-img">
+                    <img id="avatar-decoration" class="avatar-decoration hidden" src="" alt="Avatar Decoration">
                     <div class="status-dot" id="status-dot"></div>
                 </div>
 
@@ -104,7 +107,10 @@
                     <div class="tab-pane active" id="tab-profile">
                         <!-- User Info -->
                         <div class="user-info">
-                            <h1 class="display-name">Akari <i class="fa-solid fa-circle-check verified-badge"></i></h1>
+                            <div class="nameplate-container">
+                                <img id="nameplate" class="nameplate hidden" src="" alt="Nameplate">
+                                <h1 class="display-name">Akari <i class="fa-solid fa-circle-check verified-badge"></i></h1>
+                            </div>
                             <p class="scramble-text" id="scramble-text"></p>
                             <p class="user-note">Nai wa~~</p>
                             <p class="member-since">Member since Apr 22, 2021</p>
@@ -276,7 +282,7 @@
     <div id="toast" class="toast"></div>
 
     <!-- Main Script -->
-    <script src="assets/js/script.js?v=3.8"></script>
+    <script src="assets/js/script.js?v=4.0"></script>
 </body>
 </html>
 

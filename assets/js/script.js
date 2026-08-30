@@ -793,6 +793,22 @@ async function initLanyard() {
     } catch (e) { console.error("Lanyard init failed", e); }
 }
 
+async function fetchExtendedProfile() {
+    try {
+        const res = await fetch(`https://dcdn.dstn.to/profile/${DISCORD_ID}`);
+        if (!res.ok) return;
+        const json = await res.json();
+        
+        // Accent Color
+        if (json.user && json.user.accent_color) {
+            const hex = '#' + json.user.accent_color.toString(16).padStart(6, '0');
+            document.documentElement.style.setProperty('--c-lavender', hex);
+        }
+    } catch (e) {
+        console.error("Failed to fetch extended profile", e);
+    }
+}
+
 function connectWS() {
     const ws = new WebSocket('wss://api.lanyard.rest/socket');
     let hb;
@@ -823,6 +839,15 @@ function updatePresence(d) {
         const av = u.avatar ? `https://cdn.discordapp.com/avatars/${u.id}/${u.avatar}.${u.avatar.startsWith('a_') ? 'gif' : 'png'}?size=256` : `https://cdn.discordapp.com/embed/avatars/0.png`;
         document.getElementById('avatar').src = av;
         document.getElementById('discord-avatar').src = av;
+
+        // Avatar Decoration
+        const adEl = document.getElementById('avatar-decoration');
+        if (u.avatar_decoration_data && u.avatar_decoration_data.asset) {
+            adEl.src = `https://cdn.discordapp.com/avatar-decoration-presets/${u.avatar_decoration_data.asset}.png?size=96&passthrough=true`;
+            adEl.classList.remove('hidden');
+        } else {
+            adEl.classList.add('hidden');
+        }
 
         // Status Dot & Text
         const s = d.discord_status || 'offline';
@@ -1047,3 +1072,4 @@ function updatePresence(d) {
 }
 
 initLanyard();
+fetchExtendedProfile();
