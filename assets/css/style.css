@@ -572,12 +572,11 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 /* =========================================
    USER INFO
 ========================================= */
-.user-info { margin-top: 45px; position: relative; z-index: 2; }
+.user-info { margin-top: 45px; position: relative; z-index: 2; width: 100%; text-align: left; }
 .nameplate-container {
     position: relative;
-    display: inline-block;
-    padding: 4px 8px;
-    margin-left: -8px;
+    padding: 0;
+    margin: 0;
 }
 .nameplate {
     position: absolute;
@@ -590,21 +589,73 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     pointer-events: none;
     opacity: 0.9;
 }
-.display-name { font-size: 1.4rem; font-weight: 700; display: flex; align-items: center; gap: 8px; text-shadow: 0 2px 4px rgba(0,0,0,0.5); }
+.name-header-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+.display-name { 
+    font-size: 1.5rem; 
+    font-weight: 800; 
+    margin: 0; 
+    color: #fff;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5); 
+}
+.clan-tag {
+    display: inline-flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 6px;
+    padding: 2px 6px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    gap: 4px;
+    color: #e0e0e0;
+}
+.clan-icon {
+    width: 14px;
+    height: 14px;
+    object-fit: contain;
+}
+.discord-badges-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.profile-badge {
+    width: 22px;
+    height: 22px;
+    object-fit: contain;
+}
+.username-pronouns-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 4px;
+    font-size: 0.95rem;
+    font-weight: 500;
+}
+.username-text {
+    color: #e0e0e0;
+}
+.dot-separator {
+    font-size: 0.6rem;
+    color: var(--text-muted);
+}
+.pronouns-text {
+    color: var(--c-lavender);
+    font-weight: 600;
+}
 .verified-badge {
     font-size: 1.1rem; color: var(--c-sapphire);
     text-shadow: 0 0 10px var(--c-sapphire);
 }
 .scramble-text {
-    font-family: 'Space Mono', monospace;
-    font-size: 0.8rem; color: var(--c-lavender);
-    margin-top: 6px; font-weight: 700;
-    min-height: 20px; /* prevent layout shift */
-    letter-spacing: 2px;
+    display: none; /* Hide old scramble text since we have real username now */
 }
 .user-note {
-    font-size: 0.9rem;
-    color: #fff;
     margin-top: 6px;
     font-weight: 500;
 }
