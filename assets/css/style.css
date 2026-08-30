@@ -643,7 +643,9 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 .discord-badges-row {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 4px;
+    margin-top: 10px;
 }
 .profile-badge {
     width: 22px;
