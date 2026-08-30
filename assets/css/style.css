@@ -569,8 +569,9 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     left: -9px;
     width: 108px;
     height: 108px;
+    z-index: 20;
     pointer-events: none;
-    z-index: 11;
+    transform: scale(1.1);
 }
 
 /* =========================================
@@ -801,6 +802,11 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     border-radius: 12px;
     padding: 12px;
     margin-bottom: 15px;
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+}
+.music-box:hover {
+    box-shadow: 0 0 15px rgba(29, 185, 84, 0.4);
+    border-color: rgba(29, 185, 84, 0.6);
 }
 .music-box.hidden { display: none; }
 .music-header {
@@ -904,7 +910,11 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     opacity: 1; pointer-events: auto;
     transform: translateX(-50%) translateY(0);
 }
-.bgm-player:hover { transform: translateX(-50%) scale(1.02); }
+.bgm-player:hover { 
+    transform: translateX(-50%) scale(1.02); 
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 20px rgba(203, 166, 247, 0.5);
+    border-color: rgba(203, 166, 247, 0.6);
+}
 
 .bgm-cover {
     width: 45px; height: 45px;
