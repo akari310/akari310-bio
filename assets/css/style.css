@@ -280,25 +280,33 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 ========================================= */
 .profile-effect-container {
     position: absolute;
-    /* Mathematically exact values from Discord's custom-profile-frame API */
-    /* Container Width: 1200, Overlap: 56, Top: 304 */
-    /* Card Width = 1200 - 56*2 = 1088 */
-    width: 110.294cqi;  /* 1200 / 1088 */
-    left: -5.147cqi;    /* -56 / 1088 */
-    top: -27.941cqi;    /* -304 / 1088 */
+    /* Card width is approx 380px, so we can use percentages and fallback pixels */
+    width: 110.294%;
+    left: -5.147%;
+    top: -106px; /* Fallback for browsers that don't support cqi */
+    top: -27.941cqi;
+    height: 100%; /* Give it a height so side borders can stretch */
     pointer-events: none;
-    z-index: 50; /* Above the card inner */
 }
 .profile-effect-layer {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: auto;
+    height: auto; /* Planets keep aspect ratio */
     object-fit: contain;
 }
-.profile-effect-layer:first-child {
-    position: relative;
+.profile-effect-layer:nth-child(1) {
+    /* Side borders */
+    height: calc(100% + 150px); /* Stretch down deeper */
+    object-fit: fill;
+    z-index: 10; /* Front layer */
+}
+.profile-effect-layer:nth-child(2) {
+    z-index: 10; /* Front layer (small planet) */
+}
+.profile-effect-layer:nth-child(3) {
+    z-index: 1; /* Back layer (big planet) - goes behind card-inner */
 }
 
 /* HOLOGRAM FOIL GLARE */
@@ -348,6 +356,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     -webkit-backdrop-filter: blur(12px);
     border-radius: 20px;
     position: relative;
+    z-index: 2; /* Ensure it covers the back layer profile effect (big planet) */
     overflow: hidden;
     padding: 20px 22px;
     display: flex;
