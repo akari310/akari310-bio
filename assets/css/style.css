@@ -682,9 +682,15 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     text-shadow: 0 0 10px var(--c-sapphire);
 }
 .scramble-text {
-    display: none; /* Hide old scramble text since we have real username now */
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem; color: var(--c-lavender);
+    margin-top: 6px; font-weight: 700;
+    min-height: 20px;
+    letter-spacing: 2px;
 }
 .user-note {
+    font-size: 0.9rem;
+    color: #fff;
     margin-top: 6px;
     font-weight: 500;
 }
