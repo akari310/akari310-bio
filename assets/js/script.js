@@ -1073,3 +1073,12 @@ function updatePresence(d) {
 
 initLanyard();
 fetchExtendedProfile();
+
+// Initialize Tippy.js for tooltips
+tippy('[data-tippy-content]', {
+    allowHTML: true,
+    theme: 'discord',
+    animation: 'scale-subtle',
+    placement: 'top',
+    arrow: true
+});
