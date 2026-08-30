@@ -279,25 +279,24 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 ========================================= */
 .profile-effect-container {
     position: absolute;
-    top: -50px;
+    /* Adjust these to control how much the effect spills over the card */
+    top: -70px; /* Overlap the top edge */
     left: -20px;
-    width: calc(100% + 40px);
-    height: 300px; /* Only cover the top banner area */
+    width: calc(100% + 40px); /* 20px overlap on each side */
     pointer-events: none;
     z-index: 50; /* Above the card inner */
-    overflow: visible;
+    /* Container height will be dictated by the first relative layer */
 }
 .profile-effect-layer {
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 100%;
-    background-size: contain;
-    background-position: center top;
-    background-repeat: no-repeat;
+    height: auto;
     object-fit: contain;
-    object-position: center top;
+}
+.profile-effect-layer:first-child {
+    position: relative; /* Make the first layer relative so it dictates container height */
 }
 
 /* HOLOGRAM FOIL GLARE */
