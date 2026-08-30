@@ -367,6 +367,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     border-radius: 12px;
     border: 1px solid var(--border-color);
     width: 100%;
+    margin-top: 15px;
 }
 .tab-btn {
     flex: 1;
