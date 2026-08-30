@@ -573,9 +573,9 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
    USER INFO & BANNER
 ========================================= */
 .card-banner-top {
-    width: calc(100% + 40px);
-    margin: -20px -20px 0 -20px;
-    height: 120px;
+    width: calc(100% + 44px);
+    margin: -20px -22px 0 -22px;
+    height: 140px;
     position: relative;
     overflow: hidden;
     border-top-left-radius: 20px;
@@ -587,7 +587,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     object-fit: cover;
     display: block;
 }
-.user-info { margin-top: 10px; position: relative; z-index: 2; width: 100%; text-align: left; }
+.user-info { margin-top: 5px; position: relative; z-index: 2; width: 100%; text-align: left; }
 .nameplate-container {
     position: relative;
     padding: 0;
@@ -631,6 +631,8 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     font-weight: 600;
     gap: 4px;
     color: #e0e0e0;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
 }
 .clan-icon {
     width: 14px;
@@ -646,6 +648,12 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     width: 22px;
     height: 22px;
     object-fit: contain;
+    cursor: pointer;
+    transition: transform 0.2s ease, filter 0.2s ease;
+}
+.profile-badge:hover {
+    transform: scale(1.3);
+    filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.8));
 }
 .username-pronouns-row {
     display: flex;
@@ -657,14 +665,17 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 }
 .username-text {
     color: #e0e0e0;
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
 }
 .dot-separator {
     font-size: 0.6rem;
     color: var(--text-muted);
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.3);
 }
 .pronouns-text {
     color: var(--c-lavender);
     font-weight: 600;
+    text-shadow: 0 0 5px var(--c-lavender);
 }
 .verified-badge {
     font-size: 1.1rem; color: var(--c-sapphire);
