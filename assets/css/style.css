@@ -327,6 +327,8 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     flex-direction: column;
     align-items: center;
     gap: 8px;
+    box-shadow: 0 0 30px rgba(255, 105, 180, 0.4), inset 0 0 20px rgba(255, 105, 180, 0.2);
+    border: 1px solid rgba(255, 105, 180, 0.3);
 }
 
 /* =========================================
@@ -648,7 +650,6 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     align-items: center;
     justify-content: center;
     gap: 4px;
-    margin-top: 10px;
 }
 .profile-badge {
     width: 22px;
@@ -728,31 +729,76 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 
 
 /* =========================================
-   SOCIALS
+   SOCIALS / CONNECTIONS
 ========================================= */
-.social-row {
-    display: flex; justify-content: center; gap: 15px;
-    margin: 5px 0;
+.connections-section {
+    width: 100%;
+    margin-top: 15px;
+    text-align: left;
 }
-.social-icon {
-    width: 45px; height: 45px;
-    border-radius: 14px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--border-color);
-    display: flex; justify-content: center; align-items: center;
-    color: var(--text-main); font-size: 1.4rem;
+.connections-title {
+    font-size: 0.75rem;
+    color: #b9bbbe;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    font-weight: 700;
+    padding-left: 10px;
+}
+.connections-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.connection-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 12px;
+    border-radius: 8px;
+    background: rgba(43, 45, 49, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.05);
     text-decoration: none;
-    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    transition: background 0.2s ease, transform 0.1s ease;
+    gap: 12px;
 }
-.social-icon:hover {
-    background: rgba(255, 255, 255, 0.1);
-    transform: translateY(-5px) scale(1.1);
+@media (hover: hover) {
+    .connection-item:hover {
+        background: rgba(43, 45, 49, 0.9);
+        transform: scale(1.02);
+    }
 }
-.social-icon.discord:hover { color: #5865F2; border-color: #5865F2; box-shadow: 0 10px 20px rgba(88, 101, 242, 0.3); }
-.social-icon.spotify:hover { color: #1DB954; border-color: #1DB954; box-shadow: 0 10px 20px rgba(29, 185, 84, 0.3); }
-.social-icon.github:hover { color: #ffffff; border-color: #ffffff; box-shadow: 0 10px 20px rgba(255, 255, 255, 0.2); }
-.social-icon.steam:hover { color: #66c0f4; border-color: #66c0f4; box-shadow: 0 10px 20px rgba(102, 192, 244, 0.3); }
-.social-icon.riot:hover { color: #ff4655; border-color: #ff4655; box-shadow: 0 10px 20px rgba(255, 70, 85, 0.3); }
+.connection-item:active {
+    transform: scale(0.98);
+}
+.connection-icon-box {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+}
+.connection-info-box {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.connection-name {
+    font-size: 0.95rem;
+    color: #e0e0e0;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+}
+.external-link-icon {
+    font-size: 0.7rem;
+    color: #b9bbbe;
+    margin-left: 6px;
+}
+.connection-sub {
+    font-size: 0.75rem;
+    color: #b9bbbe;
+    margin-top: 2px;
+}
 
 /* =========================================
    DISCORD PRESENCE / NOTES BOX
