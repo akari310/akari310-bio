@@ -341,7 +341,6 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     padding: 4px;
     border-radius: 12px;
     border: 1px solid var(--border-color);
-    margin-top: 55px;
     width: 100%;
 }
 .tab-btn {
