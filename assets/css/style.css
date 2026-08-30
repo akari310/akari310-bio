@@ -279,13 +279,12 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 ========================================= */
 .profile-effect-container {
     position: absolute;
-    /* 304px overflow on a 1200px width = 25.3%. For a ~500px card, that is ~130px */
-    top: -130px; 
+    top: -90px; /* Moved down from -130px so planets aren't too high */
     left: -20px;
     width: calc(100% + 40px); /* 20px overlap on each side */
+    height: calc(100% + 90px); /* Let container cover the whole card */
     pointer-events: none;
     z-index: 50; /* Above the card inner */
-    /* Container height will be dictated by the first relative layer */
 }
 .profile-effect-layer {
     position: absolute;
@@ -295,8 +294,10 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     height: auto;
     object-fit: contain;
 }
-.profile-effect-layer:first-child {
-    position: relative; /* Make the first layer relative so it dictates container height */
+/* Side borders (first layer) should stretch vertically to cover the card */
+.profile-effect-layer:nth-child(1) {
+    height: 100%;
+    object-fit: fill;
 }
 
 /* HOLOGRAM FOIL GLARE */
