@@ -279,8 +279,8 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 ========================================= */
 .profile-effect-container {
     position: absolute;
-    /* Adjust these to control how much the effect spills over the card */
-    top: -70px; /* Overlap the top edge */
+    /* 304px overflow on a 1200px width = 25.3%. For a ~500px card, that is ~130px */
+    top: -130px; 
     left: -20px;
     width: calc(100% + 40px); /* 20px overlap on each side */
     pointer-events: none;
