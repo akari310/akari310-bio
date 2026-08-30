@@ -301,6 +301,9 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     height: calc(100% + 150px); /* Stretch down deeper */
     object-fit: fill;
     z-index: 10; /* Front layer */
+    /* Fade out the top and bottom excess gracefully */
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
 }
 .profile-effect-layer:nth-child(2) {
     z-index: 10; /* Front layer (small planet) */
