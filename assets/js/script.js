@@ -25,10 +25,15 @@ function formatTime(seconds) {
 
 // Restore Saved Volume
 const savedVol = localStorage.getItem('akari_bgm_volume');
+const savedMute = localStorage.getItem('akari_bgm_muted');
 if (savedVol !== null) {
     volumeSlider.value = savedVol;
     audio.volume = savedVol;
     if (savedVol == 0) bgmMute.className = 'fa-solid fa-volume-xmark';
+}
+if (savedMute === 'true') {
+    audio.muted = true;
+    bgmMute.className = 'fa-solid fa-volume-xmark';
 }
 
 entryScreen.addEventListener('click', (e) => {
@@ -242,6 +247,9 @@ function onYouTubeIframeAPIReady() {
         events: {
             'onReady': (e) => {
                 e.target.setVolume(volumeSlider.value * 100);
+                if (localStorage.getItem('akari_bgm_muted') === 'true' || volumeSlider.value == 0) {
+                    e.target.mute();
+                }
             },
             'onStateChange': (e) => {
                 if (currentBgmMode !== 'youtube') return;
@@ -302,18 +310,23 @@ bgmCoverBtn.addEventListener('click', () => {
 });
 
 bgmMute.addEventListener('click', () => {
+    let isMuted = false;
     if (currentBgmMode === 'local') {
         audio.muted = !audio.muted;
-        bgmMute.className = audio.muted ? 'fa-solid fa-volume-xmark' : 'fa-solid fa-volume-high';
+        isMuted = audio.muted;
+        bgmMute.className = isMuted ? 'fa-solid fa-volume-xmark' : 'fa-solid fa-volume-high';
     } else if (currentBgmMode === 'youtube' && ytPlayer) {
         if (ytPlayer.isMuted()) {
             ytPlayer.unMute();
+            isMuted = false;
             bgmMute.className = 'fa-solid fa-volume-high';
         } else {
             ytPlayer.mute();
+            isMuted = true;
             bgmMute.className = 'fa-solid fa-volume-xmark';
         }
     }
+    localStorage.setItem('akari_bgm_muted', isMuted);
 });
 
 audio.addEventListener('loadedmetadata', () => {
@@ -371,14 +384,16 @@ timelineSlider.addEventListener('input', (e) => {
 volumeSlider.addEventListener('input', (e) => {
     const vol = e.target.value;
     localStorage.setItem('akari_bgm_volume', vol);
+    let isMuted = vol == 0;
     if (currentBgmMode === 'local') {
         audio.volume = vol;
-        audio.muted = vol == 0;
+        audio.muted = isMuted;
     } else if (currentBgmMode === 'youtube' && ytPlayer) {
         ytPlayer.setVolume(vol * 100);
-        if (vol == 0) ytPlayer.mute(); else ytPlayer.unMute();
+        if (isMuted) ytPlayer.mute(); else ytPlayer.unMute();
     }
-    bgmMute.className = vol == 0 ? 'fa-solid fa-volume-xmark' : 'fa-solid fa-volume-high';
+    bgmMute.className = isMuted ? 'fa-solid fa-volume-xmark' : 'fa-solid fa-volume-high';
+    localStorage.setItem('akari_bgm_muted', isMuted);
 });
 
 function tickVisualizer() {
