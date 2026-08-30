@@ -784,14 +784,39 @@ document.querySelectorAll('.social-icon[data-copy]').forEach(icon => {
     });
 });
 
-// --- Main Animation Loop ---
+// --- Main Animation Loop (with visibility pause) ---
+let animationPaused = false;
+let animFrameId = null;
+
 function mainLoop() {
-    requestAnimationFrame(mainLoop);
+    if (animationPaused) { animFrameId = null; return; }
+    animFrameId = requestAnimationFrame(mainLoop);
     tickVisualizer();
     tickCursor();
     tickSakura();
     tickSparkles();
 }
+
+function startAnimLoop() {
+    if (!animFrameId && !animationPaused) {
+        animFrameId = requestAnimationFrame(mainLoop);
+    }
+}
+
+// Pause all animations when tab is hidden to save CPU/battery
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+        animationPaused = true;
+        if (animFrameId) {
+            cancelAnimationFrame(animFrameId);
+            animFrameId = null;
+        }
+    } else {
+        animationPaused = false;
+        startAnimLoop();
+    }
+});
+
 mainLoop();
 
 // --- Lanyard API ---
