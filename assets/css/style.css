@@ -644,6 +644,10 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     align-items: center;
     gap: 4px;
 }
+.badge-wrapper {
+    position: relative;
+    display: inline-block;
+}
 .profile-badge {
     width: 22px;
     height: 22px;
@@ -651,9 +655,43 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     cursor: pointer;
     transition: transform 0.2s ease, filter 0.2s ease;
 }
-.profile-badge:hover {
+.badge-wrapper:hover .profile-badge {
     transform: scale(1.3);
     filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.8));
+}
+.discord-tooltip {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%) scale(0.95);
+    background: #111214;
+    color: #dbdee1;
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    white-space: nowrap;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    z-index: 1000;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.4);
+    text-align: center;
+    line-height: 1.4;
+}
+.discord-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #111214 transparent transparent transparent;
+}
+.badge-wrapper:hover .discord-tooltip {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
 }
 .username-pronouns-row {
     display: flex;
