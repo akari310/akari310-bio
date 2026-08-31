@@ -502,12 +502,15 @@ const hologramGlare = document.getElementById('hologram-glare');
 
 function handleTilt(e) {
     if (mainContent.classList.contains('hidden')) return;
-    const clientX = e.touches ? e.touches[0].clientX : e.pageX;
-    const clientY = e.touches ? e.touches[0].clientY : e.pageY;
-    const centerX = window.innerWidth / 2;
-    const centerY = window.innerHeight / 2;
-    const xAxis = (centerX - clientX) / 35;
-    const yAxis = (centerY - clientY) / 35;
+    const rect = cardTilt.getBoundingClientRect();
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+    
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const xAxis = (centerX - clientX) / 15;
+    const yAxis = (centerY - clientY) / 25;
+    
     cardTilt.style.transform = `perspective(1000px) rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
 
     // Move Hologram reflection
@@ -517,8 +520,8 @@ function handleTilt(e) {
         hologramGlare.style.backgroundPosition = `${posX}% ${posY}%`;
     }
 }
-document.addEventListener('mousemove', handleTilt);
-document.addEventListener('touchmove', handleTilt);
+cardTilt.addEventListener('mousemove', handleTilt);
+cardTilt.addEventListener('touchmove', handleTilt);
 
 // Reset tilt on mouseleave or touchend
 function resetTilt() {
@@ -527,8 +530,8 @@ function resetTilt() {
     if (hologramGlare) hologramGlare.style.backgroundPosition = `50% 50%`;
     setTimeout(() => cardTilt.style.transition = 'none', 500);
 }
-document.addEventListener('mouseleave', resetTilt);
-document.addEventListener('touchend', resetTilt);
+cardTilt.addEventListener('mouseleave', resetTilt);
+cardTilt.addEventListener('touchend', resetTilt);
 
 // --- Multi-Tabs Switcher ---
 document.querySelectorAll('.tab-btn').forEach(btn => {
