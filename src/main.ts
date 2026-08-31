@@ -962,9 +962,12 @@ function updatePresence(d) {
 
         // Avatar Decoration
         const adEl = document.getElementById('avatar-decoration');
+        const isReduced = document.body.classList.contains('reduced-motion');
         if (u.avatar_decoration_data) {
             if (u.avatar_decoration_data.sku_id) {
-                adEl.src = `https://cdn.discordapp.com/media/v1/collectibles-shop/${u.avatar_decoration_data.sku_id}/static`;
+                // Use animated version when reduce-motion is off, static when on
+                const baseUrl = `https://cdn.discordapp.com/media/v1/collectibles-shop/${u.avatar_decoration_data.sku_id}`;
+                adEl.src = isReduced ? `${baseUrl}/static` : baseUrl;
             } else if (u.avatar_decoration_data.asset) {
                 adEl.src = `https://cdn.discordapp.com/avatar-decoration-presets/${u.avatar_decoration_data.asset}.png`;
             }
@@ -978,7 +981,6 @@ function updatePresence(d) {
         const videoEl = document.getElementById('nameplate-video');
         const imgEl = document.getElementById('nameplate-img');
         const effectContainer = document.getElementById('nameplate-effect');
-        const isReduced = document.body.classList.contains('reduced-motion');
         
         // Store globally for toggle handler
         (window as any).currentNameplateData = np;
@@ -1331,7 +1333,22 @@ if (reduceMotionToggle) {
             startAnimLoop();
         }
         updateNameplateEffect();
+        updateAvatarDecoration(isReduced);
     });
+}
+
+// Update avatar decoration based on reduce-motion setting
+function updateAvatarDecoration(isReduced: boolean) {
+    const adEl = document.getElementById('avatar-decoration');
+    if (!adEl || !adEl.src) return;
+    
+    // Extract SKU from current URL
+    const match = adEl.src.match(/\/collectibles-shop\/(\d+)/);
+    if (match) {
+        const skuId = match[1];
+        const baseUrl = `https://cdn.discordapp.com/media/v1/collectibles-shop/${skuId}`;
+        adEl.src = isReduced ? `${baseUrl}/static` : baseUrl;
+    }
 }
 
 // Update nameplate effect based on reduce-motion setting
