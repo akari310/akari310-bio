@@ -821,8 +821,12 @@ document.querySelectorAll('.social-icon[data-copy]').forEach(icon => {
 let animationPaused = false;
 let animFrameId = null;
 
+function isReducedMotion(): boolean {
+    return document.body.classList.contains('reduced-motion');
+}
+
 function mainLoop() {
-    if (animationPaused) { animFrameId = null; return; }
+    if (animationPaused || isReducedMotion()) { animFrameId = null; return; }
     animFrameId = requestAnimationFrame(mainLoop);
     tickVisualizer();
     tickCursor();
@@ -831,7 +835,7 @@ function mainLoop() {
 }
 
 function startAnimLoop() {
-    if (!animFrameId && !animationPaused) {
+    if (!animFrameId && !animationPaused && !isReducedMotion()) {
         animFrameId = requestAnimationFrame(mainLoop);
     }
 }
@@ -1223,6 +1227,7 @@ if (reduceMotionToggle) {
         } else {
             document.body.classList.remove('reduced-motion');
             localStorage.setItem('akari_reduce_motion', 'false');
+            startAnimLoop();
         }
     });
 }

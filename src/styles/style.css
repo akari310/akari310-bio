@@ -1197,27 +1197,6 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 }
 
 /* =========================================
-   REDUCED MOTION (Accessibility)
-   Respects user's OS-level preference to
-   reduce animations for comfort or performance
-========================================= */
-@media (prefers-reduced-motion: reduce) {
-    *, *::before, *::after {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-        scroll-behavior: auto !important;
-    }
-    #mouse-canvas,
-    #audio-visualizer,
-    .sakura-petal,
-    .sparkle-particle { display: none !important; }
-    .hologram-glare { opacity: 0 !important; }
-    .card-border { box-shadow: 0 0 15px rgba(180, 190, 254, 0.2), 0 10px 30px rgba(0,0,0,0.6) !important; }
-    .marquee-inner { animation: none !important; }
-}
-
-/* =========================================
    TOP CONTROLS & SETTINGS MODAL
 ========================================= */
 .top-controls {
@@ -1366,11 +1345,13 @@ input:checked + .slider:before {
 
 /* Reduced Motion Override */
 body.reduced-motion #mouse-canvas,
-body.reduced-motion .sakura-petal,
 body.reduced-motion #cursor-dot,
 body.reduced-motion #cursor-ring,
 body.reduced-motion .hologram-glare,
-body.reduced-motion #audio-visualizer {
+body.reduced-motion #audio-visualizer,
+body.reduced-motion .spinning-disc,
+body.reduced-motion .bgm-spin,
+body.reduced-motion .card-border::before {
     display: none !important;
 }
 
@@ -1393,4 +1374,9 @@ body.reduced-motion .card-tilt {
 body.reduced-motion * {
     animation: none !important;
     transition: none !important;
+}
+
+body.reduced-motion .bgm-title,
+body.reduced-motion .marquee-container {
+    animation: none !important;
 }
