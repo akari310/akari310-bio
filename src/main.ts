@@ -2,7 +2,6 @@ import tippy from 'tippy.js';
 import 'tippy.js/dist/tippy.css';
 
 const DISCORD_ID = "834722078489968680";
-const COUNTER_URL = "https://api.counterapi.dev/v1/akari310/v2/up";
 
 // --- Entry Screen & Audio ---
 const entryScreen = document.getElementById('entry');
@@ -487,23 +486,20 @@ function scrambleText() {
 }
 scrambleText();
 
-// --- View Counter ---
+// --- View Counter (localStorage only, no external API) ---
 async function updateViews() {
     const viewCountEl = document.getElementById('view-count');
     let localViews = parseInt(localStorage.getItem('akari_views_v3') || "0");
-    try {
-        const res = await fetch(COUNTER_URL);
-        const data = await res.json();
-        let serverCount = typeof data === 'number' ? data : data?.count || data?.value;
-        if (serverCount) {
-            viewCountEl.textContent = serverCount.toLocaleString();
-            localStorage.setItem('akari_views_v3', serverCount);
-        } else throw new Error("Invalid response");
-    } catch (err) {
+    
+    // Only increment on first visit per session
+    const hasCounted = sessionStorage.getItem('akari_view_counted');
+    if (!hasCounted) {
         localViews++;
         localStorage.setItem('akari_views_v3', localViews);
-        viewCountEl.textContent = localViews.toLocaleString();
+        sessionStorage.setItem('akari_view_counted', 'true');
     }
+    
+    viewCountEl.textContent = localViews.toLocaleString();
 }
 updateViews();
 
@@ -988,12 +984,12 @@ function updatePresence(d) {
         (window as any).currentNameplateData = np;
         
         if (np && np.sku_id && videoEl && imgEl && effectContainer) {
-            // Use local video file (public/assets/img/video.webm)
-            const videoSrc = '/assets/img/video.webm';
+            // Use confirmed working Discord CDN URL (user provided)
+            const videoSrc = `https://cdn.discordapp.com/media/v1/collectibles-shop/${np.sku_id}/video.webm`;
             const staticSrc = `https://cdn.discordapp.com/media/v1/collectibles-shop/${np.sku_id}/static`;
             
             console.log('Nameplate data:', np);
-            console.log('Video URL (local):', videoSrc);
+            console.log('Video URL:', videoSrc);
             console.log('Static URL:', staticSrc);
             console.log('Reduce motion:', isReduced);
             
@@ -1006,14 +1002,14 @@ function updatePresence(d) {
                 imgEl.classList.remove('hidden');
                 imgEl.onerror = () => effectContainer.classList.add('hidden');
             } else {
-                // Normal: use local animated video
+                // Normal: use animated video from Discord CDN
                 imgEl.classList.add('hidden');
                 imgEl.src = '';
                 videoEl.src = videoSrc;
                 videoEl.classList.remove('hidden');
                 videoEl.play().catch(() => {});
                 videoEl.onerror = () => {
-                    console.log('Local video failed, trying static fallback');
+                    console.log('Video failed, trying static fallback');
                     videoEl.classList.add('hidden');
                     imgEl.src = staticSrc;
                     imgEl.classList.remove('hidden');
@@ -1345,7 +1341,7 @@ function updateNameplateEffect() {
     const np = (window as any).currentNameplateData;
     if (!np || !np.sku_id || !videoEl || !imgEl || !effectContainer) return;
     
-    const videoSrc = '/assets/img/video.webm';
+    const videoSrc = `https://cdn.discordapp.com/media/v1/collectibles-shop/${np.sku_id}/video.webm`;
     const staticSrc = `https://cdn.discordapp.com/media/v1/collectibles-shop/${np.sku_id}/static`;
     
     if (isReduced) {
