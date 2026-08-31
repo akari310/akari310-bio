@@ -882,27 +882,50 @@ async function fetchExtendedProfile() {
             document.documentElement.style.setProperty('--c-lavender', hex);
         }
 
-        // Nameplate - Discord API NameplateData structure
-        // { sku_id?, asset?, palette?, label? }
+        // Nameplate - from dcdn API (user.collectibles.nameplate)
         const nameplateEl = document.getElementById('nameplate');
-        if (nameplateEl && json.user && json.user.nameplate) {
-            const np = json.user.nameplate;
+        const np = json.user?.collectibles?.nameplate;
+        if (nameplateEl && np) {
             let src = '';
-            
-            // Discord CDN nameplate URLs:
-            // SKU-based (collectibles shop): https://cdn.discordapp.com/nameplates/{user_id}/{asset}.png
-            // Palette-based: https://cdn.discordapp.com/nameplates/{palette}.png
-            if (np.sku_id && np.asset) {
-                src = `https://cdn.discordapp.com/nameplates/${DISCORD_ID}/${np.asset}.png`;
+            // Asset includes "nameplates/" prefix, e.g., "nameplates/woodland_friends/petal_bloom/"
+            // Discord CDN: https://cdn.discordapp.com/{asset}{palette}.png
+            if (np.asset && np.palette) {
+                src = `https://cdn.discordapp.com/${np.asset}${np.palette}.png`;
             } else if (np.asset) {
-                src = `https://cdn.discordapp.com/nameplates/${DISCORD_ID}/${np.asset}.png`;
+                src = `https://cdn.discordapp.com/${np.asset}default.png`;
             } else if (np.palette) {
                 src = `https://cdn.discordapp.com/nameplates/${np.palette}.png`;
             }
             
+            // Fallback: SKU-based collectibles shop URL
+            const skuSrc = np.sku_id ? `https://cdn.discordapp.com/media/v1/collectibles-shop/${np.sku_id}/static` : '';
+            
+            console.log('Nameplate data (dcdn):', np);
+            console.log('Nameplate primary URL:', src);
+            console.log('Nameplate SKU fallback:', skuSrc);
+            
             if (src) {
                 nameplateEl.src = src;
                 nameplateEl.classList.remove('hidden');
+                
+                nameplateEl.onerror = () => {
+                    if (skuSrc) {
+                        console.log('Primary nameplate failed, trying SKU fallback:', skuSrc);
+                        nameplateEl.src = skuSrc;
+                        nameplateEl.onerror = () => {
+                            console.log('Nameplate fallback also failed');
+                            nameplateEl.classList.add('hidden');
+                        };
+                    } else {
+                        nameplateEl.classList.add('hidden');
+                    }
+                };
+            } else if (skuSrc) {
+                nameplateEl.src = skuSrc;
+                nameplateEl.classList.remove('hidden');
+                nameplateEl.onerror = () => nameplateEl.classList.add('hidden');
+            } else {
+                nameplateEl.classList.add('hidden');
             }
         }
     } catch (e) {
@@ -960,7 +983,10 @@ function updatePresence(d) {
         if (nameplateEl && np) {
             let src = '';
             // Asset path already includes "nameplates/" prefix, e.g., "nameplates/woodland_friends/petal_bloom/"
-            // Discord CDN: https://cdn.discordapp.com/nameplates/{asset}{palette}.png
+            // Discord CDN formats to try:
+            // 1. https://cdn.discordapp.com/{asset}{palette}.png (asset includes "nameplates/" prefix)
+            // 2. https://cdn.discordapp.com/nameplates/{sku_id}/{asset}{palette}.png
+            // 3. https://cdn.discordapp.com/media/v1/collectibles-shop/{sku_id}/static (for animated)
             if (np.asset && np.palette) {
                 src = `https://cdn.discordapp.com/${np.asset}${np.palette}.png`;
             } else if (np.asset) {
@@ -968,9 +994,35 @@ function updatePresence(d) {
             } else if (np.palette) {
                 src = `https://cdn.discordapp.com/nameplates/${np.palette}.png`;
             }
+            
+            // Fallback: try SKU-based URL if asset+palette doesn't work
+            const skuSrc = np.sku_id ? `https://cdn.discordapp.com/media/v1/collectibles-shop/${np.sku_id}/static` : '';
+            
+            console.log('Nameplate data:', np);
+            console.log('Nameplate primary URL:', src);
+            console.log('Nameplate SKU fallback:', skuSrc);
+            
             if (src) {
                 nameplateEl.src = src;
                 nameplateEl.classList.remove('hidden');
+                
+                // Add error handler to try fallback
+                nameplateEl.onerror = () => {
+                    if (skuSrc) {
+                        console.log('Primary nameplate failed, trying SKU fallback:', skuSrc);
+                        nameplateEl.src = skuSrc;
+                        nameplateEl.onerror = () => {
+                            console.log('Nameplate fallback also failed');
+                            nameplateEl.classList.add('hidden');
+                        };
+                    } else {
+                        nameplateEl.classList.add('hidden');
+                    }
+                };
+            } else if (skuSrc) {
+                nameplateEl.src = skuSrc;
+                nameplateEl.classList.remove('hidden');
+                nameplateEl.onerror = () => nameplateEl.classList.add('hidden');
             } else {
                 nameplateEl.classList.add('hidden');
             }
