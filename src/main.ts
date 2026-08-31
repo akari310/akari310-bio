@@ -961,16 +961,13 @@ function updatePresence(d) {
         document.getElementById('discord-avatar').src = av;
 
         // Avatar Decoration
-        const adEl = document.getElementById('avatar-decoration');
+        const adEl = document.getElementById('avatar-decoration') as HTMLImageElement;
         const isReduced = document.body.classList.contains('reduced-motion');
-        if (u.avatar_decoration_data) {
-            if (u.avatar_decoration_data.sku_id) {
-                // Use animated version when reduce-motion is off, static when on
-                const baseUrl = `https://cdn.discordapp.com/media/v1/collectibles-shop/${u.avatar_decoration_data.sku_id}`;
-                adEl.src = isReduced ? `${baseUrl}/static` : baseUrl;
-            } else if (u.avatar_decoration_data.asset) {
-                adEl.src = `https://cdn.discordapp.com/avatar-decoration-presets/${u.avatar_decoration_data.asset}.png`;
-            }
+        if (u.avatar_decoration_data && u.avatar_decoration_data.asset) {
+            const assetUrl = `https://cdn.discordapp.com/avatar-decoration-presets/${u.avatar_decoration_data.asset}.png?size=256`;
+            // Discord doesn't have a simple static endpoint for presets, so we'll just use the APNG.
+            // If they want to completely hide it on reduced-motion, they can via CSS, but normally we just display it.
+            adEl.src = assetUrl;
             adEl.classList.remove('hidden');
         } else {
             adEl.classList.add('hidden');
@@ -988,7 +985,7 @@ function updatePresence(d) {
         if (np && np.sku_id && videoEl && imgEl && effectContainer) {
             // Use confirmed working Discord CDN URL
             const videoSrc = `https://cdn.discordapp.com/media/v1/collectibles-shop/${np.sku_id}/video.webm`;
-            const staticSrc = '/assets/img/static.png';
+            const staticSrc = './assets/img/static.png';
             
             console.log('Nameplate data:', np);
             console.log('Video URL:', videoSrc);
@@ -1333,22 +1330,7 @@ if (reduceMotionToggle) {
             startAnimLoop();
         }
         updateNameplateEffect();
-        updateAvatarDecoration(isReduced);
     });
-}
-
-// Update avatar decoration based on reduce-motion setting
-function updateAvatarDecoration(isReduced: boolean) {
-    const adEl = document.getElementById('avatar-decoration');
-    if (!adEl || !adEl.src) return;
-    
-    // Extract SKU from current URL
-    const match = adEl.src.match(/\/collectibles-shop\/(\d+)/);
-    if (match) {
-        const skuId = match[1];
-        const baseUrl = `https://cdn.discordapp.com/media/v1/collectibles-shop/${skuId}`;
-        adEl.src = isReduced ? `${baseUrl}/static` : baseUrl;
-    }
 }
 
 // Update nameplate effect based on reduce-motion setting
@@ -1364,7 +1346,7 @@ function updateNameplateEffect() {
     
     // Use Discord CDN for video, local for static
     const videoSrc = `https://cdn.discordapp.com/media/v1/collectibles-shop/${np.sku_id}/video.webm`;
-    const staticSrc = '/assets/img/static.png';
+    const staticSrc = './assets/img/static.png';
     
     // Clean up any existing sources
     videoEl.pause();
