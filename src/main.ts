@@ -984,32 +984,34 @@ function updatePresence(d) {
         (window as any).currentNameplateData = np;
         
         if (np && np.sku_id && videoEl && imgEl && effectContainer) {
-            // Use confirmed working Discord CDN video, local static for reduce-motion
-            const videoSrc = `https://cdn.discordapp.com/media/v1/collectibles-shop/${np.sku_id}/video.webm`;
-            const staticSrc = '/assets/img/static.png';
+            // Use local files from public/ (served at root path by Vite)
+            const videoSrc = '/video.webm';
+            const staticSrc = '/static.png';
             
             console.log('Nameplate data:', np);
-            console.log('Video URL:', videoSrc);
+            console.log('Video URL (local):', videoSrc);
             console.log('Static URL (local):', staticSrc);
             console.log('Reduce motion:', isReduced);
             
+            // Clean up any existing sources
+            videoEl.pause();
+            videoEl.src = '';
+            imgEl.src = '';
+            videoEl.classList.add('hidden');
+            imgEl.classList.add('hidden');
+            
             if (isReduced) {
                 // Reduced motion: use local static image
-                videoEl.classList.add('hidden');
-                videoEl.pause();
-                videoEl.src = '';
                 imgEl.src = staticSrc;
                 imgEl.classList.remove('hidden');
                 imgEl.onerror = () => effectContainer.classList.add('hidden');
             } else {
-                // Normal: use animated video from Discord CDN
-                imgEl.classList.add('hidden');
-                imgEl.src = '';
+                // Normal: use local animated video
                 videoEl.src = videoSrc;
                 videoEl.classList.remove('hidden');
                 videoEl.play().catch(() => {});
                 videoEl.onerror = () => {
-                    console.log('Video failed, trying local static fallback');
+                    console.log('Local video failed, trying local static fallback');
                     videoEl.classList.add('hidden');
                     imgEl.src = staticSrc;
                     imgEl.classList.remove('hidden');
@@ -1341,19 +1343,22 @@ function updateNameplateEffect() {
     const np = (window as any).currentNameplateData;
     if (!np || !np.sku_id || !videoEl || !imgEl || !effectContainer) return;
     
-    const videoSrc = `https://cdn.discordapp.com/media/v1/collectibles-shop/${np.sku_id}/video.webm`;
-    const staticSrc = `https://cdn.discordapp.com/media/v1/collectibles-shop/${np.sku_id}/static`;
+    // Use local files from public/
+    const videoSrc = '/video.webm';
+    const staticSrc = '/static.png';
+    
+    // Clean up any existing sources
+    videoEl.pause();
+    videoEl.src = '';
+    imgEl.src = '';
+    videoEl.classList.add('hidden');
+    imgEl.classList.add('hidden');
     
     if (isReduced) {
-        videoEl.classList.add('hidden');
-        videoEl.pause();
-        videoEl.src = '';
         imgEl.src = staticSrc;
         imgEl.classList.remove('hidden');
         imgEl.onerror = () => effectContainer.classList.add('hidden');
     } else {
-        imgEl.classList.add('hidden');
-        imgEl.src = '';
         videoEl.src = videoSrc;
         videoEl.classList.remove('hidden');
         videoEl.play().catch(() => {});
