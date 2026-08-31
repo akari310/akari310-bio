@@ -984,9 +984,9 @@ function updatePresence(d) {
         (window as any).currentNameplateData = np;
         
         if (np && np.sku_id && videoEl && imgEl && effectContainer) {
-            // Use local files from public/ (served at root path by Vite)
-            const videoSrc = '/video.webm';
-            const staticSrc = '/static.png';
+            // Files in public/ are copied to dist/assets/img/ so served at /assets/img/
+            const videoSrc = '/assets/img/video.webm';
+            const staticSrc = '/assets/img/static.png';
             
             console.log('Nameplate data:', np);
             console.log('Video URL (local):', videoSrc);
@@ -1343,9 +1343,9 @@ function updateNameplateEffect() {
     const np = (window as any).currentNameplateData;
     if (!np || !np.sku_id || !videoEl || !imgEl || !effectContainer) return;
     
-    // Use local files from public/
-    const videoSrc = '/video.webm';
-    const staticSrc = '/static.png';
+    // Files in public/ are copied to dist/assets/img/ so served at /assets/img/
+    const videoSrc = '/assets/img/video.webm';
+    const staticSrc = '/assets/img/static.png';
     
     // Clean up any existing sources
     videoEl.pause();
