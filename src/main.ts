@@ -882,18 +882,24 @@ async function fetchExtendedProfile() {
             document.documentElement.style.setProperty('--c-lavender', hex);
         }
 
-        // Nameplate
+        // Nameplate - Discord API NameplateData structure
+        // { sku_id?, asset?, palette?, label? }
         const nameplateEl = document.getElementById('nameplate');
         if (nameplateEl && json.user && json.user.nameplate) {
             const np = json.user.nameplate;
             let src = '';
-            if (np.sku_id) {
-                src = `https://cdn.discordapp.com/media/v1/collectibles-shop/${np.sku_id}/static`;
+            
+            // Discord CDN nameplate URLs:
+            // SKU-based (collectibles shop): https://cdn.discordapp.com/nameplates/{user_id}/{asset}.png
+            // Palette-based: https://cdn.discordapp.com/nameplates/{palette}.png
+            if (np.sku_id && np.asset) {
+                src = `https://cdn.discordapp.com/nameplates/${DISCORD_ID}/${np.asset}.png`;
             } else if (np.asset) {
                 src = `https://cdn.discordapp.com/nameplates/${DISCORD_ID}/${np.asset}.png`;
             } else if (np.palette) {
                 src = `https://cdn.discordapp.com/nameplates/${np.palette}.png`;
             }
+            
             if (src) {
                 nameplateEl.src = src;
                 nameplateEl.classList.remove('hidden');
@@ -946,6 +952,30 @@ function updatePresence(d) {
             adEl.classList.remove('hidden');
         } else {
             adEl.classList.add('hidden');
+        }
+
+        // Nameplate (from Lanyard presence data - under collectibles)
+        const nameplateEl = document.getElementById('nameplate');
+        const np = u.collectibles?.nameplate;
+        if (nameplateEl && np) {
+            let src = '';
+            // Asset path already includes "nameplates/" prefix, e.g., "nameplates/woodland_friends/petal_bloom/"
+            // Discord CDN: https://cdn.discordapp.com/nameplates/{asset}{palette}.png
+            if (np.asset && np.palette) {
+                src = `https://cdn.discordapp.com/${np.asset}${np.palette}.png`;
+            } else if (np.asset) {
+                src = `https://cdn.discordapp.com/${np.asset}default.png`;
+            } else if (np.palette) {
+                src = `https://cdn.discordapp.com/nameplates/${np.palette}.png`;
+            }
+            if (src) {
+                nameplateEl.src = src;
+                nameplateEl.classList.remove('hidden');
+            } else {
+                nameplateEl.classList.add('hidden');
+            }
+        } else if (nameplateEl) {
+            nameplateEl.classList.add('hidden');
         }
 
         // Status Dot & Text
