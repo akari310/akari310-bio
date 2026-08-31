@@ -881,6 +881,24 @@ async function fetchExtendedProfile() {
             const hex = '#' + json.user.accent_color.toString(16).padStart(6, '0');
             document.documentElement.style.setProperty('--c-lavender', hex);
         }
+
+        // Nameplate
+        const nameplateEl = document.getElementById('nameplate');
+        if (nameplateEl && json.user && json.user.nameplate) {
+            const np = json.user.nameplate;
+            let src = '';
+            if (np.sku_id) {
+                src = `https://cdn.discordapp.com/media/v1/collectibles-shop/${np.sku_id}/static`;
+            } else if (np.asset) {
+                src = `https://cdn.discordapp.com/nameplates/${DISCORD_ID}/${np.asset}.png`;
+            } else if (np.palette) {
+                src = `https://cdn.discordapp.com/nameplates/${np.palette}.png`;
+            }
+            if (src) {
+                nameplateEl.src = src;
+                nameplateEl.classList.remove('hidden');
+            }
+        }
     } catch (e) {
         console.error("Failed to fetch extended profile", e);
     }
