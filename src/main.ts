@@ -984,19 +984,19 @@ function updatePresence(d) {
         (window as any).currentNameplateData = np;
         
         if (np && np.sku_id && videoEl && imgEl && effectContainer) {
-            // Files in public/ are copied to dist/assets/img/ so served at /assets/img/
-            const videoSrc = '/assets/img/video.webm';
+            // Use confirmed working Discord CDN URL
+            const videoSrc = `https://cdn.discordapp.com/media/v1/collectibles-shop/${np.sku_id}/video.webm`;
             const staticSrc = '/assets/img/static.png';
             
             console.log('Nameplate data:', np);
-            console.log('Video URL (local):', videoSrc);
-            console.log('Static URL (local):', staticSrc);
+            console.log('Video URL:', videoSrc);
+            console.log('Static URL:', staticSrc);
             console.log('Reduce motion:', isReduced);
             
             // Clean up any existing sources
             videoEl.pause();
             videoEl.src = '';
-            videoEl.load(); // Force reset video element
+            videoEl.load();
             imgEl.src = '';
             videoEl.classList.add('hidden');
             imgEl.classList.add('hidden');
@@ -1007,13 +1007,13 @@ function updatePresence(d) {
                 imgEl.classList.remove('hidden');
                 imgEl.onerror = () => effectContainer.classList.add('hidden');
             } else {
-                // Normal: use local animated video
+                // Normal: use Discord CDN animated video
                 videoEl.src = videoSrc;
                 videoEl.classList.remove('hidden');
-                videoEl.load(); // Force reload video
+                videoEl.load();
                 videoEl.play().catch(() => {});
                 videoEl.onerror = () => {
-                    console.log('Local video failed, trying local static fallback');
+                    console.log('CDN video failed, trying local static fallback');
                     videoEl.classList.add('hidden');
                     imgEl.src = staticSrc;
                     imgEl.classList.remove('hidden');
@@ -1345,14 +1345,14 @@ function updateNameplateEffect() {
     const np = (window as any).currentNameplateData;
     if (!np || !np.sku_id || !videoEl || !imgEl || !effectContainer) return;
     
-    // Files in public/ are copied to dist/assets/img/ so served at /assets/img/
-    const videoSrc = '/assets/img/video.webm';
+    // Use Discord CDN for video, local for static
+    const videoSrc = `https://cdn.discordapp.com/media/v1/collectibles-shop/${np.sku_id}/video.webm`;
     const staticSrc = '/assets/img/static.png';
     
     // Clean up any existing sources
     videoEl.pause();
     videoEl.src = '';
-    videoEl.load(); // Force reset video element
+    videoEl.load();
     imgEl.src = '';
     videoEl.classList.add('hidden');
     imgEl.classList.add('hidden');
@@ -1364,7 +1364,7 @@ function updateNameplateEffect() {
     } else {
         videoEl.src = videoSrc;
         videoEl.classList.remove('hidden');
-        videoEl.load(); // Force reload video
+        videoEl.load();
         videoEl.play().catch(() => {});
         videoEl.onerror = () => {
             videoEl.classList.add('hidden');

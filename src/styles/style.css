@@ -427,6 +427,20 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     border: 1px solid rgba(255, 105, 180, 0.3);
 }
 
+/* Profile Effect APNG - overlay on TOP of card-inner, aligned with top edge, matching width */
+.card-inner::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 200px; /* Adjust based on effect.png aspect ratio */
+    background: url('/assets/img/effect.png') center top / 100% auto no-repeat;
+    pointer-events: none;
+    z-index: 10; /* On TOP of card-inner content */
+    opacity: 0.9;
+}
+
 /* =========================================
    NAVIGATION TABS
 ========================================= */
@@ -1374,6 +1388,10 @@ body.reduced-motion #cursor-ring,
 body.reduced-motion .hologram-glare,
 body.reduced-motion #audio-visualizer,
 body.reduced-motion .card-border::before {
+    display: none !important;
+}
+
+body.reduced-motion .card-inner::after {
     display: none !important;
 }
 
