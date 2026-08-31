@@ -984,17 +984,17 @@ function updatePresence(d) {
         (window as any).currentNameplateData = np;
         
         if (np && np.sku_id && videoEl && imgEl && effectContainer) {
-            // Use confirmed working Discord CDN URL (user provided)
+            // Use confirmed working Discord CDN video, local static for reduce-motion
             const videoSrc = `https://cdn.discordapp.com/media/v1/collectibles-shop/${np.sku_id}/video.webm`;
-            const staticSrc = `https://cdn.discordapp.com/media/v1/collectibles-shop/${np.sku_id}/static`;
+            const staticSrc = '/assets/img/static.png';
             
             console.log('Nameplate data:', np);
             console.log('Video URL:', videoSrc);
-            console.log('Static URL:', staticSrc);
+            console.log('Static URL (local):', staticSrc);
             console.log('Reduce motion:', isReduced);
             
             if (isReduced) {
-                // Reduced motion: use static image
+                // Reduced motion: use local static image
                 videoEl.classList.add('hidden');
                 videoEl.pause();
                 videoEl.src = '';
@@ -1009,7 +1009,7 @@ function updatePresence(d) {
                 videoEl.classList.remove('hidden');
                 videoEl.play().catch(() => {});
                 videoEl.onerror = () => {
-                    console.log('Video failed, trying static fallback');
+                    console.log('Video failed, trying local static fallback');
                     videoEl.classList.add('hidden');
                     imgEl.src = staticSrc;
                     imgEl.classList.remove('hidden');
