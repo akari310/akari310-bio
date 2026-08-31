@@ -996,6 +996,7 @@ function updatePresence(d) {
             // Clean up any existing sources
             videoEl.pause();
             videoEl.src = '';
+            videoEl.load(); // Force reset video element
             imgEl.src = '';
             videoEl.classList.add('hidden');
             imgEl.classList.add('hidden');
@@ -1009,6 +1010,7 @@ function updatePresence(d) {
                 // Normal: use local animated video
                 videoEl.src = videoSrc;
                 videoEl.classList.remove('hidden');
+                videoEl.load(); // Force reload video
                 videoEl.play().catch(() => {});
                 videoEl.onerror = () => {
                     console.log('Local video failed, trying local static fallback');
@@ -1350,6 +1352,7 @@ function updateNameplateEffect() {
     // Clean up any existing sources
     videoEl.pause();
     videoEl.src = '';
+    videoEl.load(); // Force reset video element
     imgEl.src = '';
     videoEl.classList.add('hidden');
     imgEl.classList.add('hidden');
@@ -1361,6 +1364,7 @@ function updateNameplateEffect() {
     } else {
         videoEl.src = videoSrc;
         videoEl.classList.remove('hidden');
+        videoEl.load(); // Force reload video
         videoEl.play().catch(() => {});
         videoEl.onerror = () => {
             videoEl.classList.add('hidden');
