@@ -963,10 +963,15 @@ function updatePresence(d) {
         // Avatar Decoration
         const adEl = document.getElementById('avatar-decoration') as HTMLImageElement;
         const isReduced = document.body.classList.contains('reduced-motion');
+        
+        // Store user data globally for toggles
+        (window as any).currentUserData = u;
+
         if (u.avatar_decoration_data && u.avatar_decoration_data.asset) {
-            const assetUrl = `https://cdn.discordapp.com/avatar-decoration-presets/${u.avatar_decoration_data.asset}.png?size=256`;
-            // Discord doesn't have a simple static endpoint for presets, so we'll just use the APNG.
-            // If they want to completely hide it on reduced-motion, they can via CSS, but normally we just display it.
+            let assetUrl = `https://cdn.discordapp.com/avatar-decoration-presets/${u.avatar_decoration_data.asset}.png?size=256`;
+            if (isReduced && u.avatar_decoration_data.sku_id) {
+                assetUrl = `https://cdn.discordapp.com/media/v1/collectibles-shop/${u.avatar_decoration_data.sku_id}/static`;
+            }
             adEl.src = assetUrl;
             adEl.classList.remove('hidden');
         } else {
@@ -1330,7 +1335,23 @@ if (reduceMotionToggle) {
             startAnimLoop();
         }
         updateNameplateEffect();
+        updateAvatarDecoration(isReduced);
     });
+}
+
+// Update avatar decoration based on reduce-motion setting
+function updateAvatarDecoration(isReduced: boolean) {
+    const adEl = document.getElementById('avatar-decoration') as HTMLImageElement;
+    if (!adEl || !adEl.src) return;
+    
+    const u = (window as any).currentUserData;
+    if (u && u.avatar_decoration_data) {
+        let assetUrl = `https://cdn.discordapp.com/avatar-decoration-presets/${u.avatar_decoration_data.asset}.png?size=256`;
+        if (isReduced && u.avatar_decoration_data.sku_id) {
+            assetUrl = `https://cdn.discordapp.com/media/v1/collectibles-shop/${u.avatar_decoration_data.sku_id}/static`;
+        }
+        adEl.src = assetUrl;
+    }
 }
 
 // Update nameplate effect based on reduce-motion setting
@@ -1349,6 +1370,8 @@ function updateNameplateEffect() {
     const staticSrc = './assets/img/static.png';
     
     // Clean up any existing sources
+    videoEl.onerror = null;
+    imgEl.onerror = null;
     videoEl.pause();
     videoEl.src = '';
     videoEl.load();
