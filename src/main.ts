@@ -1,3 +1,6 @@
+import tippy from 'tippy.js';
+import 'tippy.js/dist/tippy.css';
+
 const DISCORD_ID = "834722078489968680";
 const COUNTER_URL = "https://api.counterapi.dev/v1/akari310/v2/up";
 
