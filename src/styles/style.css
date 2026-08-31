@@ -1349,10 +1349,13 @@ body.reduced-motion #cursor-dot,
 body.reduced-motion #cursor-ring,
 body.reduced-motion .hologram-glare,
 body.reduced-motion #audio-visualizer,
-body.reduced-motion .spinning-disc,
-body.reduced-motion .bgm-spin,
 body.reduced-motion .card-border::before {
     display: none !important;
+}
+
+body.reduced-motion .spinning-disc,
+body.reduced-motion .bgm-spin {
+    animation: none !important;
 }
 
 body.reduced-motion {
