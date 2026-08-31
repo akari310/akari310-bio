@@ -434,7 +434,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     top: 0;
     left: 0;
     right: 0;
-    height: 200px; /* Adjust based on effect.png aspect ratio */
+    bottom: 0; /* Let it expand fully */
     background: url('../assets/img/effect.png') center top / 100% auto no-repeat;
     pointer-events: none;
     z-index: 100; /* On TOP of card-inner content */
