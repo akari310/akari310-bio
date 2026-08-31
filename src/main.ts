@@ -1138,17 +1138,16 @@ const settingsModal = document.getElementById('settings-modal');
 const closeSettings = document.getElementById('close-settings');
 const reduceMotionToggle = document.getElementById('reduce-motion-toggle') as HTMLInputElement;
 
-const themes = ['mocha', 'macchiato', 'frappe', 'latte'];
+const themes = ['macchiato', 'tokyonight', 'atom', 'latte'];
 let currentThemeIndex = 0;
 
 // Load Theme
-const savedTheme = localStorage.getItem('akari_theme');
-if (savedTheme) {
-    currentThemeIndex = themes.indexOf(savedTheme);
-    if (currentThemeIndex !== -1) {
-        document.body.className = `theme-${savedTheme}`;
-    }
-}
+const savedTheme = localStorage.getItem('akari_theme') || 'macchiato';
+currentThemeIndex = themes.indexOf(savedTheme);
+if (currentThemeIndex === -1) currentThemeIndex = 0;
+
+// Always apply a theme class
+document.body.className = `theme-${themes[currentThemeIndex]}`;
 
 // Load Reduce Motion
 const savedReduceMotion = localStorage.getItem('akari_reduce_motion');
@@ -1166,12 +1165,22 @@ if (themeBtn) {
         themes.forEach(t => document.body.classList.remove(`theme-${t}`));
         
         // Add new theme class
-        if (newTheme !== 'mocha') {
-            document.body.classList.add(`theme-${newTheme}`);
+        document.body.classList.add(`theme-${newTheme}`);
+        
+        // Restore reduced-motion if it was active
+        if (document.getElementById('reduce-motion-toggle') && (document.getElementById('reduce-motion-toggle') as HTMLInputElement).checked) {
+            document.body.classList.add('reduced-motion');
         }
         
         localStorage.setItem('akari_theme', newTheme);
-        showToast(`🎨 Theme changed to <b>Catppuccin ${newTheme.charAt(0).toUpperCase() + newTheme.slice(1)}</b>`);
+        
+        const themeNames = {
+            macchiato: "Catppuccin Macchiato",
+            tokyonight: "Tokyo Night",
+            atom: "Atom One Dark",
+            latte: "Catppuccin Latte"
+        };
+        showToast(`🎨 Theme changed to <b>${themeNames[newTheme as keyof typeof themeNames] || newTheme}</b>`);
     });
 }
 

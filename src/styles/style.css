@@ -30,18 +30,32 @@ body.theme-macchiato {
     --c-yellow: #eed49f;
 }
 
-/* Catppuccin Frappe */
-body.theme-frappe {
-    --bg-dark: #232634;
-    --card-bg: rgba(48, 52, 70, 0.45);
-    --text-main: #c6d0f5;
-    --text-muted: #a5adce;
-    --c-mauve: #ca9ee6;
-    --c-pink: #f4b8e4;
-    --c-lavender: #babbf1;
-    --c-sapphire: #85c1dc;
-    --c-green: #a6d189;
-    --c-yellow: #e5c890;
+/* Tokyo Night */
+body.theme-tokyonight {
+    --bg-dark: #16161e;
+    --card-bg: rgba(26, 27, 38, 0.7);
+    --text-main: #c0caf5;
+    --text-muted: #7982a9;
+    --c-mauve: #bb9af7;
+    --c-pink: #f7768e;
+    --c-lavender: #7aa2f7;
+    --c-sapphire: #7dcfff;
+    --c-green: #73daca;
+    --c-yellow: #e0af68;
+}
+
+/* Atom One Dark */
+body.theme-atom {
+    --bg-dark: #1e2227;
+    --card-bg: rgba(33, 37, 43, 0.72);
+    --text-main: #abb2bf;
+    --text-muted: #7f8796;
+    --c-mauve: #c678dd;
+    --c-pink: #e06c75;
+    --c-lavender: #61afef;
+    --c-sapphire: #56b6c2;
+    --c-green: #98c379;
+    --c-yellow: #e5c07b;
 }
 
 /* Catppuccin Latte (Light) */
