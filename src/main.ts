@@ -988,39 +988,14 @@ function updatePresence(d) {
         (window as any).currentNameplateData = np;
         
         if (np && np.sku_id && videoEl && imgEl && effectContainer) {
-            // Try multiple video URL formats
-            const videoUrls = [
-                `https://cdn.discordapp.com/media/v1/collectibles-shop/${np.sku_id}/video`,
-                `https://cdn.discordapp.com/media/v1/collectibles-shop/${np.sku_id}/video.mp4`,
-                `https://cdn.discordapp.com/media/v1/collectibles-shop/${np.sku_id}/video.webm`,
-            ];
+            // Use local video file (public/assets/img/video.webm)
+            const videoSrc = '/assets/img/video.webm';
             const staticSrc = `https://cdn.discordapp.com/media/v1/collectibles-shop/${np.sku_id}/static`;
             
             console.log('Nameplate data:', np);
-            console.log('Video URLs to try:', videoUrls);
+            console.log('Video URL (local):', videoSrc);
             console.log('Static URL:', staticSrc);
             console.log('Reduce motion:', isReduced);
-            
-            let currentVideoIndex = 0;
-            
-            const tryNextVideo = () => {
-                if (currentVideoIndex < videoUrls.length) {
-                    const url = videoUrls[currentVideoIndex];
-                    console.log(`Trying video URL ${currentVideoIndex + 1}:`, url);
-                    videoEl.src = url;
-                    videoEl.load();
-                    currentVideoIndex++;
-                } else {
-                    console.log('All video URLs failed, falling back to static');
-                    videoEl.classList.add('hidden');
-                    imgEl.src = staticSrc;
-                    imgEl.classList.remove('hidden');
-                    imgEl.onerror = () => {
-                        console.log('Static fallback also failed');
-                        effectContainer.classList.add('hidden');
-                    };
-                }
-            };
             
             if (isReduced) {
                 // Reduced motion: use static image
@@ -1029,28 +1004,21 @@ function updatePresence(d) {
                 videoEl.src = '';
                 imgEl.src = staticSrc;
                 imgEl.classList.remove('hidden');
-                imgEl.onerror = () => {
-                    console.log('Static image failed in reduced motion');
-                    effectContainer.classList.add('hidden');
-                };
+                imgEl.onerror = () => effectContainer.classList.add('hidden');
             } else {
-                // Normal: use animated video with fallback chain
+                // Normal: use local animated video
                 imgEl.classList.add('hidden');
                 imgEl.src = '';
+                videoEl.src = videoSrc;
                 videoEl.classList.remove('hidden');
-                
+                videoEl.play().catch(() => {});
                 videoEl.onerror = () => {
-                    console.log(`Video failed (attempt ${currentVideoIndex}):`, videoEl.src);
-                    tryNextVideo();
+                    console.log('Local video failed, trying static fallback');
+                    videoEl.classList.add('hidden');
+                    imgEl.src = staticSrc;
+                    imgEl.classList.remove('hidden');
+                    imgEl.onerror = () => effectContainer.classList.add('hidden');
                 };
-                
-                videoEl.onloadeddata = () => {
-                    console.log('Video loaded successfully:', videoEl.src);
-                    videoEl.play().catch(e => console.log('Video play failed:', e));
-                };
-                
-                // Start with first video URL
-                tryNextVideo();
             }
             effectContainer.classList.remove('hidden');
         } else if (effectContainer) {
@@ -1377,30 +1345,8 @@ function updateNameplateEffect() {
     const np = (window as any).currentNameplateData;
     if (!np || !np.sku_id || !videoEl || !imgEl || !effectContainer) return;
     
-    const videoUrls = [
-        `https://cdn.discordapp.com/media/v1/collectibles-shop/${np.sku_id}/video`,
-        `https://cdn.discordapp.com/media/v1/collectibles-shop/${np.sku_id}/video.mp4`,
-        `https://cdn.discordapp.com/media/v1/collectibles-shop/${np.sku_id}/video.webm`,
-    ];
+    const videoSrc = '/assets/img/video.webm';
     const staticSrc = `https://cdn.discordapp.com/media/v1/collectibles-shop/${np.sku_id}/static`;
-    
-    let currentVideoIndex = 0;
-    
-    const tryNextVideo = () => {
-        if (currentVideoIndex < videoUrls.length) {
-            const url = videoUrls[currentVideoIndex];
-            console.log(`[Toggle] Trying video URL ${currentVideoIndex + 1}:`, url);
-            videoEl.src = url;
-            videoEl.load();
-            currentVideoIndex++;
-        } else {
-            console.log('[Toggle] All video URLs failed, falling back to static');
-            videoEl.classList.add('hidden');
-            imgEl.src = staticSrc;
-            imgEl.classList.remove('hidden');
-            imgEl.onerror = () => effectContainer.classList.add('hidden');
-        }
-    };
     
     if (isReduced) {
         videoEl.classList.add('hidden');
@@ -1412,17 +1358,15 @@ function updateNameplateEffect() {
     } else {
         imgEl.classList.add('hidden');
         imgEl.src = '';
+        videoEl.src = videoSrc;
         videoEl.classList.remove('hidden');
-        currentVideoIndex = 0;
+        videoEl.play().catch(() => {});
         videoEl.onerror = () => {
-            console.log(`[Toggle] Video failed (attempt ${currentVideoIndex}):`, videoEl.src);
-            tryNextVideo();
+            videoEl.classList.add('hidden');
+            imgEl.src = staticSrc;
+            imgEl.classList.remove('hidden');
+            imgEl.onerror = () => effectContainer.classList.add('hidden');
         };
-        videoEl.onloadeddata = () => {
-            console.log('[Toggle] Video loaded successfully:', videoEl.src);
-            videoEl.play().catch(e => console.log('[Toggle] Video play failed:', e));
-        };
-        tryNextVideo();
     }
 }
 
