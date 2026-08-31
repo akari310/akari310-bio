@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" 
+          content="default-src 'self'; 
+                   script-src 'self' 'unsafe-inline' https://unpkg.com https://www.youtube.com https://s.ytimg.com;
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://unpkg.com;
+                   font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com;
+                   img-src 'self' data: https: blob:;
+                   media-src 'self' blob:;
+                   connect-src 'self' https://api.lanyard.rest wss://api.lanyard.rest https://api.counterapi.dev https://discord.com https://akari-webhook.ngocanhyb2009.workers.dev;
+                   frame-src https://www.youtube.com;">
+    <title>akari310</title>
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="Akari's Bio">
+    <meta property="og:description" content="Nai wa~~ | Discord: Nguyễn Ngọc Anh">
+    <meta property="og:image" content="https://akari.is-a.dev/assets/img/banner.jpg">
+    <meta property="og:url" content="https://akari.is-a.dev/">
+    <meta name="theme-color" content="#cba6f7">
+    <meta name="twitter:card" content="summary_large_image">
+    <link rel="icon" href="assets/img/logo.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- Tippy.js for Discord-style tooltips -->
+    <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/animations/scale-subtle.css" />
+  <script type="module" crossorigin src="/assets/index-DWhDe1pz.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/index-B7xK1I9w.css">
+</head>
+<body>
+    <!-- Background & Grid Overlay -->
+    <div class="bg-layer" style="background-image: url('assets/img/bg.jpg');"></div>
+    <div class="grid-overlay"></div>
+
+    <!-- Custom Cursor -->
+    <div id="cursor-dot"></div>
+    <div id="cursor-ring"></div>
+
+    <!-- Mouse Canvas Trail -->
+    <canvas id="mouse-canvas"></canvas>
+
+    <!-- Entry Screen -->
+    <div class="entry-screen" id="entry">
+        <h1 class="entry-title">[ akari310 ]</h1>
+        <p class="entry-prompt">click anywhere to enter</p>
+    </div>
+
+    <!-- Audio Element -->
+    <audio id="bg-audio" src="assets/audio/bgm.webm" loop></audio>
+
+    <!-- Floating Media Player -->
+    <div class="bgm-player" id="bgm-player">
+        <div class="bgm-cover" id="bgm-cover-btn">
+            <div class="bgm-spin">
+                <img src="https://img.youtube.com/vi/ys7Gc6j_iG4/hqdefault.jpg" alt="Cover" class="bgm-cover-img" id="bgm-cover-img">
+            </div>
+            <div class="bgm-hole"></div>
+            <div class="bgm-cover-overlay" id="bgm-cover-overlay">
+                <i class="fa-solid fa-pause" id="bgm-play-pause"></i>
+            </div>
+        </div>
+        <audio id="bgm-audio" loop>
+            <source src="assets/audio/bgm.webm" type="audio/webm">
+        </audio>
+        <div id="yt-player-container" class="hidden"></div>
+        <div class="bgm-info">
+            <div class="bgm-title-row">
+                <div class="marquee-container">
+                    <p class="bgm-title">Moshi Moshi Remix</p>
+                </div>
+                <div class="bgm-controls">
+                    <i class="fa-solid fa-shuffle" id="bgm-shuffle" title="Shuffle: Off"></i>
+                    <i class="fa-solid fa-backward-step" id="bgm-prev" title="Previous Song"></i>
+                    <i class="fa-solid fa-forward-step" id="bgm-next" title="Next Song"></i>
+                    <i class="fa-solid fa-repeat" id="bgm-repeat" title="Repeat: All"></i>
+                    <i class="fa-solid fa-volume-high" id="bgm-mute" title="Mute"></i>
+                    <input type="range" id="bgm-volume" min="0" max="1" step="0.01" value="0.3" class="volume-slider">
+                </div>
+            </div>
+            <div class="bgm-timeline">
+                <span class="bgm-time" id="bgm-current">0:00</span>
+                <input type="range" id="bgm-progress-slider" min="0" max="100" step="0.1" value="0" class="timeline-slider">
+                <span class="bgm-time" id="bgm-duration">0:00</span>
+            </div>
+        </div>
+        <!-- Audio Visualizer Canvas -->
+        <canvas id="audio-visualizer"></canvas>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content hidden" id="main">
+        <div class="cards-container">
+            <!-- 3D Tilt Container -->
+        <div class="card-tilt" id="card">
+            <div class="profile-effect" id="profile-effect"></div>
+            <!-- Animated Gradient Border Wrapper -->
+            <div class="card-border" id="card-border">
+                <div class="hologram-glare" id="hologram-glare"></div>
+                
+                <!-- Profile Effect (Hardcoded from user's DOM) -->
+                <div class="profile-effect-container">
+                    <img class="profile-effect-layer" src="https://cdn.discordapp.com/media/v1/collectibles-shop/1524192423260061706/1526660205738328175/static" alt="">
+                    <img class="profile-effect-layer" src="https://cdn.discordapp.com/media/v1/collectibles-shop/1524192423260061706/1526660211274944754/static" alt="">
+                    <img class="profile-effect-layer" src="https://cdn.discordapp.com/media/v1/collectibles-shop/1524192423260061706/1526660216026828950/static" alt="">
+                </div>
+
+                <div class="card-inner">
+                    <!-- Top Banner Image -->
+                    <div class="card-banner-top">
+                        <img src="https://usrbg.is-hardly.online/usrbg/v2/834722078489968680?c8e4=" alt="Banner" class="banner-img">
+                    </div>
+
+                    <!-- Avatar -->
+                    <div class="avatar-wrapper" id="avatar-wrapper" title="Click 5 times for a surprise!">
+                        <img id="avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Avatar" class="avatar-img">
+                        <img id="avatar-decoration" class="avatar-decoration hidden" src="" alt="Avatar Decoration">
+                        <div class="status-dot" id="status-dot"></div>
+                    </div>
+
+                    <!-- Navigation Tabs -->
+                    <div class="tab-nav">
+                        <button class="tab-btn active" data-tab="tab-profile"><i class="fa-solid fa-user"></i> Bio</button>
+                        <button class="tab-btn" data-tab="tab-setup"><i class="fa-solid fa-gamepad"></i> Setup</button>
+                        <button class="tab-btn" data-tab="tab-message"><i class="fa-solid fa-paper-plane"></i> Message</button>
+                    </div>
+
+                    <!-- TAB 1: PROFILE / BIO -->
+                    <div class="tab-pane active" id="tab-profile">
+                        <!-- User Info -->
+                        <div class="user-info">
+                            <div class="nameplate-container">
+                                <img id="nameplate" class="nameplate hidden" src="" alt="Nameplate">
+                                <div class="name-header-row">
+                                    <h1 class="display-name glow-text">Nguyễn Ngọc Anh</h1>
+                                    <div class="clan-tag">
+                                        <img src="https://cdn.discordapp.com/guild-tag-badges/459382827440537601/813846ce33ed1c30a15d1569fd2e4fd9.png" alt="Clan" class="clan-icon" onerror="this.src='assets/img/logo.png'">
+                                        <span class="clan-text">KUMO</span>
+                                    </div>
+                                    <i class="fa-solid fa-circle-check verified-badge"></i>
+                                    <div class="discord-badges-row">
+                                        <img src="assets/img/nitro.svg" alt="Nitro" data-tippy-content="Subscriber since<br>Apr 22, 2021" class="profile-badge">
+                                        <img src="https://cdn.discordapp.com/badge-icons/8a88d63823d8a71cd5e390baa45efa02.png" alt="HypeSquad Bravery" data-tippy-content="HypeSquad Bravery" class="profile-badge">
+                                        <img src="https://cdn.discordapp.com/badge-icons/6de6d34650760ba5551a79732e98ed60.png" alt="Legacy Username" data-tippy-content="Originally known as<br>Ash Ngọc Anh#8360" class="profile-badge">
+                                        <img src="https://cdn.discordapp.com/badge-icons/7d9ae358c8c5e118768335dbe68b4fb8.png" alt="Completed a Quest" data-tippy-content="Completed a Quest" class="profile-badge">
+                                        <img src="https://cdn.discordapp.com/badge-icons/ca105ad9cfc8580c765101d17bbb2323.png" alt="Level 100 Reached" data-tippy-content="Last Meadow Online<br>Level 100 Reached" class="profile-badge">
+                                        <img src="https://cdn.discordapp.com/badge-icons/83d8a1eb09a8d64e59233eec5d4d5c2d.png" alt="Orb Profile Badge" data-tippy-content="Collected the<br>Orb Profile Badge" class="profile-badge">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="username-pronouns-row">
+                                <span class="username-text">akari310</span>
+                                <span class="dot-separator">•</span>
+                                <span class="pronouns-text">Kumo</span>
+                            </div>
+                            <p class="scramble-text" id="scramble-text"></p>
+                            <p class="user-note">Nai wa~~</p>
+                            <p class="member-since">Member since Apr 22, 2021</p>
+                        </div>
+
+                        <!-- Socials -->
+                        <div class="social-row">
+                            <a href="https://discord.com/users/834722078489968680" target="_blank" class="social-icon discord" data-tippy-content="Discord: akari310 (Click to Copy)" data-copy="akari310"><i class="fa-brands fa-discord"></i></a>
+                            <a href="https://open.spotify.com/user/31wv74q4et5pkxf3s4i52of6cqxi" target="_blank" class="social-icon spotify" data-tippy-content="Spotify"><i class="fa-brands fa-spotify"></i></a>
+                            <a href="https://github.com/akari310" target="_blank" class="social-icon github" data-tippy-content="GitHub"><i class="fa-brands fa-github"></i></a>
+                            <a href="https://steamcommunity.com/id/4kari/" target="_blank" class="social-icon steam" data-tippy-content="Steam: Akari"><i class="fa-brands fa-steam"></i></a>
+                            <a href="https://tracker.gg/valorant/profile/riot/Akari%234kari/" target="_blank" class="social-icon riot" data-tippy-content="Valorant: Akari#4kari (Click to Copy)" data-copy="Akari#4kari">
+                                <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor" width="22" height="22">
+                                    <path d="M23.792 2.152a.252.252 0 0 0-.098.083c-3.384 4.23-6.769 8.46-10.15 12.69-.107.093-.025.288.119.265 2.439.003 4.877 0 7.316.001a.66.66 0 0 0 .552-.25c.774-.967 1.55-1.934 2.324-2.903a.72.72 0 0 0 .144-.49c-.002-3.077 0-6.153-.003-9.23.016-.11-.1-.206-.204-.167zM.077 2.166c-.077.038-.074.132-.076.205.002 3.074.001 6.15.001 9.225a.679.679 0 0 0 .158.463l7.64 9.55c.12.152.308.25.505.247 2.455 0 4.91.003 7.365 0 .142.02.222-.174.116-.265C10.661 15.176 5.526 8.766.4 2.35c-.08-.094-.174-.272-.322-.184z"/>
+                                </svg>
+                            </a>
+                        </div>
+
+                        <!-- Custom Status / Notes -->
+                        <div class="activity-box">
+                            <div class="discord-presence">
+                                <img id="discord-avatar" src="data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=" class="presence-avatar skeleton">
+                                <div class="presence-info">
+                                    <p class="presence-name skeleton" id="discord-global-name" style="width: 150px; height: 16px; border-radius: 4px;">Nguyễn Ngọc Anh <span class="presence-status" id="discord-status-text">IDLE</span></p>
+                                    <p class="presence-state skeleton" id="discord-custom-status" style="width: 180px; height: 14px; margin-top: 6px; border-radius: 4px;">Connecting to Discord...</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- View Counter -->
+                        <div class="footer-row">
+                            <div class="views">
+                                <i class="fa-solid fa-eye"></i> <span id="view-count">2,400</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 2: SETUP & GEAR -->
+                    <div class="tab-pane" id="tab-setup">
+                        <div class="setup-section">
+                            <h3 class="setup-title"><i class="fa-solid fa-crosshairs"></i> Game Profile</h3>
+                            <div class="gear-grid">
+                                <div class="gear-item">
+                                    <span class="gear-label"><i class="fa-solid fa-shield-halved"></i> Valorant</span>
+                                    <span class="gear-value highlight">Akari#4kari</span>
+                                </div>
+                                <div class="gear-item">
+                                    <span class="gear-label"><i class="fa-brands fa-steam"></i> Steam</span>
+                                    <span class="gear-value">4kari</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="setup-section">
+                            <h3 class="setup-title"><i class="fa-solid fa-desktop"></i> Gear</h3>
+                            <div class="gear-grid">
+                                <div class="gear-item">
+                                    <span class="gear-label"><i class="fa-solid fa-computer-mouse"></i> Mouse</span>
+                                    <span class="gear-value">VXE R1 SE+</span>
+                                </div>
+                                <div class="gear-item">
+                                    <span class="gear-label"><i class="fa-solid fa-keyboard"></i> Keyboard</span>
+                                    <span class="gear-value">Xinmeng M87 Pro V2</span>
+                                </div>
+                                <div class="gear-item">
+                                    <span class="gear-label"><i class="fa-solid fa-headphones"></i> Audio</span>
+                                    <span class="gear-value">7HZ x Crinacle Zero: 2</span>
+                                </div>
+                                <div class="gear-item">
+                                    <span class="gear-label"><i class="fa-solid fa-microchip"></i> Platform</span>
+                                    <span class="gear-value">Windows 10 / 11</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="setup-section">
+                            <h3 class="setup-title"><i class="fa-solid fa-heart"></i> Favorites</h3>
+                            <div class="tags-container">
+                                <span class="tag-badge"><i class="fa-solid fa-gamepad"></i> FPS / Valorant</span>
+                                <span class="tag-badge"><i class="fa-solid fa-music"></i> Pop / Lofi</span>
+                                <span class="tag-badge"><i class="fa-solid fa-book-open"></i> ACGN (Anime/Manga/VN)</span>
+                                <span class="tag-badge"><i class="fa-solid fa-code"></i> Coding</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 3: MESSAGE ME (GUESTBOOK) -->
+                    <div class="tab-pane" id="tab-message">
+                        <div class="message-box-container">
+                            <p class="message-desc"><i class="fa-solid fa-envelope-open-text"></i> Leave an anonymous note or message for Akari!</p>
+                            <form id="anonymous-form" class="anon-form">
+                                <div class="form-group">
+                                    <input type="text" id="anon-name" placeholder="Your Name or Tag (Optional)" maxlength="30" class="anon-input">
+                                </div>
+                                <div class="form-group">
+                                    <textarea id="anon-msg" placeholder="Type your message here..." required maxlength="300" rows="4" class="anon-textarea"></textarea>
+                                </div>
+                                <button type="submit" id="anon-submit-btn" class="anon-submit-btn">
+                                    <i class="fa-solid fa-paper-plane"></i> Send Message
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- Activity Card (Rich Presence) -->
+        <div class="card-tilt hidden" id="activity-card-container">
+            <div class="card-border">
+                <div class="card-inner" id="activity-inner">
+                    <!-- Spotify / Music Player -->
+                    <div class="music-box hidden" id="spotify-box">
+                        <div class="music-header">
+                            <i class="fa-brands fa-spotify"></i> LISTENING TO SPOTIFY
+                        </div>
+                        <div class="music-content">
+                            <div class="spinning-disc">
+                                <img id="sp-art" src="" alt="Album Art">
+                                <div class="disc-hole"></div>
+                            </div>
+                            <div class="music-info">
+                                <p class="song-title" id="sp-song">Song Title</p>
+                                <p class="song-artist" id="sp-artist">Artist</p>
+                                <div class="music-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" id="sp-progress-fill"></div>
+                                    </div>
+                                    <div class="time-row">
+                                        <span id="sp-time-current">0:00</span>
+                                        <span id="sp-time-total">-:-</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Game / App Activity -->
+                    <div class="game-box hidden" id="game-box">
+                        <div class="music-header" id="rp-header">
+                            <i class="fa-solid fa-gamepad"></i> PLAYING A GAME
+                        </div>
+                        <div class="game-content">
+                            <div class="game-assets">
+                                <img id="rp-large-img" src="" class="rp-large">
+                                <img id="rp-small-img" src="" class="rp-small hidden">
+                            </div>
+                            <div class="game-info">
+                                <p class="song-title" id="rp-name">Game Name</p>
+                                <p class="song-artist" id="rp-details">Details</p>
+                                <p class="song-artist" id="rp-state">State</p>
+                                <p class="time-elapsed" id="rp-time">00:00 elapsed</p>
+                            </div>
+                        </div>
+                        <div class="rp-buttons hidden" id="rp-buttons"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Scripts -->
+</body>
+</html>
