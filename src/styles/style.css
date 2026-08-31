@@ -906,6 +906,29 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 
+/* Nameplate Effect in Activity Box */
+.nameplate-effect {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: 1;
+    border-radius: 12px;
+    overflow: hidden;
+    opacity: 0.6;
+}
+.nameplate-media {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+.nameplate-media.hidden {
+    display: none !important;
+}
+
 /* =========================================
    SPOTIFY PLAYER (SPINNING DISC)
 ========================================= */

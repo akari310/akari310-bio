@@ -977,56 +977,56 @@ function updatePresence(d) {
             adEl.classList.add('hidden');
         }
 
-        // Nameplate (from Lanyard presence data - under collectibles)
-        const nameplateEl = document.getElementById('nameplate');
+        // Nameplate Effect in Activity Box (animated video + static fallback for reduce-motion)
         const np = u.collectibles?.nameplate;
-        if (nameplateEl && np) {
-            let src = '';
-            // Asset path already includes "nameplates/" prefix, e.g., "nameplates/woodland_friends/petal_bloom/"
-            // Discord CDN formats to try:
-            // 1. https://cdn.discordapp.com/{asset}{palette}.png (asset includes "nameplates/" prefix)
-            // 2. https://cdn.discordapp.com/nameplates/{sku_id}/{asset}{palette}.png
-            // 3. https://cdn.discordapp.com/media/v1/collectibles-shop/{sku_id}/static (for animated)
-            if (np.asset && np.palette) {
-                src = `https://cdn.discordapp.com/${np.asset}${np.palette}.png`;
-            } else if (np.asset) {
-                src = `https://cdn.discordapp.com/${np.asset}default.png`;
-            } else if (np.palette) {
-                src = `https://cdn.discordapp.com/nameplates/${np.palette}.png`;
-            }
-            
-            // Fallback: try SKU-based URL if asset+palette doesn't work
-            const skuSrc = np.sku_id ? `https://cdn.discordapp.com/media/v1/collectibles-shop/${np.sku_id}/static` : '';
+        const videoEl = document.getElementById('nameplate-video');
+        const imgEl = document.getElementById('nameplate-img');
+        const effectContainer = document.getElementById('nameplate-effect');
+        const isReduced = document.body.classList.contains('reduced-motion');
+        
+        // Store globally for toggle handler
+        (window as any).currentNameplateData = np;
+        
+        if (np && np.sku_id && videoEl && imgEl && effectContainer) {
+            const videoSrc = `https://cdn.discordapp.com/media/v1/collectibles-shop/${np.sku_id}/video`;
+            const staticSrc = `https://cdn.discordapp.com/media/v1/collectibles-shop/${np.sku_id}/static`;
             
             console.log('Nameplate data:', np);
-            console.log('Nameplate primary URL:', src);
-            console.log('Nameplate SKU fallback:', skuSrc);
+            console.log('Video URL:', videoSrc);
+            console.log('Static URL:', staticSrc);
+            console.log('Reduce motion:', isReduced);
             
-            if (src) {
-                nameplateEl.src = src;
-                nameplateEl.classList.remove('hidden');
-                
-                // Add error handler to try fallback
-                nameplateEl.onerror = () => {
-                    if (skuSrc) {
-                        console.log('Primary nameplate failed, trying SKU fallback:', skuSrc);
-                        nameplateEl.src = skuSrc;
-                        nameplateEl.onerror = () => {
-                            console.log('Nameplate fallback also failed');
-                            nameplateEl.classList.add('hidden');
-                        };
-                    } else {
-                        nameplateEl.classList.add('hidden');
-                    }
-                };
-            } else if (skuSrc) {
-                nameplateEl.src = skuSrc;
-                nameplateEl.classList.remove('hidden');
-                nameplateEl.onerror = () => nameplateEl.classList.add('hidden');
+            if (isReduced) {
+                // Reduced motion: use static image
+                videoEl.classList.add('hidden');
+                videoEl.pause();
+                videoEl.src = '';
+                imgEl.src = staticSrc;
+                imgEl.classList.remove('hidden');
+                imgEl.onerror = () => effectContainer.classList.add('hidden');
             } else {
-                nameplateEl.classList.add('hidden');
+                // Normal: use animated video
+                imgEl.classList.add('hidden');
+                imgEl.src = '';
+                videoEl.src = videoSrc;
+                videoEl.classList.remove('hidden');
+                videoEl.play().catch(() => {});
+                videoEl.onerror = () => {
+                    console.log('Video failed, trying static fallback');
+                    videoEl.classList.add('hidden');
+                    imgEl.src = staticSrc;
+                    imgEl.classList.remove('hidden');
+                    imgEl.onerror = () => effectContainer.classList.add('hidden');
+                };
             }
-        } else if (nameplateEl) {
+            effectContainer.classList.remove('hidden');
+        } else if (effectContainer) {
+            effectContainer.classList.add('hidden');
+        }
+
+        // Old nameplate in profile header (keep for compatibility)
+        const nameplateEl = document.getElementById('nameplate');
+        if (nameplateEl) {
             nameplateEl.classList.add('hidden');
         }
 
@@ -1329,7 +1329,44 @@ if (reduceMotionToggle) {
             localStorage.setItem('akari_reduce_motion', 'false');
             startAnimLoop();
         }
+        updateNameplateEffect();
     });
+}
+
+// Update nameplate effect based on reduce-motion setting
+function updateNameplateEffect() {
+    const videoEl = document.getElementById('nameplate-video');
+    const imgEl = document.getElementById('nameplate-img');
+    const effectContainer = document.getElementById('nameplate-effect');
+    const isReduced = document.body.classList.contains('reduced-motion');
+    
+    // Get SKU from the current presence data (stored globally)
+    const np = (window as any).currentNameplateData;
+    if (!np || !np.sku_id || !videoEl || !imgEl || !effectContainer) return;
+    
+    const videoSrc = `https://cdn.discordapp.com/media/v1/collectibles-shop/${np.sku_id}/video`;
+    const staticSrc = `https://cdn.discordapp.com/media/v1/collectibles-shop/${np.sku_id}/static`;
+    
+    if (isReduced) {
+        videoEl.classList.add('hidden');
+        videoEl.pause();
+        videoEl.src = '';
+        imgEl.src = staticSrc;
+        imgEl.classList.remove('hidden');
+        imgEl.onerror = () => effectContainer.classList.add('hidden');
+    } else {
+        imgEl.classList.add('hidden');
+        imgEl.src = '';
+        videoEl.src = videoSrc;
+        videoEl.classList.remove('hidden');
+        videoEl.play().catch(() => {});
+        videoEl.onerror = () => {
+            videoEl.classList.add('hidden');
+            imgEl.src = staticSrc;
+            imgEl.classList.remove('hidden');
+            imgEl.onerror = () => effectContainer.classList.add('hidden');
+        };
+    }
 }
 
 // Initialize Tippy.js for tooltips

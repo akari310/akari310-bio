@@ -157,23 +157,20 @@
                     <div class="tab-pane active" id="tab-profile">
                         <!-- User Info -->
                         <div class="user-info">
-                            <div class="nameplate-container">
-                                <img id="nameplate" class="nameplate hidden" src="" alt="Nameplate">
-                                <div class="name-header-row">
-                                    <h1 class="display-name glow-text">Nguyễn Ngọc Anh</h1>
-                                    <div class="clan-tag">
-                                        <img src="https://cdn.discordapp.com/guild-tag-badges/459382827440537601/813846ce33ed1c30a15d1569fd2e4fd9.png" alt="Clan" class="clan-icon" onerror="this.src='assets/img/logo.png'">
-                                        <span class="clan-text">KUMO</span>
-                                    </div>
-                                    <i class="fa-solid fa-circle-check verified-badge"></i>
-                                    <div class="discord-badges-row">
-                                        <img src="assets/img/nitro.svg" alt="Nitro" data-tippy-content="Subscriber since<br>Apr 22, 2021" class="profile-badge">
-                                        <img src="https://cdn.discordapp.com/badge-icons/8a88d63823d8a71cd5e390baa45efa02.png" alt="HypeSquad Bravery" data-tippy-content="HypeSquad Bravery" class="profile-badge">
-                                        <img src="https://cdn.discordapp.com/badge-icons/6de6d34650760ba5551a79732e98ed60.png" alt="Legacy Username" data-tippy-content="Originally known as<br>Ash Ngọc Anh#8360" class="profile-badge">
-                                        <img src="https://cdn.discordapp.com/badge-icons/7d9ae358c8c5e118768335dbe68b4fb8.png" alt="Completed a Quest" data-tippy-content="Completed a Quest" class="profile-badge">
-                                        <img src="https://cdn.discordapp.com/badge-icons/ca105ad9cfc8580c765101d17bbb2323.png" alt="Level 100 Reached" data-tippy-content="Last Meadow Online<br>Level 100 Reached" class="profile-badge">
-                                        <img src="https://cdn.discordapp.com/badge-icons/83d8a1eb09a8d64e59233eec5d4d5c2d.png" alt="Orb Profile Badge" data-tippy-content="Collected the<br>Orb Profile Badge" class="profile-badge">
-                                    </div>
+                            <div class="name-header-row">
+                                <h1 class="display-name glow-text">Nguyễn Ngọc Anh</h1>
+                                <div class="clan-tag">
+                                    <img src="https://cdn.discordapp.com/guild-tag-badges/459382827440537601/813846ce33ed1c30a15d1569fd2e4fd9.png" alt="Clan" class="clan-icon" onerror="this.src='assets/img/logo.png'">
+                                    <span class="clan-text">KUMO</span>
+                                </div>
+                                <i class="fa-solid fa-circle-check verified-badge"></i>
+                                <div class="discord-badges-row">
+                                    <img src="assets/img/nitro.svg" alt="Nitro" data-tippy-content="Subscriber since<br>Apr 22, 2021" class="profile-badge">
+                                    <img src="https://cdn.discordapp.com/badge-icons/8a88d63823d8a71cd5e390baa45efa02.png" alt="HypeSquad Bravery" data-tippy-content="HypeSquad Bravery" class="profile-badge">
+                                    <img src="https://cdn.discordapp.com/badge-icons/6de6d34650760ba5551a79732e98ed60.png" alt="Legacy Username" data-tippy-content="Originally known as<br>Ash Ngọc Anh#8360" class="profile-badge">
+                                    <img src="https://cdn.discordapp.com/badge-icons/7d9ae358c8c5e118768335dbe68b4fb8.png" alt="Completed a Quest" data-tippy-content="Completed a Quest" class="profile-badge">
+                                    <img src="https://cdn.discordapp.com/badge-icons/ca105ad9cfc8580c765101d17bbb2323.png" alt="Level 100 Reached" data-tippy-content="Last Meadow Online<br>Level 100 Reached" class="profile-badge">
+                                    <img src="https://cdn.discordapp.com/badge-icons/83d8a1eb09a8d64e59233eec5d4d5c2d.png" alt="Orb Profile Badge" data-tippy-content="Collected the<br>Orb Profile Badge" class="profile-badge">
                                 </div>
                             </div>
                             <div class="username-pronouns-row">
@@ -207,6 +204,11 @@
                                     <p class="presence-name skeleton" id="discord-global-name" style="width: 150px; height: 16px; border-radius: 4px;">Nguyễn Ngọc Anh <span class="presence-status" id="discord-status-text">IDLE</span></p>
                                     <p class="presence-state skeleton" id="discord-custom-status" style="width: 180px; height: 14px; margin-top: 6px; border-radius: 4px;">Connecting to Discord...</p>
                                 </div>
+                            </div>
+                            <!-- Nameplate Effect (animated) -->
+                            <div class="nameplate-effect" id="nameplate-effect">
+                                <video id="nameplate-video" class="nameplate-media" autoplay loop muted playsinline preload="metadata"></video>
+                                <img id="nameplate-img" class="nameplate-media hidden" src="" alt="Nameplate">
                             </div>
                         </div>
 
