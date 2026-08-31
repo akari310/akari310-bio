@@ -176,6 +176,15 @@ function getPrevTrackIndex() {
 if (bgmPrev) bgmPrev.addEventListener('click', () => loadTrack(getPrevTrackIndex(), true));
 if (bgmNext) bgmNext.addEventListener('click', () => loadTrack(getNextTrackIndex(), true));
 
+audio.addEventListener('ended', () => {
+    if (isRepeatOne) {
+        audio.currentTime = 0;
+        audio.play().catch(e => console.log("Replay failed", e));
+    } else {
+        loadTrack(getNextTrackIndex(), true);
+    }
+});
+
 if (bgmShuffle) {
     bgmShuffle.addEventListener('click', () => {
         isShuffle = !isShuffle;
@@ -1118,6 +1127,73 @@ function updatePresence(d) {
 
 initLanyard();
 fetchExtendedProfile();
+
+// --- Theme & Settings Logic ---
+const themeBtn = document.getElementById('theme-btn');
+const settingsBtn = document.getElementById('settings-btn');
+const settingsModal = document.getElementById('settings-modal');
+const closeSettings = document.getElementById('close-settings');
+const reduceMotionToggle = document.getElementById('reduce-motion-toggle') as HTMLInputElement;
+
+const themes = ['mocha', 'macchiato', 'frappe', 'latte'];
+let currentThemeIndex = 0;
+
+// Load Theme
+const savedTheme = localStorage.getItem('akari_theme');
+if (savedTheme) {
+    currentThemeIndex = themes.indexOf(savedTheme);
+    if (currentThemeIndex !== -1) {
+        document.body.className = `theme-${savedTheme}`;
+    }
+}
+
+// Load Reduce Motion
+const savedReduceMotion = localStorage.getItem('akari_reduce_motion');
+if (savedReduceMotion === 'true') {
+    document.body.classList.add('reduced-motion');
+    if(reduceMotionToggle) reduceMotionToggle.checked = true;
+}
+
+if (themeBtn) {
+    themeBtn.addEventListener('click', () => {
+        currentThemeIndex = (currentThemeIndex + 1) % themes.length;
+        const newTheme = themes[currentThemeIndex];
+        
+        // Remove all theme classes
+        themes.forEach(t => document.body.classList.remove(`theme-${t}`));
+        
+        // Add new theme class
+        if (newTheme !== 'mocha') {
+            document.body.classList.add(`theme-${newTheme}`);
+        }
+        
+        localStorage.setItem('akari_theme', newTheme);
+        showToast(`🎨 Theme changed to <b>Catppuccin ${newTheme.charAt(0).toUpperCase() + newTheme.slice(1)}</b>`);
+    });
+}
+
+if (settingsBtn && settingsModal && closeSettings) {
+    settingsBtn.addEventListener('click', () => settingsModal.classList.remove('hidden'));
+    closeSettings.addEventListener('click', () => settingsModal.classList.add('hidden'));
+    
+    // Close on click outside
+    settingsModal.addEventListener('click', (e) => {
+        if (e.target === settingsModal) settingsModal.classList.add('hidden');
+    });
+}
+
+if (reduceMotionToggle) {
+    reduceMotionToggle.addEventListener('change', (e) => {
+        const isReduced = (e.target as HTMLInputElement).checked;
+        if (isReduced) {
+            document.body.classList.add('reduced-motion');
+            localStorage.setItem('akari_reduce_motion', 'true');
+        } else {
+            document.body.classList.remove('reduced-motion');
+            localStorage.setItem('akari_reduce_motion', 'false');
+        }
+    });
+}
 
 // Initialize Tippy.js for tooltips
 tippy('[data-tippy-content]', {

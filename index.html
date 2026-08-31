@@ -46,7 +46,7 @@
     </div>
 
     <!-- Audio Element -->
-    <audio id="bg-audio" src="assets/audio/bgm.webm" loop></audio>
+    <audio id="bg-audio" src="assets/audio/bgm.webm"></audio>
 
     <!-- Floating Media Player -->
     <div class="bgm-player" id="bgm-player">
@@ -59,7 +59,7 @@
                 <i class="fa-solid fa-pause" id="bgm-play-pause"></i>
             </div>
         </div>
-        <audio id="bgm-audio" loop>
+        <audio id="bgm-audio">
             <source src="assets/audio/bgm.webm" type="audio/webm">
         </audio>
         <div id="yt-player-container" class="hidden"></div>
@@ -89,6 +89,34 @@
 
     <!-- Main Content -->
     <main class="main-content hidden" id="main">
+        <!-- Top Right Controls -->
+        <div class="top-controls">
+            <button id="theme-btn" class="control-btn" data-tippy-content="Đổi Theme"><i class="fa-solid fa-palette"></i></button>
+            <button id="settings-btn" class="control-btn" data-tippy-content="Cài Đặt"><i class="fa-solid fa-gear"></i></button>
+        </div>
+
+        <!-- Settings Modal -->
+        <div id="settings-modal" class="modal hidden">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Cài Đặt</h2>
+                    <button class="close-modal-btn" id="close-settings"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+                <div class="modal-body">
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Tắt Hiệu Ứng Động</h3>
+                            <p>Tắt hiệu ứng vệt chuột, hạt bụi và nghiêng 3D.</p>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" id="reduce-motion-toggle">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="cards-container">
             <!-- 3D Tilt Container -->
         <div class="card-tilt" id="card">

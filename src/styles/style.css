@@ -16,13 +16,56 @@
     --c-yellow: #f9e2af;
 }
 
+/* Catppuccin Macchiato */
+body.theme-macchiato {
+    --bg-dark: #181825;
+    --card-bg: rgba(36, 39, 58, 0.45);
+    --text-main: #cad3f5;
+    --text-muted: #a5adcb;
+    --c-mauve: #c6a0f6;
+    --c-pink: #f5bde6;
+    --c-lavender: #b7bdf8;
+    --c-sapphire: #7dc4e4;
+    --c-green: #a6da95;
+    --c-yellow: #eed49f;
+}
+
+/* Catppuccin Frappe */
+body.theme-frappe {
+    --bg-dark: #232634;
+    --card-bg: rgba(48, 52, 70, 0.45);
+    --text-main: #c6d0f5;
+    --text-muted: #a5adce;
+    --c-mauve: #ca9ee6;
+    --c-pink: #f4b8e4;
+    --c-lavender: #babbf1;
+    --c-sapphire: #85c1dc;
+    --c-green: #a6d189;
+    --c-yellow: #e5c890;
+}
+
+/* Catppuccin Latte (Light) */
+body.theme-latte {
+    --bg-dark: #eff1f5;
+    --card-bg: rgba(255, 255, 255, 0.6);
+    --border-color: rgba(0, 0, 0, 0.1);
+    --text-main: #4c4f69;
+    --text-muted: #6c6f85;
+    --c-mauve: #8839ef;
+    --c-pink: #ea76cb;
+    --c-lavender: #7287fd;
+    --c-sapphire: #209fb5;
+    --c-green: #40a02b;
+    --c-yellow: #df8e1d;
+}
+
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 /* =========================================
    SKELETON LOADING
 ========================================= */
 .skeleton {
-    background: linear-gradient(90deg, rgba(255,255,255,0.05) 25%, rgba(255,255,255,0.15) 50%, rgba(255,255,255,0.05) 75%);
+    background: linear-gradient(90deg, var(--border-color) 25%, rgba(255,255,255,0.15) 50%, var(--border-color) 75%);
     background-size: 200% 100%;
     animation: skeleton-load 1.5s infinite;
     color: transparent !important;
@@ -151,7 +194,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 .rp-button {
     flex: 1;
     background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--border-color);
     border-radius: 6px;
     padding: 6px 10px;
     color: #fff; font-size: 0.75rem; font-weight: 600;
@@ -402,7 +445,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 }
 .tab-btn:hover {
     color: #fff;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--border-color);
 }
 .tab-btn.active {
     color: #fff;
@@ -489,7 +532,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     font-size: 0.7rem;
     font-weight: 600;
     color: var(--text-main);
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--border-color);
     border: 1px solid rgba(255, 255, 255, 0.06);
     padding: 4px 8px;
     border-radius: 6px;
@@ -547,7 +590,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 }
 .anon-submit-btn {
     background: linear-gradient(45deg, var(--c-lavender), var(--c-sapphire));
-    color: #11111b;
+    color: var(--bg-dark);
     border: none;
     border-radius: 8px;
     padding: 8px 14px;
@@ -800,7 +843,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 .social-icon {
     width: 45px; height: 45px;
     border-radius: 14px;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--border-color);
     border: 1px solid var(--border-color);
     display: flex; justify-content: center; align-items: center;
     font-size: 1.3rem; color: #fff;
@@ -937,7 +980,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 .views {
     font-size: 0.8rem; color: var(--text-muted);
     display: flex; align-items: center; gap: 6px;
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--border-color);
     padding: 4px 10px; border-radius: 12px;
 }
 
@@ -995,7 +1038,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     position: absolute; top: 50%; left: 50%;
     transform: translate(-50%, -50%);
     width: 10px; height: 10px;
-    background: #1e1e2e;
+    background: var(--card-bg);
     border: 2px solid rgba(255,255,255,0.1);
 }
 .bgm-cover-overlay {
