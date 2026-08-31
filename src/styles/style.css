@@ -1397,7 +1397,7 @@ body.reduced-motion .card-inner::after {
 
 body.reduced-motion .spinning-disc,
 body.reduced-motion .bgm-spin {
-    animation: none !important;
+    animation-play-state: paused !important;
 }
 
 body.reduced-motion {
@@ -1413,15 +1413,13 @@ body.reduced-motion label {
 
 body.reduced-motion .card-tilt {
     transform: none !important;
-    transition: none !important;
-}
-
-body.reduced-motion * {
-    animation: none !important;
-    transition: none !important;
 }
 
 body.reduced-motion .bgm-title,
 body.reduced-motion .marquee-container {
-    animation: none !important;
+    animation-play-state: paused !important;
+}
+
+body.reduced-motion .sakura-canvas {
+    display: none !important;
 }
