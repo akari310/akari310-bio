@@ -10,6 +10,20 @@ const mainContent = document.getElementById('main');
 const audio = document.getElementById('bg-audio');
 const bgmPlayer = document.getElementById('bgm-player');
 const bgmPlayPause = document.getElementById('bgm-play-pause');
+const bgmPlayPauseSmall = document.getElementById('bgm-play-pause-small');
+
+function updatePlayPauseUI(isPlaying: boolean) {
+    if (isPlaying) {
+        bgmPlayPause?.classList.replace('fa-play', 'fa-pause');
+        bgmPlayPauseSmall?.classList.replace('fa-play', 'fa-pause');
+        bgmPlayer?.classList.add('playing');
+    } else {
+        bgmPlayPause?.classList.replace('fa-pause', 'fa-play');
+        bgmPlayPauseSmall?.classList.replace('fa-pause', 'fa-play');
+        bgmPlayer?.classList.remove('playing');
+    }
+}
+
 const bgmMute = document.getElementById('bgm-mute');
 const bgmCurrent = document.getElementById('bgm-current');
 const bgmDuration = document.getElementById('bgm-duration');
@@ -127,8 +141,7 @@ function loadTrack(index, autoPlay = true) {
         audio.src = track.src;
         if (autoPlay) {
             audio.play().then(() => {
-                bgmPlayPause.classList.replace('fa-play', 'fa-pause');
-                bgmPlayer.classList.add('playing');
+                updatePlayPauseUI(true);
             }).catch(e => console.log("Play failed", e));
         }
     } else {
@@ -267,8 +280,7 @@ function onYouTubeIframeAPIReady() {
                 if (currentBgmMode !== 'youtube') return;
                 
                 if (e.data === YT.PlayerState.PLAYING) {
-                    bgmPlayPause.classList.replace('fa-play', 'fa-pause');
-                    bgmPlayer.classList.add('playing');
+                    updatePlayPauseUI(true);
                     ytDuration = ytPlayer.getDuration();
                     bgmDuration.textContent = formatTime(ytDuration);
                     
@@ -283,8 +295,7 @@ function onYouTubeIframeAPIReady() {
                         }
                     }, 500);
                 } else {
-                    bgmPlayPause.classList.replace('fa-pause', 'fa-play');
-                    bgmPlayer.classList.remove('playing');
+                    updatePlayPauseUI(false);
                     if (e.data === YT.PlayerState.ENDED) {
                         if (isRepeatOne) {
                             ytPlayer.playVideo();
@@ -303,23 +314,25 @@ ytScript.src = "https://www.youtube.com/iframe_api";
 document.head.appendChild(ytScript);
 
 const bgmCoverBtn = document.getElementById('bgm-cover-btn');
-bgmCoverBtn.addEventListener('click', () => {
+
+function togglePlayPause() {
     if (currentBgmMode === 'local') {
         if (audio.paused) {
             audio.play();
-            bgmPlayPause.classList.replace('fa-play', 'fa-pause');
-            bgmPlayer.classList.add('playing');
+            updatePlayPauseUI(true);
         } else {
             audio.pause();
-            bgmPlayPause.classList.replace('fa-pause', 'fa-play');
-            bgmPlayer.classList.remove('playing');
+            updatePlayPauseUI(false);
         }
     } else if (currentBgmMode === 'youtube' && ytPlayer) {
         const state = ytPlayer.getPlayerState();
         if (state === YT.PlayerState.PLAYING) ytPlayer.pauseVideo();
         else ytPlayer.playVideo();
     }
-});
+}
+
+if (bgmCoverBtn) bgmCoverBtn.addEventListener('click', togglePlayPause);
+if (bgmPlayPauseSmall) bgmPlayPauseSmall.addEventListener('click', togglePlayPause);
 
 bgmMute.addEventListener('click', () => {
     let isMuted = false;
@@ -347,8 +360,7 @@ audio.addEventListener('loadedmetadata', () => {
 
 audio.addEventListener('play', () => {
     if (currentBgmMode === 'local') {
-        bgmPlayPause.classList.replace('fa-play', 'fa-pause');
-        bgmPlayer.classList.add('playing');
+        updatePlayPauseUI(true);
         const spinner = document.querySelector('.bgm-spin');
         if(spinner) spinner.style.animationPlayState = 'running';
     }
@@ -356,8 +368,7 @@ audio.addEventListener('play', () => {
 
 audio.addEventListener('pause', () => {
     if (currentBgmMode === 'local') {
-        bgmPlayPause.classList.replace('fa-pause', 'fa-play');
-        bgmPlayer.classList.remove('playing');
+        updatePlayPauseUI(false);
         const spinner = document.querySelector('.bgm-spin');
         if(spinner) spinner.style.animationPlayState = 'paused';
     }
