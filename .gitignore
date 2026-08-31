@@ -3,6 +3,5 @@ dist
 .DS_Store
 *.local
 .agents
-public
 scratch
 lanyard.json
