@@ -1202,3 +1202,169 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     .card-border { box-shadow: 0 0 15px rgba(180, 190, 254, 0.2), 0 10px 30px rgba(0,0,0,0.6) !important; }
     .marquee-inner { animation: none !important; }
 }
+
+/* =========================================
+   TOP CONTROLS & SETTINGS MODAL
+========================================= */
+.top-controls {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    gap: 15px;
+    z-index: 100;
+}
+.control-btn {
+    background: rgba(17, 17, 27, 0.6);
+    border: 1px solid var(--c-surface2, rgba(255,255,255,0.1));
+    color: var(--c-text, #cba6f7);
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: all 0.3s ease;
+}
+.control-btn:hover {
+    background: var(--c-surface1, rgba(255,255,255,0.2));
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(17, 17, 27, 0.8);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+.modal.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+.modal-content {
+    background: var(--c-crust, #11111b);
+    border: 1px solid var(--c-surface0, rgba(255,255,255,0.1));
+    border-radius: 16px;
+    width: 90%;
+    max-width: 400px;
+    padding: 24px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    transform: translateY(0);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+.modal.hidden .modal-content {
+    transform: translateY(20px);
+}
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--c-surface0, rgba(255,255,255,0.1));
+    padding-bottom: 12px;
+}
+.modal-header h2 {
+    font-size: 1.2rem;
+    color: var(--c-text, #fff);
+    margin: 0;
+}
+.close-modal-btn {
+    background: none;
+    border: none;
+    color: var(--c-subtext0, #a6adc8);
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+.close-modal-btn:hover {
+    color: var(--c-red, #f38ba8);
+}
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.setting-info h3 {
+    font-size: 1rem;
+    color: var(--c-text, #fff);
+    margin: 0 0 5px 0;
+}
+.setting-info p {
+    font-size: 0.85rem;
+    color: var(--c-subtext0, #a6adc8);
+    margin: 0;
+}
+
+/* Toggle Switch */
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: var(--c-surface1, rgba(255,255,255,0.2));
+    transition: .4s;
+}
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: var(--c-text, white);
+    transition: .4s;
+}
+input:checked + .slider {
+    background-color: var(--c-green, #a6e3a1);
+}
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+.slider.round {
+    border-radius: 24px;
+}
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* Reduced Motion Override */
+body.reduced-motion #mouse-canvas,
+body.reduced-motion .sakura-petal,
+body.reduced-motion #cursor-dot,
+body.reduced-motion #cursor-ring,
+body.reduced-motion .hologram-glare {
+    display: none !important;
+}
+
+body.reduced-motion .card-tilt {
+    transform: none !important;
+    transition: none !important;
+}
+
+body.reduced-motion * {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+}
