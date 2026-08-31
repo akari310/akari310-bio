@@ -883,6 +883,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     border: 1px solid var(--border-color);
     border-radius: 12px;
     padding: 10px 12px;
+    position: relative;
 }
 .discord-presence {
     display: flex; align-items: center; gap: 12px;
