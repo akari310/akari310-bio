@@ -606,12 +606,21 @@ if (anonForm) {
         submitBtn.disabled = true;
         submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Sending...`;
 
+        const themeColors = {
+            macchiato: 13017334,
+            tokyonight: 12294903,
+            atom: 13007069,
+            latte: 8927727
+        };
+        const currentTheme = themes[currentThemeIndex];
+        const embedColor = themeColors[currentTheme as keyof typeof themeColors] || 13017334;
+
         const WEBHOOK_PROXY_URL = "https://akari-webhook.ngocanhyb2009.workers.dev/";
         
         const payload = {
             embeds: [{
                 title: "💌 Thư nặc danh mới!",
-                color: 13346551, // Hex 0xcba6f7 (Catppuccin Mauve)
+                color: embedColor,
                 fields: [
                     { name: "👤 Người gửi", value: name, inline: true },
                     { name: "⏰ Thời gian", value: new Date().toLocaleString('vi-VN'), inline: true },
