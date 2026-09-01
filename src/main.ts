@@ -52,13 +52,18 @@ if (savedMute === 'true') {
     bgmMute.className = 'fa-solid fa-volume-xmark';
 }
 
+let userInteracted = false;
+
 entryScreen.addEventListener('click', (e) => {
+    userInteracted = true;
     entryScreen.classList.add('hidden');
     mainContent.classList.remove('hidden');
     bgmPlayer.classList.add('visible', 'playing');
     createSparkles(e.clientX, e.clientY);
     
-    if (ytPlayer && ytPlayer.playVideo) ytPlayer.playVideo();
+    if (ytPlayer && ytPlayer.playVideo) {
+        ytPlayer.playVideo();
+    }
 });
 
 
@@ -73,20 +78,27 @@ function onYouTubeIframeAPIReady() {
     ytPlayer = new YT.Player('yt-player-container', {
         height: '0', width: '0',
         playerVars: { 
-            'autoplay': 1, 
+            'autoplay': 0, 
             'controls': 0, 
             'disablekb': 1, 
-            'fs': 0,
-            'listType': 'playlist',
-            'list': 'PLzusV5GucuLQw6AuNMQw_QMB9KO5JmRc2'
+            'fs': 0 
         },
         events: {
             'onReady': (e) => {
+                e.target.cuePlaylist({
+                    listType: 'playlist',
+                    list: 'PLzusV5GucuLQw6AuNMQw_QMB9KO5JmRc2'
+                });
                 e.target.setVolume(volumeSlider.value * 100);
                 if (localStorage.getItem('akari_bgm_muted') === 'true' || volumeSlider.value == 0) {
                     e.target.mute();
                 }
-                e.target.setShuffle(true);
+                setTimeout(() => {
+                    e.target.setShuffle(true);
+                    if (userInteracted) {
+                        e.target.playVideo();
+                    }
+                }, 500);
             },
             'onStateChange': (e) => {
                 if (e.data === YT.PlayerState.PLAYING) {
