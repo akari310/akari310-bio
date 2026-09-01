@@ -1079,7 +1079,10 @@ function updatePresence(d) {
                             }
                         }
                     } else {
-                        btn.onclick = () => alert("This button's link is hidden by Discord API.");
+                        btn.onclick = (e) => {
+                            e.preventDefault();
+                            showToast(`<i class="fa-solid fa-circle-exclamation" style="color: var(--c-yellow);"></i> Discord API hides this link for privacy!`);
+                        };
                     }
                     
                     buttonsContainer.appendChild(btn);
