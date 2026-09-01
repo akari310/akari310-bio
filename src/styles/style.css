@@ -1208,13 +1208,15 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 .bgm-player {
     position: absolute;
     bottom: 25px; left: 50%;
+    width: calc(100% - 40px); /* Fill available width within card */
+    max-width: 360px; /* Prevent it from getting too wide on large screens */
     z-index: 50;
     background: rgba(30, 30, 46, 0.7);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--border-color);
     border-radius: 20px;
-    padding: 12px 25px 12px 12px;
+    padding: 12px 15px;
     display: flex; align-items: center; gap: 15px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     opacity: 0; transition: opacity 1s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -1349,7 +1351,6 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 
 .timeline-slider::-webkit-slider-thumb, .volume-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
-    appearance: none;
     background: var(--text-primary);
     border-radius: 50%;
 }
