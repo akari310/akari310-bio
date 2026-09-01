@@ -750,7 +750,38 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     background-color: #80848e; /* Offline by default */
     border: 4px solid var(--card-bg);
     z-index: 25;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+}
+
+.status-dot.online {
+    background-color: #23a559;
+    box-shadow: none;
+}
+
+.status-dot.idle {
+    background-color: transparent;
+    box-shadow: -3px -3px 0 3px #f0b232 inset;
+}
+
+.status-dot.dnd {
+    background-color: #f23f43;
+    box-shadow: none;
+}
+.status-dot.dnd::after {
+    content: '';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 8px;
+    height: 2.5px;
+    background-color: var(--card-bg);
+    border-radius: 2px;
+}
+
+.status-dot.offline {
+    background-color: transparent;
+    box-shadow: 0 0 0 3px #80848e inset;
 }
 
 .avatar-img {
