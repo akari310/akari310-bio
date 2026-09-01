@@ -75,6 +75,7 @@ let isShuffle = true;
 let isRepeatOne = false;
 
 function onYouTubeIframeAPIReady() {
+    console.log('[YT] onYouTubeIframeAPIReady called!');
     ytPlayer = new YT.Player('yt-player-container', {
         height: '0', width: '0',
         playerVars: { 
@@ -145,6 +146,9 @@ function onYouTubeIframeAPIReady() {
         }
     });
 }
+
+// Expose to global scope so YouTube IFrame API can find it
+(window as any).onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
 
 const ytScript = document.createElement('script');
 ytScript.src = "https://www.youtube.com/iframe_api";
