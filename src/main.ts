@@ -109,7 +109,7 @@ function onYouTubeIframeAPIReady() {
                     
                     const videoData = ytPlayer.getVideoData();
                     if (videoData) {
-                        bgmTitleEl.textContent = videoData.title;
+                        updateBgmTitle(videoData.title);
                         bgmCoverImg.src = `https://i.ytimg.com/vi/${videoData.video_id}/maxresdefault.jpg`;
                         if ('mediaSession' in navigator) {
                             navigator.mediaSession.metadata = new MediaMetadata({
@@ -161,6 +161,17 @@ const bgmShuffle = document.getElementById('bgm-shuffle');
 const bgmRepeat = document.getElementById('bgm-repeat');
 const bgmTitleEl = document.querySelector('.bgm-title');
 const bgmCoverImg = document.getElementById('bgm-cover-img');
+
+function updateBgmTitle(title) {
+    if (!bgmTitleEl) return;
+    bgmTitleEl.textContent = title;
+    const container = bgmTitleEl.parentElement;
+    if (bgmTitleEl.scrollWidth > container.clientWidth) {
+        bgmTitleEl.classList.add('scroll');
+    } else {
+        bgmTitleEl.classList.remove('scroll');
+    }
+}
 
 if (bgmPrev) bgmPrev.addEventListener('click', () => { if (ytPlayer) ytPlayer.previousVideo(); });
 if (bgmNext) bgmNext.addEventListener('click', () => { if (ytPlayer) ytPlayer.nextVideo(); });
@@ -1074,7 +1085,9 @@ function updatePresence(d) {
                             if (vid) {
                                 btn.onclick = (e) => {
                                     e.preventDefault();
-                                    if(ytPlayer) ytPlayer.loadVideoById(vid); bgmTitleEl.textContent = gameActivity.details || gameActivity.name; bgmCoverImg.src = document.getElementById("rp-large-img").src;
+                                    if(ytPlayer) ytPlayer.loadVideoById(vid); 
+                                    updateBgmTitle(gameActivity.details || gameActivity.name);
+                                    bgmCoverImg.src = document.getElementById("rp-large-img").src;
                                 };
                             }
                         }

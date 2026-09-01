@@ -1274,33 +1274,51 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     opacity: 1;
 }
 
-.bgm-info { display: flex; flex-direction: column; justify-content: center; flex: 1; z-index: 2; min-width: 0; }
-.bgm-title-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; min-width: 0; }
+.bgm-info { display: flex; flex-direction: column; justify-content: center; flex: 1; z-index: 2; min-width: 0; gap: 4px; }
 .marquee-container {
     flex: 1;
     min-width: 0;
     overflow: hidden;
     white-space: nowrap;
-    position: relative;
-    mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
-    -webkit-mask-image: linear-gradient(to right, transparent, black 5%, black 95%, transparent);
+    mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
 }
 .bgm-title {
-    font-size: 0.85rem; font-weight: 700; color: #fff;
     display: inline-block;
-    padding-left: 100%;
-    animation: marqueeScroll 10s linear infinite;
+    font-size: 0.85rem; font-weight: 700;
+    color: var(--text-primary);
 }
-
-@keyframes marqueeScroll {
-    0% { transform: translateX(0); }
+.bgm-title.scroll {
+    animation: marquee 10s linear infinite;
+}
+@keyframes marquee {
+    0% { transform: translateX(100%); }
     100% { transform: translateX(-100%); }
 }
 
+.bgm-timeline { display: flex; align-items: center; gap: 8px; width: 100%; margin-top: 2px; }
+.bgm-time { font-size: 0.65rem; color: var(--text-muted); font-variant-numeric: tabular-nums; }
+.timeline-slider {
+    -webkit-appearance: none;
+    flex: 1; height: 4px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 2px;
+    outline: none; cursor: pointer;
+    position: relative;
+    z-index: 5;
+}
+
+.bgm-controls-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    margin-top: 4px;
+}
 .bgm-controls {
     display: flex; gap: 12px; align-items: center;
     color: var(--text-muted);
-    flex-shrink: 0;
 }
 .bgm-controls i {
     font-size: 0.9rem; cursor: pointer; transition: color 0.2s;
@@ -1311,29 +1329,20 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     text-shadow: 0 0 5px rgba(203, 166, 247, 0.5);
 }
 
+.bgm-volume-container {
+    position: absolute;
+    right: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-muted);
+}
 .volume-slider {
     -webkit-appearance: none;
-    width: 60px; height: 4px;
+    width: 50px; height: 4px;
     background: rgba(255,255,255,0.1);
     border-radius: 2px;
     outline: none; cursor: pointer;
-}
-.volume-slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 10px; height: 10px;
-    border-radius: 50%; background: var(--c-lavender);
-}
-
-.bgm-timeline { display: flex; align-items: center; gap: 8px; width: 100%; }
-.bgm-time { font-size: 0.65rem; color: var(--text-muted); font-variant-numeric: tabular-nums; }
-.timeline-slider {
-    -webkit-appearance: none;
-    flex: 1; height: 4px;
-    background: rgba(255,255,255,0.1);
-    border-radius: 2px;
-    outline: none; cursor: pointer;
-    position: relative;
-    z-index: 5;
 }
 .timeline-slider::-webkit-slider-thumb {
     -webkit-appearance: none;

@@ -50,7 +50,8 @@
     <div class="bgm-player" id="bgm-player">
         <div class="bgm-cover" id="bgm-cover-btn">
             <div class="bgm-spin">
-                <img src="https://img.youtube.com/vi/ys7Gc6j_iG4/hqdefault.jpg" alt="Cover" class="bgm-cover-img" id="bgm-cover-img">
+                <!-- Using a transparent placeholder or simple note icon initially -->
+                <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Cover" class="bgm-cover-img" id="bgm-cover-img">
             </div>
             <div class="bgm-hole"></div>
             <div class="bgm-cover-overlay" id="bgm-cover-overlay">
@@ -60,24 +61,26 @@
 
         <div id="yt-player-container"></div>
         <div class="bgm-info">
-            <div class="bgm-title-row">
-                <div class="marquee-container">
-                    <p class="bgm-title">Moshi Moshi Remix</p>
-                </div>
+            <div class="marquee-container">
+                <p class="bgm-title">Loading...</p>
+            </div>
+            <div class="bgm-timeline">
+                <span class="bgm-time" id="bgm-current">0:00</span>
+                <input type="range" id="bgm-progress-slider" min="0" max="100" step="0.1" value="0" class="timeline-slider">
+                <span class="bgm-time" id="bgm-duration">0:00</span>
+            </div>
+            <div class="bgm-controls-row">
                 <div class="bgm-controls">
                     <i class="fa-solid fa-shuffle" id="bgm-shuffle" data-tippy-content="Shuffle: Off"></i>
                     <i class="fa-solid fa-backward-step" id="bgm-prev" data-tippy-content="Previous Song"></i>
                     <i class="fa-solid fa-play" id="bgm-play-pause-small" data-tippy-content="Play/Pause"></i>
                     <i class="fa-solid fa-forward-step" id="bgm-next" data-tippy-content="Next Song"></i>
                     <i class="fa-solid fa-repeat" id="bgm-repeat" data-tippy-content="Repeat: All"></i>
+                </div>
+                <div class="bgm-volume-container">
                     <i class="fa-solid fa-volume-high" id="bgm-mute" data-tippy-content="Mute"></i>
                     <input type="range" id="bgm-volume" min="0" max="1" step="0.01" value="0.3" class="volume-slider">
                 </div>
-            </div>
-            <div class="bgm-timeline">
-                <span class="bgm-time" id="bgm-current">0:00</span>
-                <input type="range" id="bgm-progress-slider" min="0" max="100" step="0.1" value="0" class="timeline-slider">
-                <span class="bgm-time" id="bgm-duration">0:00</span>
             </div>
         </div>
         <!-- Audio Visualizer Canvas -->
