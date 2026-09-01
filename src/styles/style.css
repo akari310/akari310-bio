@@ -315,6 +315,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     border-radius: 22px;
     box-shadow: 0 0 30px rgba(180, 190, 254, 0.3), 0 20px 50px rgba(0,0,0,0.8);
     container-type: inline-size;
+    transform-style: preserve-3d;
 }
 .card-border::before {
     content: "";
@@ -425,6 +426,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     gap: 8px;
     box-shadow: 0 0 30px rgba(255, 105, 180, 0.4), inset 0 0 20px rgba(255, 105, 180, 0.2);
     border: 1px solid rgba(255, 105, 180, 0.3);
+    transform-style: preserve-3d;
 }
 
 /* Profile Effect APNG - overlay on TOP of card-inner */
@@ -453,6 +455,10 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     border: 1px solid var(--border-color);
     width: 100%;
     margin-top: 15px;
+    position: relative;
+    z-index: 105;
+    transform-style: preserve-3d;
+    transform: translateZ(20px);
 }
 .tab-btn {
     flex: 1;
@@ -555,6 +561,10 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     display: flex;
     flex-wrap: wrap;
     gap: 6px;
+    position: relative;
+    z-index: 105;
+    transform-style: preserve-3d;
+    transform: translateZ(15px);
 }
 .tag-badge {
     font-size: 0.7rem;
@@ -567,11 +577,17 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     display: flex;
     align-items: center;
     gap: 5px;
-    transition: background 0.2s;
+    position: relative;
+    z-index: 110;
+    transform-style: preserve-3d;
+    transform: translateZ(5px);
+    transition: all 0.2s ease;
 }
 .tag-badge:hover {
-    background: rgba(180, 190, 254, 0.15);
+    background: rgba(180, 190, 254, 0.25);
     border-color: var(--c-lavender);
+    box-shadow: 0 0 10px rgba(203, 166, 247, 0.4);
+    transform: translateZ(12px) scale(1.05);
 }
 
 /* =========================================
@@ -703,7 +719,15 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     object-fit: cover;
     display: block;
 }
-.user-info { margin-top: 0px; position: relative; z-index: 2; width: 100%; text-align: center; }
+.user-info { 
+    margin-top: 0px; 
+    position: relative; 
+    z-index: 105; 
+    width: 100%; 
+    text-align: center; 
+    transform-style: preserve-3d;
+    transform: translateZ(15px);
+}
 .nameplate-container {
     position: relative;
     padding: 0;
@@ -726,6 +750,10 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     justify-content: center;
     gap: 8px;
     flex-wrap: wrap;
+    position: relative;
+    z-index: 110;
+    transform-style: preserve-3d;
+    transform: translateZ(20px);
 }
 .display-name { 
     font-size: 1.5rem; 
@@ -750,6 +778,10 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     color: #e0e0e0;
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
     text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+    position: relative;
+    z-index: 112;
+    transform-style: preserve-3d;
+    transform: translateZ(5px);
 }
 .clan-icon {
     width: 14px;
@@ -780,17 +812,25 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     align-items: center;
     justify-content: center;
     gap: 4px;
+    position: relative;
+    z-index: 115;
+    transform-style: preserve-3d;
+    transform: translateZ(30px);
 }
 .profile-badge {
     width: 22px;
     height: 22px;
     object-fit: contain;
     cursor: pointer;
+    position: relative;
+    z-index: 120;
+    transform-style: preserve-3d;
+    transform: translateZ(10px);
     transition: transform 0.2s ease, filter 0.2s ease;
 }
 .profile-badge:hover {
-    transform: scale(1.3);
-    filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.8));
+    transform: translateZ(20px) scale(1.35);
+    filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.95)) drop-shadow(0 0 14px var(--c-lavender));
 }
 /* Tippy.js Discord Theme */
 .tippy-box[data-theme~='discord'] {
@@ -832,6 +872,10 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 .verified-badge {
     font-size: 1.1rem; color: var(--c-sapphire);
     text-shadow: 0 0 10px var(--c-sapphire);
+    position: relative;
+    z-index: 112;
+    transform-style: preserve-3d;
+    transform: translateZ(5px);
 }
 .scramble-text {
     font-family: 'Space Mono', monospace;
@@ -857,7 +901,6 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 }
 .badges img { width: 22px; height: 22px; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.4)); object-fit: contain; }
 
-
 /* =========================================
    SOCIALS
 ========================================= */
@@ -867,6 +910,10 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     gap: 10px;
     margin-top: 15px;
     flex-wrap: wrap;
+    position: relative;
+    z-index: 105;
+    transform-style: preserve-3d;
+    transform: translateZ(20px);
 }
 .social-icon {
     width: 45px; height: 45px;
