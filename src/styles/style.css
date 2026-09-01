@@ -10,6 +10,9 @@
     --bg-brightness: 0.4;
     --bg-tint: rgba(17, 17, 27, 0.7);
     --grid-color: rgba(255, 255, 255, 0.03);
+    
+    --box-bg: rgba(0, 0, 0, 0.25);
+    --hover-bg: rgba(255, 255, 255, 0.1);
 
     /* Catppuccin Colors for gradients */
     --c-mauve: #cba6f7;
@@ -29,6 +32,8 @@ body.theme-macchiato {
     --bg-brightness: 0.4;
     --bg-tint: rgba(24, 24, 37, 0.75);
     --grid-color: rgba(255, 255, 255, 0.04);
+    --box-bg: rgba(0, 0, 0, 0.3);
+    --hover-bg: rgba(255, 255, 255, 0.12);
     --c-mauve: #c6a0f6;
     --c-pink: #f5bde6;
     --c-lavender: #b7bdf8;
@@ -46,6 +51,8 @@ body.theme-tokyonight {
     --bg-brightness: 0.45;
     --bg-tint: rgba(22, 22, 30, 0.8);
     --grid-color: rgba(255, 255, 255, 0.04);
+    --box-bg: rgba(0, 0, 0, 0.35);
+    --hover-bg: rgba(122, 162, 247, 0.15);
     --c-mauve: #bb9af7;
     --c-pink: #f7768e;
     --c-lavender: #7aa2f7;
@@ -63,6 +70,8 @@ body.theme-atom {
     --bg-brightness: 0.4;
     --bg-tint: rgba(30, 34, 39, 0.8);
     --grid-color: rgba(255, 255, 255, 0.04);
+    --box-bg: rgba(0, 0, 0, 0.3);
+    --hover-bg: rgba(97, 175, 239, 0.15);
     --c-mauve: #c678dd;
     --c-pink: #e06c75;
     --c-lavender: #61afef;
@@ -75,12 +84,14 @@ body.theme-atom {
 body.theme-latte {
     --bg-dark: #eff1f5;
     --card-bg: rgba(255, 255, 255, 0.7);
-    --border-color: rgba(0, 0, 0, 0.1);
+    --border-color: rgba(0, 0, 0, 0.15);
     --text-main: #4c4f69;
-    --text-muted: #6c6f85;
+    --text-muted: #5c5f77;
     --bg-brightness: 0.95;
     --bg-tint: rgba(239, 241, 245, 0.85);
     --grid-color: rgba(0, 0, 0, 0.05);
+    --box-bg: rgba(255, 255, 255, 0.5);
+    --hover-bg: rgba(136, 57, 239, 0.15);
     --c-mauve: #8839ef;
     --c-pink: #ea76cb;
     --c-lavender: #7287fd;
@@ -163,14 +174,8 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 .bg-layer {
     position: absolute; inset: 0;
     background-size: cover; background-position: center;
-    filter: blur(4px) brightness(var(--bg-brightness, 0.4));
+    filter: blur(4px) brightness(0.4);
     z-index: 1;
-}
-.bg-layer::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-color: var(--bg-tint);
 }
 
 /* Scanline / Grid Overlay */
@@ -471,7 +476,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 .tab-nav {
     display: flex;
     gap: 8px;
-    background: rgba(0, 0, 0, 0.3);
+    background: var(--box-bg);
     padding: 4px;
     border-radius: 12px;
     border: 1px solid var(--border-color);
@@ -531,7 +536,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 ========================================= */
 .setup-section {
     width: 100%;
-    background: rgba(0, 0, 0, 0.2);
+    background: var(--box-bg);
     border: 1px solid var(--border-color);
     border-radius: 12px;
     padding: 12px 14px;
@@ -552,7 +557,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     gap: 8px;
 }
 .gear-item {
-    background: rgba(255, 255, 255, 0.03);
+    background: var(--box-bg);
     border: 1px solid rgba(255, 255, 255, 0.04);
     border-radius: 8px;
     padding: 6px 10px;
@@ -617,7 +622,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 ========================================= */
 .message-box-container {
     width: 100%;
-    background: rgba(0, 0, 0, 0.2);
+    background: var(--box-bg);
     border: 1px solid var(--border-color);
     border-radius: 12px;
     padding: 14px;
@@ -637,7 +642,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 }
 .anon-input, .anon-textarea {
     width: 100%;
-    background: rgba(255, 255, 255, 0.04);
+    background: var(--box-bg);
     border: 1px solid rgba(255, 255, 255, 0.08);
     border-radius: 8px;
     padding: 8px 12px;
@@ -829,7 +834,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     cursor: pointer;
 }
 .clan-tag:hover {
-    background: rgba(255, 255, 255, 0.2);
+    background: var(--hover-bg);
     border-color: var(--c-lavender);
     transform: translateZ(15px) scale(1.05);
     box-shadow: 0 0 15px rgba(203, 166, 247, 0.5);
@@ -845,7 +850,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     justify-content: center;
     width: 40px;
     height: 40px;
-    background: rgba(0, 0, 0, 0.3);
+    background: var(--box-bg);
     border-radius: 50%;
     color: var(--text-normal);
     text-decoration: none;
@@ -991,7 +996,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 ========================================= */
 .activity-box {
     width: 100%;
-    background: rgba(0, 0, 0, 0.2);
+    background: var(--box-bg);
     border: 1px solid var(--border-color);
     border-radius: 12px;
     padding: 10px 12px;
@@ -1050,7 +1055,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 ========================================= */
 .music-box {
     width: 100%;
-    background: rgba(0, 0, 0, 0.2);
+    background: var(--box-bg);
     border: 1px solid var(--border-color);
     border-radius: 12px;
     padding: 12px;
