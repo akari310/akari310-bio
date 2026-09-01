@@ -429,8 +429,8 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     transform-style: preserve-3d;
 }
 
-/* Profile Effect APNG - overlay on TOP of card-inner */
-.card-inner::after {
+/* Profile Effect APNG - overlay on TOP of card-inner (ONLY for main card) */
+#card .card-inner::after {
     content: "";
     position: absolute;
     top: 0;
