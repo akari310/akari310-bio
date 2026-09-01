@@ -7,6 +7,10 @@
     --text-main: #cdd6f4;
     --text-muted: #a6adc8;
     
+    --bg-brightness: 0.4;
+    --bg-tint: rgba(17, 17, 27, 0.7);
+    --grid-color: rgba(255, 255, 255, 0.03);
+
     /* Catppuccin Colors for gradients */
     --c-mauve: #cba6f7;
     --c-pink: #f5c2e7;
@@ -19,9 +23,12 @@
 /* Catppuccin Macchiato */
 body.theme-macchiato {
     --bg-dark: #181825;
-    --card-bg: rgba(36, 39, 58, 0.45);
+    --card-bg: rgba(36, 39, 58, 0.55);
     --text-main: #cad3f5;
     --text-muted: #a5adcb;
+    --bg-brightness: 0.4;
+    --bg-tint: rgba(24, 24, 37, 0.75);
+    --grid-color: rgba(255, 255, 255, 0.04);
     --c-mauve: #c6a0f6;
     --c-pink: #f5bde6;
     --c-lavender: #b7bdf8;
@@ -33,9 +40,12 @@ body.theme-macchiato {
 /* Tokyo Night */
 body.theme-tokyonight {
     --bg-dark: #16161e;
-    --card-bg: rgba(26, 27, 38, 0.7);
+    --card-bg: rgba(26, 27, 38, 0.75);
     --text-main: #c0caf5;
     --text-muted: #7982a9;
+    --bg-brightness: 0.45;
+    --bg-tint: rgba(22, 22, 30, 0.8);
+    --grid-color: rgba(255, 255, 255, 0.04);
     --c-mauve: #bb9af7;
     --c-pink: #f7768e;
     --c-lavender: #7aa2f7;
@@ -47,9 +57,12 @@ body.theme-tokyonight {
 /* Atom One Dark */
 body.theme-atom {
     --bg-dark: #1e2227;
-    --card-bg: rgba(33, 37, 43, 0.72);
+    --card-bg: rgba(33, 37, 43, 0.75);
     --text-main: #abb2bf;
     --text-muted: #7f8796;
+    --bg-brightness: 0.4;
+    --bg-tint: rgba(30, 34, 39, 0.8);
+    --grid-color: rgba(255, 255, 255, 0.04);
     --c-mauve: #c678dd;
     --c-pink: #e06c75;
     --c-lavender: #61afef;
@@ -61,10 +74,13 @@ body.theme-atom {
 /* Catppuccin Latte (Light) */
 body.theme-latte {
     --bg-dark: #eff1f5;
-    --card-bg: rgba(255, 255, 255, 0.6);
+    --card-bg: rgba(255, 255, 255, 0.7);
     --border-color: rgba(0, 0, 0, 0.1);
     --text-main: #4c4f69;
     --text-muted: #6c6f85;
+    --bg-brightness: 0.95;
+    --bg-tint: rgba(239, 241, 245, 0.85);
+    --grid-color: rgba(0, 0, 0, 0.05);
     --c-mauve: #8839ef;
     --c-pink: #ea76cb;
     --c-lavender: #7287fd;
@@ -147,15 +163,21 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 .bg-layer {
     position: absolute; inset: 0;
     background-size: cover; background-position: center;
-    filter: blur(4px) brightness(0.4);
+    filter: blur(4px) brightness(var(--bg-brightness, 0.4));
     z-index: 1;
+}
+.bg-layer::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: var(--bg-tint);
 }
 
 /* Scanline / Grid Overlay */
 .grid-overlay {
     position: absolute; inset: 0; z-index: 2;
-    background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-                      linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+    background-image: linear-gradient(var(--grid-color) 1px, transparent 1px),
+                      linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
     background-size: 20px 20px;
     pointer-events: none;
 }
