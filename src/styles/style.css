@@ -1309,14 +1309,14 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 }
 
 .bgm-controls-row {
-    display: flex;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
     align-items: center;
-    position: relative;
     width: 100%;
     margin-top: 4px;
 }
 .bgm-controls {
+    grid-column: 2;
     display: flex; gap: 12px; align-items: center;
     color: var(--text-muted);
 }
@@ -1330,9 +1330,9 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 }
 
 .bgm-volume-container {
-    position: absolute;
-    right: 0;
+    grid-column: 3;
     display: flex;
+    justify-content: flex-end;
     align-items: center;
     gap: 8px;
     color: var(--text-muted);
@@ -1344,12 +1344,18 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     border-radius: 2px;
     outline: none; cursor: pointer;
 }
-.timeline-slider::-webkit-slider-thumb {
+
+.timeline-slider::-webkit-slider-thumb, .volume-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
-    width: 0; height: 0; /* Hidden thumb by default, only visible on hover */
-    background: var(--c-lavender);
+    background: var(--text-primary);
     border-radius: 50%;
+}
+.timeline-slider::-webkit-slider-thumb {
+    width: 0; height: 0; /* Hidden thumb by default, only visible on hover */
     transition: width 0.1s, height 0.1s;
+}
+.volume-slider::-webkit-slider-thumb {
+    width: 8px; height: 8px;
 }
 .timeline-slider:hover::-webkit-slider-thumb {
     width: 10px; height: 10px;

@@ -54,15 +54,27 @@ if (savedMute === 'true') {
 
 let userInteracted = false;
 
-entryScreen.addEventListener('click', (e) => {
+function handleEntry(e) {
+    if (userInteracted) return;
     userInteracted = true;
     entryScreen.classList.add('hidden');
     mainContent.classList.remove('hidden');
     bgmPlayer.classList.add('visible', 'playing');
-    createSparkles(e.clientX, e.clientY);
+    
+    // Create sparkles at pointer location or center if keyboard
+    const x = e.clientX || window.innerWidth / 2;
+    const y = e.clientY || window.innerHeight / 2;
+    createSparkles(x, y);
     
     if (ytPlayer && ytPlayer.playVideo) {
         ytPlayer.playVideo();
+    }
+}
+
+entryScreen.addEventListener('click', handleEntry);
+window.addEventListener('keydown', (e) => {
+    if (!entryScreen.classList.contains('hidden')) {
+        handleEntry(e);
     }
 });
 
