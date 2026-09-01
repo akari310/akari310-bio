@@ -103,6 +103,28 @@ body.theme-latte {
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 /* =========================================
+   CUSTOM SCROLLBAR
+========================================= */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background: var(--box-bg);
+    border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--hover-bg);
+}
+* {
+    scrollbar-width: thin;
+    scrollbar-color: var(--box-bg) transparent;
+}
+
+/* =========================================
    SKELETON LOADING
 ========================================= */
 .skeleton {

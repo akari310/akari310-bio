@@ -69,12 +69,12 @@
                     <p class="bgm-title">Moshi Moshi Remix</p>
                 </div>
                 <div class="bgm-controls">
-                    <i class="fa-solid fa-shuffle" id="bgm-shuffle" title="Shuffle: Off"></i>
-                    <i class="fa-solid fa-backward-step" id="bgm-prev" title="Previous Song"></i>
-                    <i class="fa-solid fa-play" id="bgm-play-pause-small" title="Play/Pause"></i>
-                    <i class="fa-solid fa-forward-step" id="bgm-next" title="Next Song"></i>
-                    <i class="fa-solid fa-repeat" id="bgm-repeat" title="Repeat: All"></i>
-                    <i class="fa-solid fa-volume-high" id="bgm-mute" title="Mute"></i>
+                    <i class="fa-solid fa-shuffle" id="bgm-shuffle" data-tippy-content="Shuffle: Off"></i>
+                    <i class="fa-solid fa-backward-step" id="bgm-prev" data-tippy-content="Previous Song"></i>
+                    <i class="fa-solid fa-play" id="bgm-play-pause-small" data-tippy-content="Play/Pause"></i>
+                    <i class="fa-solid fa-forward-step" id="bgm-next" data-tippy-content="Next Song"></i>
+                    <i class="fa-solid fa-repeat" id="bgm-repeat" data-tippy-content="Repeat: All"></i>
+                    <i class="fa-solid fa-volume-high" id="bgm-mute" data-tippy-content="Mute"></i>
                     <input type="range" id="bgm-volume" min="0" max="1" step="0.01" value="0.3" class="volume-slider">
                 </div>
             </div>
@@ -140,7 +140,7 @@
                     </div>
 
                     <!-- Avatar -->
-                    <div class="avatar-wrapper" id="avatar-wrapper" title="Click 5 times for a surprise!">
+                    <div class="avatar-wrapper" id="avatar-wrapper" data-tippy-content="Click 5 times for a surprise!">
                         <img id="avatar" src="https://cdn.discordapp.com/embed/avatars/0.png" alt="Avatar" class="avatar-img">
                         <img id="avatar-decoration" class="avatar-decoration hidden" src="" alt="Avatar Decoration">
                         <div class="status-dot" id="status-dot"></div>
