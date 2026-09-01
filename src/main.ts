@@ -66,7 +66,7 @@ entryScreen.addEventListener('click', (e) => {
 let ytPlayer = null;
 let ytDuration = 0;
 let ytInterval = null;
-let isShuffle = false;
+let isShuffle = true;
 let isRepeatOne = false;
 
 function onYouTubeIframeAPIReady() {
@@ -86,6 +86,7 @@ function onYouTubeIframeAPIReady() {
                 if (localStorage.getItem('akari_bgm_muted') === 'true' || volumeSlider.value == 0) {
                     e.target.mute();
                 }
+                e.target.setShuffle(true);
             },
             'onStateChange': (e) => {
                 if (e.data === YT.PlayerState.PLAYING) {
@@ -148,6 +149,10 @@ const bgmCoverImg = document.getElementById('bgm-cover-img');
 if (bgmPrev) bgmPrev.addEventListener('click', () => { if (ytPlayer) ytPlayer.previousVideo(); });
 if (bgmNext) bgmNext.addEventListener('click', () => { if (ytPlayer) ytPlayer.nextVideo(); });
 if (bgmShuffle) {
+    if (isShuffle) {
+        bgmShuffle.classList.add('active');
+        bgmShuffle.title = 'Shuffle: On';
+    }
     bgmShuffle.addEventListener('click', () => {
         isShuffle = !isShuffle;
         bgmShuffle.classList.toggle('active', isShuffle);

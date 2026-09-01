@@ -405,12 +405,11 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 }
 .profile-effect-layer:nth-child(1) {
     /* Side borders */
-    height: calc(100% + 150px); /* Stretch down deeper */
+    top: 106px;
+    top: 27.941cqi; /* Offset the container's negative top */
+    height: 100%; /* Match card-inner height perfectly */
     object-fit: fill;
     z-index: 10; /* Front layer */
-    /* Fade out the top and bottom excess gracefully */
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
-    mask-image: linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
 }
 .profile-effect-layer:nth-child(2) {
     z-index: 10; /* Front layer (small planet) */
