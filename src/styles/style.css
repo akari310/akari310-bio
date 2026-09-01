@@ -782,6 +782,14 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     z-index: 112;
     transform-style: preserve-3d;
     transform: translateZ(5px);
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+.clan-tag:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: var(--c-lavender);
+    transform: translateZ(15px) scale(1.05);
+    box-shadow: 0 0 15px rgba(203, 166, 247, 0.5);
 }
 .clan-icon {
     width: 14px;
@@ -945,6 +953,9 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     border-radius: 12px;
     padding: 10px 12px;
     position: relative;
+    z-index: 105;
+    transform-style: preserve-3d;
+    transform: translateZ(15px);
 }
 .discord-presence {
     display: flex; align-items: center; gap: 12px;
