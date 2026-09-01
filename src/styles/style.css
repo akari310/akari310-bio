@@ -1208,8 +1208,8 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 .bgm-player {
     position: absolute;
     bottom: 25px; left: 50%;
-    width: calc(100% - 40px); /* Fill available width within card */
-    max-width: 360px; /* Prevent it from getting too wide on large screens */
+    width: calc(100% - 30px); /* Fill available width within card */
+    max-width: 420px; /* Increased to allow more room for controls */
     z-index: 50;
     background: rgba(30, 30, 46, 0.7);
     backdrop-filter: blur(12px);
@@ -1217,7 +1217,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     border: 1px solid var(--border-color);
     border-radius: 20px;
     padding: 12px 15px;
-    display: flex; align-items: center; gap: 15px;
+    display: flex; align-items: center; gap: 12px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     opacity: 0; transition: opacity 1s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     pointer-events: none;
@@ -1322,7 +1322,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     display: none;
 }
 .bgm-controls {
-    display: flex; gap: 12px; align-items: center;
+    display: flex; gap: 8px; align-items: center;
     color: var(--text-muted);
 }
 .bgm-controls i {
@@ -1339,12 +1339,12 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     right: 0;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
     color: var(--text-muted);
 }
 .volume-slider {
     -webkit-appearance: none;
-    width: 50px; height: 4px;
+    width: 40px; height: 4px;
     background: rgba(255,255,255,0.1);
     border-radius: 2px;
     outline: none; cursor: pointer;
@@ -1352,7 +1352,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 
 .timeline-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
-    background: var(--text-primary);
+    background: #cdd6f4;
     border-radius: 50%;
     width: 0; height: 0;
     transition: width 0.1s, height 0.1s;
@@ -1362,7 +1362,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 }
 .volume-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
-    background: var(--text-primary);
+    background: #cdd6f4;
     border-radius: 50%;
     width: 10px; height: 10px;
 }
