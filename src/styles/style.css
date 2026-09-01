@@ -157,6 +157,10 @@ body {
 /* =========================================
    CUSTOM CURSOR
 ========================================= */
+body:not(.reduced-motion), body:not(.reduced-motion) * {
+    cursor: none !important;
+}
+
 #cursor-dot {
     position: fixed; top: 0; left: 0;
     width: 6px; height: 6px;

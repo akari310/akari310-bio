@@ -1037,15 +1037,24 @@ function updatePresence(d) {
                 gameActivity.buttons.slice(0, 2).forEach(btnText => {
                     const btn = document.createElement('a');
                     btn.className = 'rp-button';
-                    btn.textContent = btnText;
                     btn.target = "_blank";
                     
-                    let url = null;
                     const textLower = btnText.toLowerCase();
                     const isListen = textLower.includes("listen") || textLower.includes("play") || textLower.includes("watch");
+                    const isView = textLower.includes("artist") || textLower.includes("channel") || textLower.includes("creator") || textLower.includes("album") || textLower.includes("view");
+                    
+                    if (isListen) {
+                        btn.innerHTML = `<i class="fa-solid fa-headphones"></i> ${btnText}`;
+                    } else if (isView) {
+                        btn.innerHTML = `<i class="fa-solid fa-arrow-up-right-from-square"></i> ${btnText}`;
+                    } else {
+                        btn.textContent = btnText;
+                    }
+                    
+                    let url = null;
                     if (isListen) {
                         url = gameActivity.details_url || gameActivity.state_url;
-                    } else if (textLower.includes("artist") || textLower.includes("channel") || textLower.includes("creator")) {
+                    } else if (isView) {
                         url = gameActivity.state_url || gameActivity.details_url;
                     }
                     
