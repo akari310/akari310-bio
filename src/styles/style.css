@@ -1309,14 +1309,17 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 }
 
 .bgm-controls-row {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
+    display: flex;
+    justify-content: space-between;
     align-items: center;
     width: 100%;
     margin-top: 4px;
 }
+.bgm-spacer, .bgm-volume-container {
+    flex: 1;
+}
 .bgm-controls {
-    grid-column: 2;
+    flex: 0 0 auto;
     display: flex; gap: 12px; align-items: center;
     color: var(--text-muted);
 }
@@ -1330,7 +1333,6 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 }
 
 .bgm-volume-container {
-    grid-column: 3;
     display: flex;
     justify-content: flex-end;
     align-items: center;
@@ -1347,6 +1349,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 
 .timeline-slider::-webkit-slider-thumb, .volume-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
+    appearance: none;
     background: var(--text-primary);
     border-radius: 50%;
 }
@@ -1355,7 +1358,8 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     transition: width 0.1s, height 0.1s;
 }
 .volume-slider::-webkit-slider-thumb {
-    width: 8px; height: 8px;
+    width: 10px; height: 10px;
+    background: var(--text-primary);
 }
 .timeline-slider:hover::-webkit-slider-thumb {
     width: 10px; height: 10px;
