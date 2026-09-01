@@ -1042,19 +1042,23 @@ function updatePresence(d) {
                     const textLower = btnText.toLowerCase();
                     const isListen = textLower.includes("listen") || textLower.includes("play") || textLower.includes("watch");
                     const isView = textLower.includes("artist") || textLower.includes("channel") || textLower.includes("creator") || textLower.includes("album") || textLower.includes("view");
+                    const isRead = textLower.includes("read");
                     
                     if (isListen) {
                         btn.innerHTML = `<i class="fa-solid fa-headphones"></i> ${btnText}`;
                     } else if (isView) {
                         btn.innerHTML = `<i class="fa-solid fa-arrow-up-right-from-square"></i> ${btnText}`;
+                    } else if (isRead) {
+                        btn.innerHTML = `<i class="fa-solid fa-book-open"></i> ${btnText}`;
                     } else {
                         btn.textContent = btnText;
                     }
                     
+                    // Fallback order for URLs based on action type
                     let url = null;
-                    if (isListen) {
+                    if (isListen || isRead) {
                         url = gameActivity.details_url || gameActivity.state_url;
-                    } else if (isView) {
+                    } else {
                         url = gameActivity.state_url || gameActivity.details_url;
                     }
                     
