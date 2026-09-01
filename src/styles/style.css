@@ -412,10 +412,14 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     z-index: 10; /* Front layer */
 }
 .profile-effect-layer:nth-child(2) {
-    z-index: 10; /* Front layer (small planet) */
+    z-index: 20 !important; /* Front layer (small planet) - OVER card-inner */
+    pointer-events: none;
+    margin-top: 15px; /* Move down a bit to match Discord */
 }
 .profile-effect-layer:nth-child(3) {
-    z-index: 1; /* Back layer (big planet) - goes behind card-inner */
+    z-index: 1 !important; /* Back layer (big planet) - goes behind card-inner */
+    pointer-events: none;
+    margin-top: 15px; /* Move down a bit to match Discord */
 }
 
 /* HOLOGRAM FOIL GLARE */
