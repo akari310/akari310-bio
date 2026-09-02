@@ -102,20 +102,20 @@ export function initYouTube(userInteracted: () => boolean) {
                     if (localStorage.getItem('akari_bgm_muted') === 'true' || (volumeSlider && Number(volumeSlider.value) == 0)) {
                         e.target.mute();
                     }
-                    
-                    setTimeout(() => {
-                        try {
-                            originalPlaylist = e.target.getPlaylist() || [];
-                        } catch (err) {}
-                        e.target.setLoop(true);
-                        e.target.setShuffle(true);
-                        if (userInteracted()) {
-                            e.target.playVideo();
-                        }
-                    }, 1000);
                 },
                 'onStateChange': (e: any) => {
-                    if (e.data === YT.PlayerState.PLAYING) {
+                    if (e.data === (window as any).YT.PlayerState.CUED) {
+                        if (!originalPlaylist || originalPlaylist.length === 0) {
+                            try {
+                                originalPlaylist = e.target.getPlaylist() || [];
+                            } catch (err) {}
+                            e.target.setLoop(true);
+                            e.target.setShuffle(isShuffle);
+                            if (userInteracted()) {
+                                e.target.playVideo();
+                            }
+                        }
+                    } else if (e.data === (window as any).YT.PlayerState.PLAYING) {
                         updatePlayPauseUI(true);
                         ytDuration = ytPlayer.getDuration();
                         if (bgmDuration) bgmDuration.textContent = formatTime(ytDuration);
