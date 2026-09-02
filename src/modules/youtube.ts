@@ -139,7 +139,19 @@ export function initYouTube(userInteracted: () => boolean) {
                     }
                     // Fallback in case CUED event doesn't fire reliably
                     setTimeout(initPlaylist, 1500);
-                    setTimeout(initPlaylist, 3000);
+                    setTimeout(() => {
+                        if (!isPlaylistInit) {
+                            console.warn('[YT] Playlist failed to init. Possible bad index. Retrying with index 0.');
+                            try { localStorage.removeItem('akari_bgm_original_index'); } catch(e){}
+                            e.target.cuePlaylist({
+                                listType: 'playlist',
+                                list: CONFIG.YOUTUBE_PLAYLIST_ID,
+                                index: 0,
+                                startSeconds: 0
+                            });
+                            setTimeout(initPlaylist, 1000);
+                        }
+                    }, 3000);
                 },
                 'onStateChange': (e: any) => {
                     if (e.data === (window as any).YT.PlayerState.CUED) {
