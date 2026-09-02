@@ -57,9 +57,14 @@ export function togglePlayPause() {
 }
 
 export function initYouTube(userInteracted: () => boolean) {
-    // Restore Saved Volume
-    const savedVol = localStorage.getItem('akari_bgm_volume');
-    const savedMute = localStorage.getItem('akari_bgm_muted');
+    // Restore Saved Volume safely
+    let savedVol = null;
+    let savedMute = null;
+    try {
+        savedVol = localStorage.getItem('akari_bgm_volume');
+        savedMute = localStorage.getItem('akari_bgm_muted');
+    } catch (e) {}
+
     if (savedVol !== null && volumeSlider) {
         volumeSlider.value = savedVol;
         if (Number(savedVol) == 0 && bgmMute) bgmMute.className = 'fa-solid fa-volume-xmark';
@@ -84,8 +89,16 @@ export function initYouTube(userInteracted: () => boolean) {
             },
             events: {
                 'onReady': (e: any) => {
-                    let savedIndex = parseInt(localStorage.getItem('akari_bgm_original_index') || '0');
-                    let savedTime = parseFloat(localStorage.getItem('akari_bgm_time') || '0');
+                    let savedIndex = 0;
+                    let savedTime = 0;
+                    let isMuted = false;
+                    
+                    try {
+                        savedIndex = parseInt(localStorage.getItem('akari_bgm_original_index') || '0');
+                        savedTime = parseFloat(localStorage.getItem('akari_bgm_time') || '0');
+                        isMuted = localStorage.getItem('akari_bgm_muted') === 'true';
+                    } catch (err) {}
+                    
                     if (isNaN(savedIndex)) savedIndex = 0;
                     if (isNaN(savedTime)) savedTime = 0;
                     
@@ -99,7 +112,7 @@ export function initYouTube(userInteracted: () => boolean) {
                     if (volumeSlider) {
                         e.target.setVolume(Number(volumeSlider.value) * 100);
                     }
-                    if (localStorage.getItem('akari_bgm_muted') === 'true' || (volumeSlider && Number(volumeSlider.value) == 0)) {
+                    if (isMuted || (volumeSlider && Number(volumeSlider.value) == 0)) {
                         e.target.mute();
                     }
                 },
@@ -145,10 +158,10 @@ export function initYouTube(userInteracted: () => boolean) {
                                 if (originalPlaylist && originalPlaylist.length > 0) {
                                     const origIdx = originalPlaylist.indexOf(currentVideoData.video_id);
                                     if (origIdx !== -1) {
-                                        localStorage.setItem('akari_bgm_original_index', String(origIdx));
+                                        try { localStorage.setItem('akari_bgm_original_index', String(origIdx)); } catch (e) {}
                                     }
                                 }
-                                localStorage.setItem('akari_bgm_time', String(cur));
+                                try { localStorage.setItem('akari_bgm_time', String(cur)); } catch (e) {}
                             }
                             
                             // Robust Repeat One: bypass ENDED event entirely
@@ -242,7 +255,7 @@ export function initYouTube(userInteracted: () => boolean) {
                     bgmMute.className = 'fa-solid fa-volume-xmark';
                 }
             }
-            localStorage.setItem('akari_bgm_muted', isMuted ? 'true' : 'false');
+            try { localStorage.setItem('akari_bgm_muted', isMuted ? 'true' : 'false'); } catch (e) {}
         });
     }
 
@@ -259,14 +272,14 @@ export function initYouTube(userInteracted: () => boolean) {
     if (volumeSlider) {
         volumeSlider.addEventListener('input', (e: any) => {
             const vol = e.target.value;
-            localStorage.setItem('akari_bgm_volume', vol);
+            try { localStorage.setItem('akari_bgm_volume', vol); } catch (err) {}
             let isMuted = vol == 0;
             if (ytPlayer) {
                 ytPlayer.setVolume(vol * 100);
                 if (isMuted) ytPlayer.mute(); else ytPlayer.unMute();
             }
             if (bgmMute) bgmMute.className = isMuted ? 'fa-solid fa-volume-xmark' : 'fa-solid fa-volume-high';
-            localStorage.setItem('akari_bgm_muted', isMuted ? 'true' : 'false');
+            try { localStorage.setItem('akari_bgm_muted', isMuted ? 'true' : 'false'); } catch (err) {}
         });
     }
 
