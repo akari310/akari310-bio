@@ -74,8 +74,30 @@ export function initYouTube(userInteracted: () => boolean) {
     }
 
     let originalPlaylist: string[] = [];
+    let isPlaylistInit = false;
 
-    // Expose to global scope so YouTube IFrame API can find it
+    const initPlaylist = () => {
+        if (isPlaylistInit) return;
+        if (!ytPlayer) return;
+        try {
+            const currentList = ytPlayer.getPlaylist();
+            if (currentList && currentList.length > 0) {
+                originalPlaylist = currentList;
+                ytPlayer.setLoop(true);
+                ytPlayer.setShuffle(isShuffle);
+                isPlaylistInit = true;
+                if (userInteracted()) ytPlayer.playVideo();
+            }
+        } catch (err) {}
+    };
+
+    // Expose to ui.ts
+    (window as any).playBgm = () => {
+        if (ytPlayer && ytPlayer.playVideo) {
+            if (!isPlaylistInit) initPlaylist();
+            ytPlayer.playVideo();
+        }
+    };
     (window as any).onYouTubeIframeAPIReady = () => {
         console.log('[YT] onYouTubeIframeAPIReady called!');
         const YT = (window as any).YT;
@@ -115,19 +137,13 @@ export function initYouTube(userInteracted: () => boolean) {
                     if (isMuted || (volumeSlider && Number(volumeSlider.value) == 0)) {
                         e.target.mute();
                     }
+                    // Fallback in case CUED event doesn't fire reliably
+                    setTimeout(initPlaylist, 1500);
+                    setTimeout(initPlaylist, 3000);
                 },
                 'onStateChange': (e: any) => {
                     if (e.data === (window as any).YT.PlayerState.CUED) {
-                        if (!originalPlaylist || originalPlaylist.length === 0) {
-                            try {
-                                originalPlaylist = e.target.getPlaylist() || [];
-                            } catch (err) {}
-                            e.target.setLoop(true);
-                            e.target.setShuffle(isShuffle);
-                            if (userInteracted()) {
-                                e.target.playVideo();
-                            }
-                        }
+                        initPlaylist();
                     } else if (e.data === (window as any).YT.PlayerState.PLAYING) {
                         updatePlayPauseUI(true);
                         ytDuration = ytPlayer.getDuration();

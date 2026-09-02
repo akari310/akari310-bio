@@ -20,7 +20,9 @@ function handleEntry(e: any) {
     const y = e.clientY || window.innerHeight / 2;
     createSparkles(x, y);
     
-    if (ytPlayer && ytPlayer.playVideo) {
+    if (typeof (window as any).playBgm === 'function') {
+        (window as any).playBgm();
+    } else if (ytPlayer && ytPlayer.playVideo) {
         ytPlayer.playVideo();
     }
 }
