@@ -81,7 +81,6 @@ export function initYouTube(userInteracted: () => boolean) {
         const YT = (window as any).YT;
         ytPlayer = new YT.Player('yt-player-container', {
             height: '0', width: '0',
-            host: 'https://www.youtube-nocookie.com',
             playerVars: { 
                 'autoplay': 0, 
                 'controls': 0, 
