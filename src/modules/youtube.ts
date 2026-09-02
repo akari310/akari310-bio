@@ -4,7 +4,7 @@ import { formatTime } from './utils';
 export let ytPlayer: any = null;
 export let ytDuration = 0;
 let isShuffle = true;
-let isRepeatOne = false;
+let repeatState = 0; // 0 = Repeat All, 1 = Repeat One, 2 = Repeat Off
 let ytInterval: any = null;
 
 // DOM Elements
@@ -147,6 +147,11 @@ export function initYouTube(userInteracted: () => boolean) {
                                 localStorage.setItem('akari_bgm_time', String(cur));
                             }
                             
+                            // Robust Repeat One: bypass ENDED event entirely
+                            if (repeatState === 1 && ytDuration > 0 && (ytDuration - cur) <= 0.4) {
+                                ytPlayer.seekTo(0, true);
+                            }
+                            
                             if (timelineSlider && !timelineSlider.matches(':active')) {
                                 if (bgmCurrent) bgmCurrent.textContent = formatTime(cur);
                                 const percent = ytDuration ? (cur / ytDuration) * 100 : 0;
@@ -159,13 +164,7 @@ export function initYouTube(userInteracted: () => boolean) {
                         const spinner = document.querySelector('.bgm-spin') as HTMLElement;
                         if(spinner) spinner.style.animationPlayState = 'paused';
                         
-                        if (e.data === YT.PlayerState.ENDED) {
-                            if (isRepeatOne) {
-                                // Replay the current video
-                                const currentIdx = ytPlayer.getPlaylistIndex();
-                                ytPlayer.playVideoAt(currentIdx);
-                            }
-                        }
+                        // We no longer manually handle ENDED for repeat because we use the time check bypass
                     }
                 }
             }
@@ -192,15 +191,32 @@ export function initYouTube(userInteracted: () => boolean) {
         });
     }
     if (bgmRepeat) {
+        // Default UI
+        bgmRepeat.classList.add('active');
+        bgmRepeat.title = 'Repeat: All';
+
         bgmRepeat.addEventListener('click', () => {
-            isRepeatOne = !isRepeatOne;
-            bgmRepeat.classList.toggle('active', isRepeatOne);
-            bgmRepeat.title = isRepeatOne ? 'Repeat: One' : 'Repeat: All';
-            bgmRepeat.className = isRepeatOne ? 'fa-solid fa-repeat active' : 'fa-solid fa-repeat';
-            if(isRepeatOne) {
-                bgmRepeat.innerHTML = '<span style="font-size: 0.5em; position: absolute; margin-top: 5px; margin-left: -5px;">1</span>';
-            } else {
+            repeatState = (repeatState + 1) % 3;
+            
+            if (repeatState === 0) {
+                // Repeat All
+                bgmRepeat.classList.add('active');
+                bgmRepeat.title = 'Repeat: All';
                 bgmRepeat.innerHTML = '';
+                if (ytPlayer) ytPlayer.setLoop(true);
+            } else if (repeatState === 1) {
+                // Repeat One
+                bgmRepeat.classList.add('active');
+                bgmRepeat.title = 'Repeat: One';
+                bgmRepeat.style.position = 'relative';
+                bgmRepeat.innerHTML = '<span style="font-family: \'Plus Jakarta Sans\', sans-serif; font-size: 0.6em; font-weight: 900; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: var(--c-bg);">1</span>';
+                if (ytPlayer) ytPlayer.setLoop(true);
+            } else {
+                // Repeat Off
+                bgmRepeat.classList.remove('active');
+                bgmRepeat.title = 'Repeat: Off';
+                bgmRepeat.innerHTML = '';
+                if (ytPlayer) ytPlayer.setLoop(false);
             }
         });
     }
