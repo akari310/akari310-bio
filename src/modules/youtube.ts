@@ -68,6 +68,8 @@ export function initYouTube(userInteracted: () => boolean) {
         bgmMute.className = 'fa-solid fa-volume-xmark';
     }
 
+    let hasRestoredState = false;
+
     // Expose to global scope so YouTube IFrame API can find it
     (window as any).onYouTubeIframeAPIReady = () => {
         console.log('[YT] onYouTubeIframeAPIReady called!');
@@ -82,14 +84,9 @@ export function initYouTube(userInteracted: () => boolean) {
             },
             events: {
                 'onReady': (e: any) => {
-                    const savedIndex = parseInt(localStorage.getItem('akari_bgm_index') || '0');
-                    const savedTime = parseFloat(localStorage.getItem('akari_bgm_time') || '0');
-                    
                     e.target.cuePlaylist({
                         listType: 'playlist',
-                        list: CONFIG.YOUTUBE_PLAYLIST_ID,
-                        index: savedIndex,
-                        startSeconds: savedTime
+                        list: CONFIG.YOUTUBE_PLAYLIST_ID
                     });
                     if (volumeSlider) {
                         e.target.setVolume(Number(volumeSlider.value) * 100);
@@ -97,14 +94,36 @@ export function initYouTube(userInteracted: () => boolean) {
                     if (localStorage.getItem('akari_bgm_muted') === 'true' || (volumeSlider && Number(volumeSlider.value) == 0)) {
                         e.target.mute();
                     }
-                    setTimeout(() => {
-                        e.target.setShuffle(true);
-                        if (userInteracted()) {
-                            e.target.playVideo();
-                        }
-                    }, 500);
                 },
                 'onStateChange': (e: any) => {
+                    if (e.data === YT.PlayerState.CUED && !hasRestoredState) {
+                        hasRestoredState = true;
+                        const savedVideoId = localStorage.getItem('akari_bgm_video_id');
+                        const savedTime = parseFloat(localStorage.getItem('akari_bgm_time') || '0');
+                        
+                        let targetIndex = 0;
+                        if (savedVideoId) {
+                            const playlist = ytPlayer.getPlaylist();
+                            if (playlist) {
+                                const idx = playlist.indexOf(savedVideoId);
+                                if (idx !== -1) targetIndex = idx;
+                            }
+                        }
+                        
+                        ytPlayer.playVideoAt(targetIndex);
+                        ytPlayer.seekTo(savedTime, true);
+                        if (!userInteracted()) {
+                            ytPlayer.pauseVideo();
+                        }
+                        
+                        setTimeout(() => {
+                            ytPlayer.setShuffle(true);
+                            if (userInteracted() && ytPlayer.getPlayerState() !== YT.PlayerState.PLAYING) {
+                                ytPlayer.playVideo();
+                            }
+                        }, 300);
+                    }
+
                     if (e.data === YT.PlayerState.PLAYING) {
                         updatePlayPauseUI(true);
                         ytDuration = ytPlayer.getDuration();
@@ -129,9 +148,9 @@ export function initYouTube(userInteracted: () => boolean) {
                         if (ytInterval) clearInterval(ytInterval);
                         ytInterval = setInterval(() => {
                             const cur = ytPlayer.getCurrentTime() || 0;
-                            const idx = ytPlayer.getPlaylistIndex();
-                            if (idx !== undefined && idx !== null) {
-                                localStorage.setItem('akari_bgm_index', String(idx));
+                            const currentVideoData = ytPlayer.getVideoData();
+                            if (currentVideoData && currentVideoData.video_id) {
+                                localStorage.setItem('akari_bgm_video_id', currentVideoData.video_id);
                                 localStorage.setItem('akari_bgm_time', String(cur));
                             }
                             
