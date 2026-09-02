@@ -26,6 +26,13 @@ const bgmCoverBtn = document.getElementById('bgm-cover-btn');
 
 
 export function updatePlayPauseUI(isPlaying: boolean) {
+    const newTitle = isPlaying ? 'Pause' : 'Play';
+    if (bgmPlayPauseSmall) {
+        bgmPlayPauseSmall.title = newTitle;
+        bgmPlayPauseSmall.setAttribute('data-tippy-content', newTitle);
+        if ((bgmPlayPauseSmall as any)._tippy) (bgmPlayPauseSmall as any)._tippy.setContent(newTitle);
+    }
+    
     if (isPlaying) {
         bgmPlayPause?.classList.replace('fa-play', 'fa-pause');
         bgmPlayPauseSmall?.classList.replace('fa-play', 'fa-pause');
