@@ -82,9 +82,14 @@ export function initYouTube(userInteracted: () => boolean) {
             },
             events: {
                 'onReady': (e: any) => {
+                    const savedIndex = parseInt(localStorage.getItem('akari_bgm_index') || '0');
+                    const savedTime = parseFloat(localStorage.getItem('akari_bgm_time') || '0');
+                    
                     e.target.cuePlaylist({
                         listType: 'playlist',
-                        list: CONFIG.YOUTUBE_PLAYLIST_ID
+                        list: CONFIG.YOUTUBE_PLAYLIST_ID,
+                        index: savedIndex,
+                        startSeconds: savedTime
                     });
                     if (volumeSlider) {
                         e.target.setVolume(Number(volumeSlider.value) * 100);
@@ -123,8 +128,14 @@ export function initYouTube(userInteracted: () => boolean) {
                         
                         if (ytInterval) clearInterval(ytInterval);
                         ytInterval = setInterval(() => {
+                            const cur = ytPlayer.getCurrentTime() || 0;
+                            const idx = ytPlayer.getPlaylistIndex();
+                            if (idx !== undefined && idx !== null) {
+                                localStorage.setItem('akari_bgm_index', String(idx));
+                                localStorage.setItem('akari_bgm_time', String(cur));
+                            }
+                            
                             if (timelineSlider && !timelineSlider.matches(':active')) {
-                                const cur = ytPlayer.getCurrentTime() || 0;
                                 if (bgmCurrent) bgmCurrent.textContent = formatTime(cur);
                                 const percent = ytDuration ? (cur / ytDuration) * 100 : 0;
                                 timelineSlider.value = String(percent || 0);
