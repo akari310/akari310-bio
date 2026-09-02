@@ -1311,17 +1311,17 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 }
 
 .bgm-controls-row {
-    position: relative;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     width: 100%;
     margin-top: 4px;
 }
-.bgm-spacer {
-    display: none;
+.bgm-spacer, .bgm-volume-container {
+    flex: 1;
 }
 .bgm-controls {
+    flex: 0 0 auto;
     display: flex; gap: 8px; align-items: center;
     color: var(--text-muted);
 }
@@ -1335,9 +1335,8 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 }
 
 .bgm-volume-container {
-    position: absolute;
-    right: 0;
     display: flex;
+    justify-content: flex-end;
     align-items: center;
     gap: 6px;
     color: var(--text-muted);
