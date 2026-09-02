@@ -51,7 +51,11 @@ export function initThemeAndSettings() {
     document.body.className = `theme-${CONFIG.THEMES[currentThemeIndex]}`;
 
     const savedReduceMotion = localStorage.getItem('akari_reduce_motion');
-    if (savedReduceMotion === 'true') {
+    const isMobile = window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const systemPrefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    
+    // Auto-enable reduced motion on mobile or if system prefers it, unless user explicitly opted out
+    if (savedReduceMotion === 'true' || (savedReduceMotion === null && (isMobile || systemPrefersReduced))) {
         document.body.classList.add('reduced-motion');
         if (reduceMotionToggle) reduceMotionToggle.checked = true;
     }
@@ -231,6 +235,7 @@ export function initTilt() {
     if (!cardTilt) return;
 
     function handleTilt(e: any) {
+        if (document.body.classList.contains('reduced-motion')) return;
         if (mainContent && mainContent.classList.contains('hidden')) return;
         if (!cardTilt) return;
         const rect = cardTilt.getBoundingClientRect();
