@@ -34,6 +34,7 @@ export function updatePresence(d: any) {
     const activityCard = document.getElementById('activity-card-container');
     const spotifyBox = document.getElementById('spotify-box');
     const gameBox = document.getElementById('game-box');
+    const skeletonBox = document.getElementById('skeleton-box');
     const infoBox = document.querySelector('.activity-box');
 
     // Add fade out transition
@@ -163,6 +164,7 @@ export function updatePresence(d: any) {
             activityCard.classList.remove('hidden');
             spotifyBox.classList.remove('hidden');
             gameBox.classList.add('hidden');
+            if (skeletonBox) skeletonBox.classList.add('hidden');
             
             (document.getElementById('sp-art') as HTMLImageElement).src = d.spotify.album_art_url;
             (document.getElementById('sp-song') as HTMLElement).textContent = d.spotify.song;
@@ -193,6 +195,7 @@ export function updatePresence(d: any) {
             activityCard.classList.remove('hidden');
             gameBox.classList.remove('hidden');
             spotifyBox.classList.add('hidden');
+            if (skeletonBox) skeletonBox.classList.add('hidden');
             
             const rpHeader = document.getElementById('rp-header');
             let headerHTML = '<i class="fa-solid fa-gamepad"></i> PLAYING A GAME';

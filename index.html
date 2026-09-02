@@ -292,9 +292,26 @@
         </div>
 
         <!-- Activity Card (Rich Presence) -->
-        <div class="card-tilt hidden" id="activity-card-container">
+        <div class="card-tilt" id="activity-card-container">
             <div class="card-border">
                 <div class="card-inner" id="activity-inner">
+                    <!-- Skeleton Activity Box -->
+                    <div class="game-box" id="skeleton-box">
+                        <div class="music-header">
+                            <span class="skeleton" style="width: 140px; height: 16px; border-radius: 4px; display: inline-block;"></span>
+                        </div>
+                        <div class="game-content">
+                            <div class="game-assets">
+                                <div class="rp-large skeleton" style="border-radius: 12px; width: 64px; height: 64px;"></div>
+                            </div>
+                            <div class="game-info" style="width: 100%; display: flex; flex-direction: column; justify-content: center; gap: 8px;">
+                                <div class="skeleton" style="width: 70%; height: 16px; border-radius: 4px;"></div>
+                                <div class="skeleton" style="width: 50%; height: 14px; border-radius: 4px;"></div>
+                                <div class="skeleton" style="width: 80%; height: 14px; border-radius: 4px;"></div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Spotify / Music Player -->
                     <div class="music-box hidden" id="spotify-box">
                         <div class="music-header">
