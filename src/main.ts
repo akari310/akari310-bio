@@ -643,6 +643,21 @@ function tickSparkles() {
     }
 }
 
+// Online View Counter
+const viewCountElement = document.getElementById('view-count');
+if (viewCountElement) {
+    fetch('https://abacus.jasoncameron.dev/hit/akari310/bio')
+        .then(response => response.json())
+        .then(data => {
+            if (data && data.value) {
+                viewCountElement.textContent = data.value.toLocaleString();
+            }
+        })
+        .catch(error => {
+            console.error('Error fetching view count:', error);
+        });
+}
+
 // --- Toast Notification & Click-to-Copy ---
 const toast = document.getElementById('toast');
 let toastTimeout;
