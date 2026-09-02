@@ -1315,7 +1315,8 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 100%;
+    width: calc(100% + 57px);
+    margin-left: -57px;
     margin-top: 4px;
 }
 .bgm-spacer {

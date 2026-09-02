@@ -272,7 +272,13 @@ function tickVisualizer() {
     if(!visualizerCanvas) return;
     visualizerCanvas.width = visualizerCanvas.clientWidth;
     visualizerCanvas.height = visualizerCanvas.clientHeight;
-    const playing = ytPlayer && ytPlayer.getPlayerState && ytPlayer.getPlayerState() === YT.PlayerState.PLAYING;
+    
+    let isActuallyPlaying = false;
+    if (ytPlayer && ytPlayer.getPlayerState && ytPlayer.getPlayerState() === YT.PlayerState.PLAYING) {
+        if (!ytPlayer.isMuted()) {
+            isActuallyPlaying = true;
+        }
+    }
     
     // Fake data array for YouTube visualizer
     if (!window.fakeDataArray) {
@@ -280,7 +286,7 @@ function tickVisualizer() {
     }
     
     for(let i=0; i<window.fakeDataArray.length; i++) {
-        if (playing) {
+        if (isActuallyPlaying) {
             window.fakeDataArray[i] = Math.max(0, Math.min(255, window.fakeDataArray[i] + (Math.random() * 40 - 20)));
         } else {
             window.fakeDataArray[i] = Math.max(0, window.fakeDataArray[i] - 10);
