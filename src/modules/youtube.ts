@@ -227,11 +227,16 @@ export function initYouTube(userInteracted: () => boolean) {
         if (isShuffle) {
             bgmShuffle.classList.add('active');
             bgmShuffle.title = 'Shuffle: On';
+            bgmShuffle.setAttribute('data-tippy-content', 'Shuffle: On');
+            if ((bgmShuffle as any)._tippy) (bgmShuffle as any)._tippy.setContent('Shuffle: On');
         }
         bgmShuffle.addEventListener('click', () => {
             isShuffle = !isShuffle;
             bgmShuffle.classList.toggle('active', isShuffle);
-            bgmShuffle.title = isShuffle ? 'Shuffle: On' : 'Shuffle: Off';
+            const newTitle = isShuffle ? 'Shuffle: On' : 'Shuffle: Off';
+            bgmShuffle.title = newTitle;
+            bgmShuffle.setAttribute('data-tippy-content', newTitle);
+            if ((bgmShuffle as any)._tippy) (bgmShuffle as any)._tippy.setContent(newTitle);
             if (ytPlayer) ytPlayer.setShuffle(isShuffle);
         });
     }
@@ -239,30 +244,37 @@ export function initYouTube(userInteracted: () => boolean) {
         // Default UI
         bgmRepeat.classList.add('active');
         bgmRepeat.title = 'Repeat: All';
+        bgmRepeat.setAttribute('data-tippy-content', 'Repeat: All');
+        if ((bgmRepeat as any)._tippy) (bgmRepeat as any)._tippy.setContent('Repeat: All');
 
         bgmRepeat.addEventListener('click', () => {
             repeatState = (repeatState + 1) % 3;
+            let newTitle = '';
             
             if (repeatState === 0) {
                 // Repeat All
                 bgmRepeat.classList.add('active');
-                bgmRepeat.title = 'Repeat: All';
+                newTitle = 'Repeat: All';
                 bgmRepeat.innerHTML = '';
                 if (ytPlayer) ytPlayer.setLoop(true);
             } else if (repeatState === 1) {
                 // Repeat One
                 bgmRepeat.classList.add('active');
-                bgmRepeat.title = 'Repeat: One';
+                newTitle = 'Repeat: One';
                 bgmRepeat.style.position = 'relative';
                 bgmRepeat.innerHTML = '<span style="font-family: \'Plus Jakarta Sans\', sans-serif; font-size: 0.6em; font-weight: 900; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: var(--c-bg);">1</span>';
                 if (ytPlayer) ytPlayer.setLoop(true);
             } else {
                 // Repeat Off
                 bgmRepeat.classList.remove('active');
-                bgmRepeat.title = 'Repeat: Off';
+                newTitle = 'Repeat: Off';
                 bgmRepeat.innerHTML = '';
                 if (ytPlayer) ytPlayer.setLoop(false);
             }
+            
+            bgmRepeat.title = newTitle;
+            bgmRepeat.setAttribute('data-tippy-content', newTitle);
+            if ((bgmRepeat as any)._tippy) (bgmRepeat as any)._tippy.setContent(newTitle);
         });
     }
 
