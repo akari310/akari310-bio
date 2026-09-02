@@ -319,13 +319,16 @@ export function updatePresence(d: any) {
                                 function extractVideoID(url: string) {
                                     const regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
                                     const match = url.match(regExp);
-                                    return (match && match[2].length === 11) ? match[2] : null;
+                                    return match;
                                 }
-                                const vid = extractVideoID(url);
+                                const match = extractVideoID(url);
+                                const vid = match && match[2].length === 11 ? match[2] : null;
                                 if (vid) {
                                     btn.onclick = (e) => {
                                         e.preventDefault();
-                                        if(ytPlayer) ytPlayer.loadVideoById(vid); 
+                                        if(ytPlayer && typeof ytPlayer.loadVideoById === 'function') {
+                                            ytPlayer.loadVideoById(vid);
+                                        } 
                                         updateBgmTitle(gameActivity.details || gameActivity.name);
                                         if (bgmCoverImg && lImg) bgmCoverImg.src = lImg.src;
                                     };
