@@ -84,8 +84,10 @@ export function initYouTube(userInteracted: () => boolean) {
             },
             events: {
                 'onReady': (e: any) => {
-                    const savedIndex = parseInt(localStorage.getItem('akari_bgm_original_index') || '0');
-                    const savedTime = parseFloat(localStorage.getItem('akari_bgm_time') || '0');
+                    let savedIndex = parseInt(localStorage.getItem('akari_bgm_original_index') || '0');
+                    let savedTime = parseFloat(localStorage.getItem('akari_bgm_time') || '0');
+                    if (isNaN(savedIndex)) savedIndex = 0;
+                    if (isNaN(savedTime)) savedTime = 0;
                     
                     e.target.cuePlaylist({
                         listType: 'playlist',
@@ -102,7 +104,9 @@ export function initYouTube(userInteracted: () => boolean) {
                     }
                     
                     setTimeout(() => {
-                        originalPlaylist = e.target.getPlaylist() || [];
+                        try {
+                            originalPlaylist = e.target.getPlaylist() || [];
+                        } catch (err) {}
                         e.target.setLoop(true);
                         e.target.setShuffle(true);
                         if (userInteracted()) {
