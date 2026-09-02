@@ -103,6 +103,7 @@ export function initYouTube(userInteracted: () => boolean) {
                     
                     setTimeout(() => {
                         originalPlaylist = e.target.getPlaylist() || [];
+                        e.target.setLoop(true);
                         e.target.setShuffle(true);
                         if (userInteracted()) {
                             e.target.playVideo();
@@ -158,8 +159,12 @@ export function initYouTube(userInteracted: () => boolean) {
                         const spinner = document.querySelector('.bgm-spin') as HTMLElement;
                         if(spinner) spinner.style.animationPlayState = 'paused';
                         
-                        if (e.data === YT.PlayerState.ENDED && !isRepeatOne) {
-                            ytPlayer.nextVideo();
+                        if (e.data === YT.PlayerState.ENDED) {
+                            if (isRepeatOne) {
+                                // Replay the current video
+                                const currentIdx = ytPlayer.getPlaylistIndex();
+                                ytPlayer.playVideoAt(currentIdx);
+                            }
                         }
                     }
                 }
@@ -194,10 +199,8 @@ export function initYouTube(userInteracted: () => boolean) {
             bgmRepeat.className = isRepeatOne ? 'fa-solid fa-repeat active' : 'fa-solid fa-repeat';
             if(isRepeatOne) {
                 bgmRepeat.innerHTML = '<span style="font-size: 0.5em; position: absolute; margin-top: 5px; margin-left: -5px;">1</span>';
-                if (ytPlayer) ytPlayer.setLoop(true);
             } else {
                 bgmRepeat.innerHTML = '';
-                if (ytPlayer) ytPlayer.setLoop(false);
             }
         });
     }
