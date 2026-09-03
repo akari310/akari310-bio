@@ -1345,19 +1345,32 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 }
 
 .bgm-volume-container {
-    position: static;
+    position: relative;
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    gap: 6px;
     color: var(--text-muted);
 }
 .volume-slider {
     -webkit-appearance: none;
+    position: absolute;
+    right: 20px;
+    top: 50%;
     width: 45px; height: 4px;
     background: rgba(255,255,255,0.1);
     border-radius: 2px;
     outline: none; cursor: pointer;
+    transform-origin: right center;
+    transform: translateY(-50%) scaleX(0);
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 10;
+}
+.bgm-volume-container:hover .volume-slider {
+    transform: translateY(-50%) scaleX(1);
+    opacity: 1;
+    pointer-events: auto;
 }
 
 .timeline-slider::-webkit-slider-thumb {
