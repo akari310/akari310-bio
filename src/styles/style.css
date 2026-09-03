@@ -1354,7 +1354,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 .volume-slider {
     -webkit-appearance: none;
     position: absolute;
-    right: 20px;
+    right: 28px;
     top: 50%;
     width: 45px; height: 4px;
     background: rgba(255,255,255,0.1);
