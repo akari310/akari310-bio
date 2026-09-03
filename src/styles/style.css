@@ -1322,6 +1322,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     align-items: center;
     width: 100%;
     margin-top: 4px;
+    gap: 10px;
 }
 .bgm-spacer, .bgm-volume-container {
     flex: 1;
@@ -1331,7 +1332,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 }
 .bgm-controls {
     flex: 0 0 auto;
-    display: flex; gap: 8px; align-items: center;
+    display: flex; gap: 6px; align-items: center;
     color: var(--text-muted);
 }
 .bgm-controls i {
@@ -1353,7 +1354,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 }
 .volume-slider {
     -webkit-appearance: none;
-    width: 60px; height: 4px;
+    width: 45px; height: 4px;
     background: rgba(255,255,255,0.1);
     border-radius: 2px;
     outline: none; cursor: pointer;
