@@ -1283,8 +1283,6 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     overflow: hidden;
     white-space: nowrap;
     text-align: center;
-    width: calc(100% + 57px);
-    margin-left: -57px;
     mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
     -webkit-mask-image: linear-gradient(to right, transparent, black 10%, black 90%, transparent);
 }
