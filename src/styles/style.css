@@ -1216,8 +1216,8 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--border-color);
     border-radius: 20px;
-    padding: 12px 15px;
-    display: flex; align-items: center; gap: 15px;
+    padding: 12px;
+    display: flex; align-items: center; gap: 12px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     opacity: 0; transition: opacity 1s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     pointer-events: none;
