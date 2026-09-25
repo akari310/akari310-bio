@@ -146,7 +146,7 @@ function updateNameplateEffect() {
     if (!np || !np.sku_id || !videoEl || !imgEl || !effectContainer) return;
     
     const videoSrc = `https://cdn.discordapp.com/media/v1/collectibles-shop/${np.sku_id}/video.webm`;
-    const staticSrc = './assets/img/static.png';
+    const staticSrc = './assets/img/static.webp';
     
     videoEl.onerror = null;
     imgEl.onerror = null;

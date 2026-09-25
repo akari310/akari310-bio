@@ -84,6 +84,7 @@
     "resolve-from": "^4.0.0",
     "reusify": "^1.1.0",
     "run-parallel": "^1.2.0",
+    "sharp": "^0.35.4",
     "signal-exit": "^4.1.0",
     "slash": "^5.1.0",
     "slice-ansi": "^4.0.0",

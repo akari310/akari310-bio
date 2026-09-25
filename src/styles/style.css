@@ -509,7 +509,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     left: 0;
     right: 0;
     bottom: 0; /* Let it expand fully */
-    background: url('../assets/img/effect.png') center top / 100% auto no-repeat;
+    background: url('../assets/img/effect.webp') center top / 100% auto no-repeat;
     pointer-events: none;
     z-index: 100; /* On TOP of card-inner content */
     opacity: 0.9;

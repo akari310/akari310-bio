@@ -77,7 +77,7 @@ export function updatePresence(d: any) {
         
         if (np && np.sku_id && videoEl && imgEl && effectContainer) {
             const videoSrc = `https://cdn.discordapp.com/media/v1/collectibles-shop/${np.sku_id}/video.webm`;
-            const staticSrc = './assets/img/static.png';
+            const staticSrc = './assets/img/static.webp';
             
             videoEl.pause();
             videoEl.src = '';
