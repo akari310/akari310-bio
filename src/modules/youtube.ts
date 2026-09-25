@@ -188,8 +188,7 @@ export function initYouTube(userInteracted: () => boolean) {
                             }
                         }
 
-                        const spinner = document.querySelector('.bgm-spin') as HTMLElement;
-                        if(spinner) spinner.style.animationPlayState = 'running';
+                        // spinner animation controlled via CSS .playing class
                         
                         if (ytInterval) clearInterval(ytInterval);
                         ytInterval = setInterval(() => {
@@ -220,8 +219,7 @@ export function initYouTube(userInteracted: () => boolean) {
                         }, 500);
                     } else {
                         updatePlayPauseUI(false);
-                        const spinner = document.querySelector('.bgm-spin') as HTMLElement;
-                        if(spinner) spinner.style.animationPlayState = 'paused';
+                        // spinner animation controlled via CSS .playing class
                         
                         // We no longer manually handle ENDED for repeat because we use the time check bypass
                     }
