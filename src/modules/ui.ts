@@ -175,7 +175,7 @@ function updateNameplateEffect() {
     }
 }
 
-// --- View Counter ---
+// --- View Counter — skeleton until fetch, 1 retry ---
 export function initViewCounter() {
     const viewCountEl = document.getElementById('view-count');
     if (!viewCountEl) return;
@@ -188,19 +188,22 @@ export function initViewCounter() {
         sessionStorage.setItem('akari_view_counted', 'true');
     }
     
-    fetch(CONFIG.VIEW_COUNTER_API)
-        .then(response => response.json())
-        .then(data => {
-            if (data && data.value) {
-                viewCountEl.textContent = data.value.toLocaleString();
-            } else {
-                viewCountEl.textContent = localViews.toLocaleString();
-            }
-        })
-        .catch(error => {
-            console.error('Error fetching view count:', error);
-            viewCountEl.textContent = localViews.toLocaleString();
-        });
+    // ponytail: keep skeleton text until first fetch resolves; single retry after 2s
+    const apply = (val: number) => { viewCountEl.textContent = val.toLocaleString(); };
+    const fetchOnce = (retry: boolean) => {
+        fetch(CONFIG.VIEW_COUNTER_API)
+            .then(r => r.json())
+            .then(data => {
+                if (data && data.value) apply(data.value);
+                else apply(localViews);
+            })
+            .catch(e => {
+                console.error('Error fetching view count:', e);
+                if (retry) setTimeout(() => fetchOnce(false), 2000);
+                else apply(localViews);
+            });
+    };
+    fetchOnce(true);
 }
 
 // --- Hacker Text Scramble Effect ---

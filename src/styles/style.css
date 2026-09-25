@@ -1240,6 +1240,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     transform: translateX(-50%) translateY(20px);
     width: 380px; /* Match card width */
     max-width: 90vw;
+    max-height: calc(100dvh - env(safe-area-inset-bottom, 0px) - 16px);
     overflow: hidden; /* For visualizer */
 }
 .bgm-player.visible {

@@ -386,4 +386,21 @@ export function initYouTube(userInteracted: () => boolean) {
         navigator.mediaSession.setActionHandler('previoustrack', () => { if (ytPlayer) ytPlayer.previousVideo(); });
         navigator.mediaSession.setActionHandler('nexttrack', () => { if (ytPlayer) ytPlayer.nextVideo(); });
     }
+
+    // SHOULD 7 — Keyboard BGM: Space play/pause, M mute, ←/→ seek 5s (when not typing)
+    document.addEventListener('keydown', (e: KeyboardEvent) => {
+        const tag = (e.target as HTMLElement)?.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || (e.target as HTMLElement)?.isContentEditable) return;
+        const playerFocused = !!bgmPlayer?.contains(e.target as Node) || !!bgmPlayer?.matches(':focus-within');
+        // Space: only when player is focused or no modal open (avoid stealing from form)
+        if (e.code === 'Space' && playerFocused) { e.preventDefault(); togglePlayPause(); }
+        else if (e.key.toLowerCase() === 'm' && playerFocused) { e.preventDefault(); (bgmMute as HTMLElement)?.click(); }
+        else if ((e.key === 'ArrowLeft' || e.key === 'ArrowRight') && playerFocused && ytPlayer) {
+            e.preventDefault();
+            const cur = ytPlayer.getCurrentTime?.() || 0;
+            const delta = e.key === 'ArrowRight' ? 5 : -5;
+            const next = Math.max(0, Math.min(ytDuration || 1e9, cur + delta));
+            ytPlayer.seekTo(next, true);
+        }
+    });
 }
