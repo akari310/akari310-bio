@@ -387,15 +387,29 @@ export function initYouTube(userInteracted: () => boolean) {
         navigator.mediaSession.setActionHandler('nexttrack', () => { if (ytPlayer) ytPlayer.nextVideo(); });
     }
 
-    // SHOULD 7 — Keyboard BGM: Space play/pause, M mute, ←/→ seek 5s (when not typing)
+    // SHOULD 7 — Keyboard BGM: Global M/K, Space/Arrows when focused or hovered
     document.addEventListener('keydown', (e: KeyboardEvent) => {
-        const tag = (e.target as HTMLElement)?.tagName;
-        if (tag === 'INPUT' || tag === 'TEXTAREA' || (e.target as HTMLElement)?.isContentEditable) return;
-        const playerFocused = !!bgmPlayer?.contains(e.target as Node) || !!bgmPlayer?.matches(':focus-within');
-        // Space: only when player is focused or no modal open (avoid stealing from form)
-        if (e.code === 'Space' && playerFocused) { e.preventDefault(); togglePlayPause(); }
-        else if (e.key.toLowerCase() === 'm' && playerFocused) { e.preventDefault(); (bgmMute as HTMLElement)?.click(); }
-        else if ((e.key === 'ArrowLeft' || e.key === 'ArrowRight') && playerFocused && ytPlayer) {
+        const target = e.target as HTMLElement;
+        const tag = target?.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || target?.isContentEditable) return;
+
+        const playerFocused = !!bgmPlayer?.contains(target) || !!bgmPlayer?.matches(':focus-within');
+        const playerHovered = !!bgmPlayer?.matches(':hover');
+        const isActivePlayer = playerFocused || playerHovered;
+
+        // Global shortcuts
+        if (e.key.toLowerCase() === 'm') {
+            e.preventDefault();
+            (bgmMute as HTMLElement)?.click();
+        } else if (e.key.toLowerCase() === 'k') {
+            e.preventDefault();
+            togglePlayPause();
+        }
+        // Player-specific shortcuts (Space and Arrows)
+        else if (e.code === 'Space' && isActivePlayer) {
+            e.preventDefault();
+            togglePlayPause();
+        } else if ((e.key === 'ArrowLeft' || e.key === 'ArrowRight') && isActivePlayer && ytPlayer) {
             e.preventDefault();
             const cur = ytPlayer.getCurrentTime?.() || 0;
             const delta = e.key === 'ArrowRight' ? 5 : -5;
