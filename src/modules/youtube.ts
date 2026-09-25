@@ -25,6 +25,8 @@ export const bgmCoverImg = document.getElementById('bgm-cover-img') as HTMLImage
 const bgmCoverBtn = document.getElementById('bgm-cover-btn');
 
 
+let discAnimation: Animation | null = null;
+
 export function updatePlayPauseUI(isPlaying: boolean) {
     const newTitle = isPlaying ? 'Pause' : 'Play';
     const coverBtn = document.getElementById('bgm-cover-btn');
@@ -40,10 +42,23 @@ export function updatePlayPauseUI(isPlaying: boolean) {
         bgmPlayPause?.classList.replace('fa-play', 'fa-pause');
         bgmPlayPauseSmall?.classList.replace('fa-play', 'fa-pause');
         bgmPlayer?.classList.add('playing');
+        
+        // Use Web Animations API for bulletproof spinning (fixes Safari/CSS bug)
+        if (!discAnimation) {
+            const spinner = document.querySelector('.bgm-spin') as HTMLElement;
+            if (spinner) {
+                discAnimation = spinner.animate(
+                    [ { transform: 'rotate(0deg)' }, { transform: 'rotate(360deg)' } ],
+                    { duration: 4000, iterations: Infinity }
+                );
+            }
+        }
+        discAnimation?.play();
     } else {
         bgmPlayPause?.classList.replace('fa-pause', 'fa-play');
         bgmPlayPauseSmall?.classList.replace('fa-pause', 'fa-play');
         bgmPlayer?.classList.remove('playing');
+        discAnimation?.pause();
     }
 }
 
