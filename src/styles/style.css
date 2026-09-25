@@ -14,6 +14,13 @@
     --box-bg: rgba(0, 0, 0, 0.25);
     --hover-bg: rgba(255, 255, 255, 0.1);
 
+    /* Spacing tokens (4/8 rhythm) */
+    --space-1: 4px; --space-2: 8px; --space-3: 12px; --space-4: 16px; --space-5: 20px; --space-6: 24px;
+    --radius-sm: 8px; --radius-md: 12px; --radius-lg: 20px; --radius-pill: 999px;
+    --focus-ring: 0 0 0 2px var(--bg-dark), 0 0 0 4px var(--c-lavender);
+    --bgm-pad-left-optical: 20px; /* compensate border-radius 20px illusion for cover centering */
+    --tippy-bg: #111214;
+
     /* Catppuccin Colors for gradients */
     --c-mauve: #cba6f7;
     --c-pink: #f5c2e7;
@@ -144,6 +151,10 @@ body.theme-latte {
 
 .hidden { display: none !important; }
 
+/* Focus visible — keyboard only, per ui-ux-pro-max */
+:focus-visible { outline: none; box-shadow: var(--focus-ring); border-radius: var(--radius-sm); }
+.control-btn:focus-visible, .tab-btn:focus-visible, .anon-input:focus-visible, .anon-textarea:focus-visible, .social-icon:focus-visible, .bgm-controls i:focus-visible, #bgm-mute:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+
 body {
     font-family: 'Plus Jakarta Sans', sans-serif;
     color: var(--text-main);
@@ -155,10 +166,15 @@ body {
 }
 
 /* =========================================
-   CUSTOM CURSOR
+   CUSTOM CURSOR — only hide cursor on fine-pointer devices, never hide focus ring
 ========================================= */
-body:not(.reduced-motion), body:not(.reduced-motion) * {
-    cursor: none !important;
+@media (hover: hover) and (pointer: fine) {
+  body:not(.reduced-motion), body:not(.reduced-motion) * { cursor: none !important; }
+}
+@media (pointer: coarse) { body { cursor: auto; } #cursor-dot, #cursor-ring { display: none !important; } }
+/* Ensure focus-visible remains visible even when custom cursor is active */
+@media (hover: hover) and (pointer: fine) {
+  :focus-visible { cursor: auto !important; }
 }
 
 #cursor-dot {
@@ -948,9 +964,9 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     transform: translateZ(20px) scale(1.35);
     filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.95)) drop-shadow(0 0 14px var(--c-lavender));
 }
-/* Tippy.js Discord Theme */
+/* Tippy.js Discord Theme — tokenized */
 .tippy-box[data-theme~='discord'] {
-    background-color: #111214;
+    background-color: var(--tippy-bg);
     color: #dbdee1;
     font-weight: 500;
     font-size: 0.85rem;
@@ -960,7 +976,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     text-align: center;
 }
 .tippy-box[data-theme~='discord'][data-placement^='top'] > .tippy-arrow::before {
-    border-top-color: #111214;
+    border-top-color: var(--tippy-bg);
 }
 .username-pronouns-row {
     display: flex;
@@ -1216,8 +1232,8 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     -webkit-backdrop-filter: blur(12px);
     border: 1px solid var(--border-color);
     border-radius: 20px;
-    padding: 12px 15px 12px 20px; /* top right bottom left. Increase left padding to offset border-radius illusion */
-    display: flex; align-items: center; gap: 12px;
+    padding: 12px 15px 12px var(--bgm-pad-left-optical);
+    display: flex; align-items: center; gap: var(--space-3);
     box-shadow: 0 10px 30px rgba(0,0,0,0.5);
     opacity: 0; transition: opacity 1s ease, transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     pointer-events: none;
@@ -1278,8 +1294,8 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
 
 .bgm-info { 
     display: flex; flex-direction: column; justify-content: center; flex: 1; z-index: 2; min-width: 0; gap: 4px;
-    border-left: 1px solid rgba(255,255,255,0.1);
-    padding-left: 12px;
+    border-left: 1px solid var(--border-color);
+    padding-left: var(--space-3);
 }
 .marquee-container {
     flex: 1;
@@ -1636,3 +1652,22 @@ body.reduced-motion .sakura-canvas {
 body.reduced-motion .avatar-wrapper {
     animation-play-state: paused !important;
 }
+
+/* =========================================
+   A11Y UTILITIES — MUST hotfix
+========================================= */
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+.field-error { font-size: 0.75rem; color: var(--c-pink); margin-top: 6px; font-weight: 600; }
+.field-error.hidden { display: none !important; }
+.anon-input[aria-invalid="true"], .anon-textarea[aria-invalid="true"] { border-color: var(--c-pink) !important; box-shadow: 0 0 0 3px rgba(245,194,231,.25) !important; }
+.anon-error-summary { background: rgba(245,194,231,.12); border: 1px solid rgba(245,194,231,.4); border-radius: var(--radius-sm); padding: 10px 12px; margin-bottom: 10px; font-size: 0.8rem; color: var(--c-pink); }
+.anon-error-summary.hidden { display: none !important; }
+.anon-error-summary a { color: var(--c-lavender); text-decoration: underline; }
+
+/* Respect OS reduced-motion even without class toggle */
+@media (prefers-reduced-motion: reduce) {
+  .spinning-disc, .bgm-spin, .card-border::before { animation: none !important; }
+  .avatar-wrapper { animation: none !important; }
+  .bgm-title.scroll { animation: none !important; }
+}
+

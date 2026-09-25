@@ -47,15 +47,15 @@
 
 
     <!-- Floating Media Player -->
-    <div class="bgm-player" id="bgm-player">
-        <div class="bgm-cover" id="bgm-cover-btn">
+    <div class="bgm-player" id="bgm-player" role="region" aria-label="Music player">
+        <div class="bgm-cover" id="bgm-cover-btn" role="button" tabindex="0" aria-label="Play or pause">
             <div class="bgm-spin">
                 <!-- Using a transparent placeholder or simple note icon initially -->
                 <img src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" alt="Cover" class="bgm-cover-img" id="bgm-cover-img">
             </div>
             <div class="bgm-hole"></div>
             <div class="bgm-cover-overlay" id="bgm-cover-overlay">
-                <i class="fa-solid fa-pause" id="bgm-play-pause"></i>
+                <i class="fa-solid fa-pause" id="bgm-play-pause" aria-hidden="true"></i>
             </div>
         </div>
 
@@ -66,26 +66,26 @@
             </div>
             <div class="bgm-timeline">
                 <span class="bgm-time" id="bgm-current">0:00</span>
-                <input type="range" id="bgm-progress-slider" min="0" max="100" step="0.1" value="0" class="timeline-slider">
+                <input type="range" id="bgm-progress-slider" min="0" max="100" step="0.1" value="0" class="timeline-slider" aria-label="Seek position" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
                 <span class="bgm-time" id="bgm-duration">0:00</span>
             </div>
             <div class="bgm-controls-row">
                 <div class="bgm-spacer"></div>
-                <div class="bgm-controls">
-                    <i class="fa-solid fa-shuffle" id="bgm-shuffle" data-tippy-content="Shuffle: Off"></i>
-                    <i class="fa-solid fa-backward-step" id="bgm-prev" data-tippy-content="Previous Song"></i>
-                    <i class="fa-solid fa-play" id="bgm-play-pause-small" data-tippy-content="Play/Pause"></i>
-                    <i class="fa-solid fa-forward-step" id="bgm-next" data-tippy-content="Next Song"></i>
-                    <i class="fa-solid fa-repeat" id="bgm-repeat" data-tippy-content="Repeat: All"></i>
+                <div class="bgm-controls" role="group" aria-label="Playback controls">
+                    <i class="fa-solid fa-shuffle" id="bgm-shuffle" data-tippy-content="Shuffle: Off" role="button" tabindex="0" aria-label="Shuffle: Off" aria-pressed="true"></i>
+                    <i class="fa-solid fa-backward-step" id="bgm-prev" data-tippy-content="Previous Song" role="button" tabindex="0" aria-label="Previous song"></i>
+                    <i class="fa-solid fa-play" id="bgm-play-pause-small" data-tippy-content="Play/Pause" role="button" tabindex="0" aria-label="Play"></i>
+                    <i class="fa-solid fa-forward-step" id="bgm-next" data-tippy-content="Next Song" role="button" tabindex="0" aria-label="Next song"></i>
+                    <i class="fa-solid fa-repeat" id="bgm-repeat" data-tippy-content="Repeat: All" role="button" tabindex="0" aria-label="Repeat: All" aria-pressed="true"></i>
                 </div>
                 <div class="bgm-volume-container">
-                    <i class="fa-solid fa-volume-high" id="bgm-mute" data-tippy-content="Mute"></i>
-                    <input type="range" id="bgm-volume" min="0" max="1" step="0.01" value="0.3" class="volume-slider">
+                    <i class="fa-solid fa-volume-high" id="bgm-mute" data-tippy-content="Mute" role="button" tabindex="0" aria-label="Mute"></i>
+                    <input type="range" id="bgm-volume" min="0" max="1" step="0.01" value="0.3" class="volume-slider" aria-label="Volume" aria-valuemin="0" aria-valuemax="100" aria-valuenow="30">
                 </div>
             </div>
         </div>
         <!-- Audio Visualizer Canvas -->
-        <canvas id="audio-visualizer"></canvas>
+        <canvas id="audio-visualizer" aria-hidden="true"></canvas>
     </div>
 
     <!-- Main Content -->
@@ -97,11 +97,11 @@
         </div>
 
         <!-- Settings Modal -->
-        <div id="settings-modal" class="modal hidden">
+        <div id="settings-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="settings-title">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h2>Settings</h2>
-                    <button class="close-modal-btn" id="close-settings"><i class="fa-solid fa-xmark"></i></button>
+                    <h2 id="settings-title">Settings</h2>
+                    <button class="close-modal-btn" id="close-settings" aria-label="Close settings"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
                 </div>
                 <div class="modal-body">
                     <div class="setting-item">
@@ -110,7 +110,7 @@
                             <p>Disable mouse trails, particles, and 3D tilt.</p>
                         </div>
                         <label class="toggle-switch">
-                            <input type="checkbox" id="reduce-motion-toggle">
+                            <input type="checkbox" id="reduce-motion-toggle" aria-label="Reduce motion">
                             <span class="slider round"></span>
                         </label>
                     </div>
@@ -272,16 +272,21 @@
                     <!-- TAB 3: MESSAGE ME (GUESTBOOK) -->
                     <div class="tab-pane" id="tab-message">
                         <div class="message-box-container">
-                            <p class="message-desc"><i class="fa-solid fa-envelope-open-text"></i> Leave an anonymous note or message for Akari!</p>
-                            <form id="anonymous-form" class="anon-form">
+                            <p class="message-desc"><i class="fa-solid fa-envelope-open-text" aria-hidden="true"></i> Leave an anonymous note or message for Akari!</p>
+                            <form id="anonymous-form" class="anon-form" novalidate>
+                                <div id="anon-error-summary" class="anon-error-summary hidden" role="alert" tabindex="-1" aria-labelledby="anon-error-title"></div>
                                 <div class="form-group">
-                                    <input type="text" id="anon-name" placeholder="Your Name or Tag (Optional)" maxlength="30" class="anon-input">
+                                    <label for="anon-name" class="sr-only">Your name</label>
+                                    <input type="text" id="anon-name" placeholder="Your Name or Tag (Optional)" maxlength="30" class="anon-input" autocomplete="nickname" aria-describedby="anon-name-hint">
+                                    <span id="anon-name-hint" class="sr-only">Optional, max 30 characters</span>
                                 </div>
                                 <div class="form-group">
-                                    <textarea id="anon-msg" placeholder="Type your message here..." required maxlength="300" rows="4" class="anon-textarea"></textarea>
+                                    <label for="anon-msg" class="sr-only">Message</label>
+                                    <textarea id="anon-msg" placeholder="Type your message here..." required maxlength="300" rows="4" class="anon-textarea" aria-describedby="anon-msg-error" aria-required="true"></textarea>
+                                    <p id="anon-msg-error" class="field-error hidden" role="alert"></p>
                                 </div>
                                 <button type="submit" id="anon-submit-btn" class="anon-submit-btn">
-                                    <i class="fa-solid fa-paper-plane"></i> Send Message
+                                    <i class="fa-solid fa-paper-plane" aria-hidden="true"></i> Send Message
                                 </button>
                             </form>
                         </div>
@@ -363,7 +368,7 @@
     </main>
 
     <!-- Toast Notification -->
-    <div id="toast" class="toast"></div>
+    <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 
     <!-- Scripts -->
     <script type="module" src="/src/main.ts"></script>

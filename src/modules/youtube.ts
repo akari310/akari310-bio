@@ -27,11 +27,14 @@ const bgmCoverBtn = document.getElementById('bgm-cover-btn');
 
 export function updatePlayPauseUI(isPlaying: boolean) {
     const newTitle = isPlaying ? 'Pause' : 'Play';
+    const coverBtn = document.getElementById('bgm-cover-btn');
     if (bgmPlayPauseSmall) {
         bgmPlayPauseSmall.title = newTitle;
         bgmPlayPauseSmall.setAttribute('data-tippy-content', newTitle);
+        bgmPlayPauseSmall.setAttribute('aria-label', newTitle);
         if ((bgmPlayPauseSmall as any)._tippy) (bgmPlayPauseSmall as any)._tippy.setContent(newTitle);
     }
+    if (coverBtn) coverBtn.setAttribute('aria-label', isPlaying ? 'Pause' : 'Play');
     
     if (isPlaying) {
         bgmPlayPause?.classList.replace('fa-play', 'fa-pause');
@@ -231,34 +234,46 @@ export function initYouTube(userInteracted: () => boolean) {
     ytScript.src = "https://www.youtube.com/iframe_api";
     document.head.appendChild(ytScript);
 
-    // Event Listeners
-    if (bgmPrev) bgmPrev.addEventListener('click', () => { if (ytPlayer) ytPlayer.previousVideo(); });
-    if (bgmNext) bgmNext.addEventListener('click', () => { if (ytPlayer) ytPlayer.nextVideo(); });
+    // Event Listeners — click + keyboard (Enter/Space)
+    const activateOnKey = (el: Element | null, fn: () => void) => {
+        if (!el) return;
+        el.addEventListener('keydown', (e: any) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); fn(); } });
+    };
+    if (bgmPrev) { bgmPrev.addEventListener('click', () => { if (ytPlayer) ytPlayer.previousVideo(); }); activateOnKey(bgmPrev, () => { if (ytPlayer) ytPlayer.previousVideo(); }); }
+    if (bgmNext) { bgmNext.addEventListener('click', () => { if (ytPlayer) ytPlayer.nextVideo(); }); activateOnKey(bgmNext, () => { if (ytPlayer) ytPlayer.nextVideo(); }); }
     if (bgmShuffle) {
         if (isShuffle) {
             bgmShuffle.classList.add('active');
             bgmShuffle.title = 'Shuffle: On';
             bgmShuffle.setAttribute('data-tippy-content', 'Shuffle: On');
+            bgmShuffle.setAttribute('aria-label', 'Shuffle: On');
+            bgmShuffle.setAttribute('aria-pressed', 'true');
             if ((bgmShuffle as any)._tippy) (bgmShuffle as any)._tippy.setContent('Shuffle: On');
         }
-        bgmShuffle.addEventListener('click', () => {
+        const toggleShuffle = () => {
             isShuffle = !isShuffle;
             bgmShuffle.classList.toggle('active', isShuffle);
             const newTitle = isShuffle ? 'Shuffle: On' : 'Shuffle: Off';
             bgmShuffle.title = newTitle;
             bgmShuffle.setAttribute('data-tippy-content', newTitle);
+            bgmShuffle.setAttribute('aria-label', newTitle);
+            bgmShuffle.setAttribute('aria-pressed', String(isShuffle));
             if ((bgmShuffle as any)._tippy) (bgmShuffle as any)._tippy.setContent(newTitle);
             if (ytPlayer) ytPlayer.setShuffle(isShuffle);
-        });
+        };
+        bgmShuffle.addEventListener('click', toggleShuffle);
+        activateOnKey(bgmShuffle, toggleShuffle);
     }
     if (bgmRepeat) {
         // Default UI
         bgmRepeat.classList.add('active');
         bgmRepeat.title = 'Repeat: All';
         bgmRepeat.setAttribute('data-tippy-content', 'Repeat: All');
+        bgmRepeat.setAttribute('aria-label', 'Repeat: All');
+        bgmRepeat.setAttribute('aria-pressed', 'true');
         if ((bgmRepeat as any)._tippy) (bgmRepeat as any)._tippy.setContent('Repeat: All');
 
-        bgmRepeat.addEventListener('click', () => {
+        const cycleRepeat = () => {
             repeatState = (repeatState + 1) % 3;
             let newTitle = '';
             
@@ -267,6 +282,7 @@ export function initYouTube(userInteracted: () => boolean) {
                 bgmRepeat.classList.add('active');
                 newTitle = 'Repeat: All';
                 bgmRepeat.innerHTML = '';
+                bgmRepeat.setAttribute('aria-pressed', 'true');
                 if (ytPlayer) ytPlayer.setLoop(true);
             } else if (repeatState === 1) {
                 // Repeat One
@@ -274,23 +290,28 @@ export function initYouTube(userInteracted: () => boolean) {
                 newTitle = 'Repeat: One';
                 bgmRepeat.style.position = 'relative';
                 bgmRepeat.innerHTML = '<span style="font-family: \'Plus Jakarta Sans\', sans-serif; font-size: 0.6em; font-weight: 900; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: var(--c-bg);">1</span>';
+                bgmRepeat.setAttribute('aria-pressed', 'true');
                 if (ytPlayer) ytPlayer.setLoop(true);
             } else {
                 // Repeat Off
                 bgmRepeat.classList.remove('active');
                 newTitle = 'Repeat: Off';
                 bgmRepeat.innerHTML = '';
+                bgmRepeat.setAttribute('aria-pressed', 'false');
                 if (ytPlayer) ytPlayer.setLoop(false);
             }
             
             bgmRepeat.title = newTitle;
             bgmRepeat.setAttribute('data-tippy-content', newTitle);
+            bgmRepeat.setAttribute('aria-label', newTitle);
             if ((bgmRepeat as any)._tippy) (bgmRepeat as any)._tippy.setContent(newTitle);
-        });
+        };
+        bgmRepeat.addEventListener('click', cycleRepeat);
+        activateOnKey(bgmRepeat, cycleRepeat);
     }
 
-    if (bgmCoverBtn) bgmCoverBtn.addEventListener('click', togglePlayPause);
-    if (bgmPlayPauseSmall) bgmPlayPauseSmall.addEventListener('click', togglePlayPause);
+    if (bgmCoverBtn) { bgmCoverBtn.addEventListener('click', togglePlayPause); activateOnKey(bgmCoverBtn, togglePlayPause); }
+    if (bgmPlayPauseSmall) { bgmPlayPauseSmall.addEventListener('click', togglePlayPause); activateOnKey(bgmPlayPauseSmall, togglePlayPause); }
 
     const updateMuteUI = (isMuted: boolean) => {
         if (!bgmMute) return;
@@ -298,11 +319,12 @@ export function initYouTube(userInteracted: () => boolean) {
         const newTitle = isMuted ? 'Unmute' : 'Mute';
         bgmMute.title = newTitle;
         bgmMute.setAttribute('data-tippy-content', newTitle);
+        bgmMute.setAttribute('aria-label', newTitle);
         if ((bgmMute as any)._tippy) (bgmMute as any)._tippy.setContent(newTitle);
     };
 
     if (bgmMute) {
-        bgmMute.addEventListener('click', () => {
+        const toggleMute = () => {
             let isMuted = false;
             if (ytPlayer) {
                 if (ytPlayer.isMuted()) {
@@ -315,12 +337,15 @@ export function initYouTube(userInteracted: () => boolean) {
             }
             updateMuteUI(isMuted);
             try { localStorage.setItem('akari_bgm_muted', isMuted ? 'true' : 'false'); } catch (e) {}
-        });
+        };
+        bgmMute.addEventListener('click', toggleMute);
+        activateOnKey(bgmMute, toggleMute);
     }
 
     if (timelineSlider) {
         timelineSlider.addEventListener('input', (e: any) => {
             const percent = e.target.value;
+            timelineSlider.setAttribute('aria-valuenow', String(Math.round(Number(percent))));
             timelineSlider.style.background = `linear-gradient(to right, var(--c-lavender) ${percent}%, rgba(255,255,255,0.1) ${percent}%)`;
             if (ytPlayer) {
                 ytPlayer.seekTo((percent / 100) * ytDuration, true);
@@ -331,6 +356,7 @@ export function initYouTube(userInteracted: () => boolean) {
     if (volumeSlider) {
         volumeSlider.addEventListener('input', (e: any) => {
             const vol = e.target.value;
+            volumeSlider.setAttribute('aria-valuenow', String(Math.round(Number(vol)*100)));
             try { localStorage.setItem('akari_bgm_volume', vol); } catch (err) {}
             let isMuted = vol == 0;
             if (ytPlayer) {

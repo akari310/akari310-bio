@@ -87,11 +87,22 @@ export function initThemeAndSettings() {
     }
 
     if (settingsBtn && settingsModal && closeSettings) {
-        settingsBtn.addEventListener('click', () => settingsModal.classList.remove('hidden'));
-        closeSettings.addEventListener('click', () => settingsModal.classList.add('hidden'));
-        settingsModal.addEventListener('click', (e) => {
-            if (e.target === settingsModal) settingsModal.classList.add('hidden');
-        });
+        let lastFocus: HTMLElement | null = null;
+        const focusable = () => Array.from(settingsModal.querySelectorAll<HTMLElement>('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])')).filter(el => !el.hasAttribute('hidden'));
+        const openModal = () => { lastFocus = document.activeElement as HTMLElement; settingsModal.classList.remove('hidden'); (closeSettings as HTMLElement).focus(); document.addEventListener('keydown', onKey); };
+        const closeModal = () => { settingsModal.classList.add('hidden'); document.removeEventListener('keydown', onKey); lastFocus?.focus(); };
+        const onKey = (e: KeyboardEvent) => {
+            if (e.key === 'Escape') { e.preventDefault(); closeModal(); }
+            if (e.key === 'Tab' && !settingsModal.classList.contains('hidden')) {
+                const els = focusable(); if (!els.length) return;
+                const first = els[0], last = els[els.length - 1];
+                if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+                else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+            }
+        };
+        settingsBtn.addEventListener('click', openModal);
+        closeSettings.addEventListener('click', closeModal);
+        settingsModal.addEventListener('click', (e) => { if (e.target === settingsModal) closeModal(); });
     }
 
     if (reduceMotionToggle) {
@@ -325,23 +336,52 @@ export function initEasterEgg() {
     }
 }
 
-// --- Anonymous Form ---
+// --- Anonymous Form — a11y validation (ui-ux-pro-max: error summary) ---
 export function initAnonymousForm() {
     const anonForm = document.getElementById('anonymous-form') as HTMLFormElement;
     if (anonForm) {
+        const msgInput = document.getElementById('anon-msg') as HTMLTextAreaElement;
+        const nameInput = document.getElementById('anon-name') as HTMLInputElement;
+        const errorEl = document.getElementById('anon-msg-error') as HTMLElement;
+        const summaryEl = document.getElementById('anon-error-summary') as HTMLElement;
+
+        const showFieldError = (msg: string) => {
+            if (msgInput) { msgInput.setAttribute('aria-invalid', 'true'); }
+            if (errorEl) { errorEl.textContent = msg; errorEl.classList.remove('hidden'); }
+            if (summaryEl) {
+                summaryEl.innerHTML = `<h3 id=\"anon-error-title\" style=\"font-size:0.85rem;margin-bottom:6px\">There is a problem</h3><a href=\"#anon-msg\">${msg}</a>`;
+                summaryEl.classList.remove('hidden');
+                summaryEl.focus();
+            }
+        };
+        const clearFieldError = () => {
+            if (msgInput) msgInput.removeAttribute('aria-invalid');
+            if (errorEl) { errorEl.textContent = ''; errorEl.classList.add('hidden'); }
+            if (summaryEl) { summaryEl.classList.add('hidden'); summaryEl.innerHTML = ''; }
+        };
+        msgInput?.addEventListener('input', clearFieldError);
+        summaryEl?.addEventListener('click', (e: any) => { if (e.target.tagName === 'A') { e.preventDefault(); msgInput?.focus(); } });
+
         anonForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            const nameInput = document.getElementById('anon-name') as HTMLInputElement;
-            const msgInput = document.getElementById('anon-msg') as HTMLInputElement;
             const submitBtn = document.getElementById('anon-submit-btn') as HTMLButtonElement;
-            
+            clearFieldError();
             const name = nameInput?.value.trim() || "Anonymous";
             const msg = msgInput?.value.trim();
 
-            if (!msg || !submitBtn) return;
+            if (!msg) {
+                showFieldError('Enter your message — lời nhắn không được để trống.');
+                showToast(`<i class=\"fa-solid fa-triangle-exclamation\" style=\"color: var(--c-pink);\"></i> Vui lòng nhập lời nhắn!`);
+                return;
+            }
+            if (msg.length > 300) {
+                showFieldError('Message must be 300 characters or fewer.');
+                return;
+            }
+            if (!submitBtn) return;
 
             submitBtn.disabled = true;
-            submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Sending...`;
+            submitBtn.innerHTML = `<i class=\"fa-solid fa-spinner fa-spin\" aria-hidden=\"true\"></i> Sending...`;
 
             const themeColors: Record<string, number> = {
                 macchiato: 13017334,
@@ -371,16 +411,16 @@ export function initAnonymousForm() {
                 body: JSON.stringify(payload)
             }).then(res => {
                 submitBtn.disabled = false;
-                submitBtn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> Send Message`;
+                submitBtn.innerHTML = `<i class=\"fa-solid fa-paper-plane\" aria-hidden=\"true\"></i> Send Message`;
                 if (res.ok) {
-                    anonForm.reset();
+                    anonForm.reset(); clearFieldError();
                     showToast(`💌 Thank you <b>${name}</b>, your note was sent!`);
                 } else {
                     showToast(`❌ Oops! Something went wrong.`);
                 }
             }).catch(() => {
                 submitBtn.disabled = false;
-                submitBtn.innerHTML = `<i class="fa-solid fa-paper-plane"></i> Send Message`;
+                submitBtn.innerHTML = `<i class=\"fa-solid fa-paper-plane\" aria-hidden=\"true\"></i> Send Message`;
                 showToast(`❌ Network Error! Cannot reach the server.`);
             });
         });
