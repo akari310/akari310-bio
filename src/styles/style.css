@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap');
 
 :root {
     --bg-dark: #11111b;
@@ -151,7 +151,7 @@ body.theme-latte {
 
 .hidden { display: none !important; }
 
-/* Focus visible — keyboard only, per ui-ux-pro-max */
+/* Focus visible â€” keyboard only, per ui-ux-pro-max */
 :focus-visible { outline: none; box-shadow: var(--focus-ring); border-radius: var(--radius-sm); }
 .control-btn:focus-visible, .tab-btn:focus-visible, .anon-input:focus-visible, .anon-textarea:focus-visible, .social-icon:focus-visible, .bgm-controls i:focus-visible, #bgm-mute:focus-visible { outline: none; box-shadow: var(--focus-ring); }
 
@@ -166,7 +166,7 @@ body {
 }
 
 /* =========================================
-   CUSTOM CURSOR — only hide cursor on fine-pointer devices, never hide focus ring
+   CUSTOM CURSOR â€” only hide cursor on fine-pointer devices, never hide focus ring
 ========================================= */
 @media (hover: hover) and (pointer: fine) {
   body:not(.reduced-motion), body:not(.reduced-motion) * { cursor: none !important; }
@@ -964,7 +964,7 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     transform: translateZ(20px) scale(1.35);
     filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.95)) drop-shadow(0 0 14px var(--c-lavender));
 }
-/* Tippy.js Discord Theme — tokenized */
+/* Tippy.js Discord Theme â€” tokenized */
 .tippy-box[data-theme~='discord'] {
     background-color: var(--tippy-bg);
     color: #dbdee1;
@@ -1663,7 +1663,7 @@ body.reduced-motion .avatar-wrapper {
 }
 
 /* =========================================
-   A11Y UTILITIES — MUST hotfix
+   A11Y UTILITIES â€” MUST hotfix
 ========================================= */
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 .field-error { font-size: 0.75rem; color: var(--c-pink); margin-top: 6px; font-weight: 600; }
@@ -1679,6 +1679,3 @@ body.reduced-motion .avatar-wrapper {
   .avatar-wrapper { animation: none !important; }
   .bgm-title.scroll { animation: none !important; }
 }
-
-. e c o s y s t e m - l i n k s   {   d i s p l a y :   g r i d ;   g r i d - t e m p l a t e - c o l u m n s :   r e p e a t ( 3 ,   1 f r ) ;   g a p :   8 p x ;   w i d t h :   1 0 0 % ;   m a r g i n - t o p :   1 0 p x ;   z - i n d e x :   1 0 5 ;   p o s i t i o n :   r e l a t i v e ;   t r a n s f o r m - s t y l e :   p r e s e r v e - 3 d ;   t r a n s f o r m :   t r a n s l a t e Z ( 1 0 p x ) ;   }   . e c o - b t n   {   b a c k g r o u n d :   v a r ( - - b o x - b g ) ;   b o r d e r :   1 p x   s o l i d   v a r ( - - b o r d e r - c o l o r ) ;   b o r d e r - r a d i u s :   8 p x ;   p a d d i n g :   1 0 p x ;   c o l o r :   v a r ( - - t e x t - m a i n ) ;   f o n t - s i z e :   0 . 7 5 r e m ;   f o n t - w e i g h t :   7 0 0 ;   t e x t - a l i g n :   c e n t e r ;   t e x t - d e c o r a t i o n :   n o n e ;   d i s p l a y :   f l e x ;   f l e x - d i r e c t i o n :   c o l u m n ;   a l i g n - i t e m s :   c e n t e r ;   g a p :   6 p x ;   t r a n s i t i o n :   a l l   0 . 2 s   e a s e ;   }   . e c o - b t n   i   {   f o n t - s i z e :   1 . 1 r e m ;   c o l o r :   v a r ( - - c - l a v e n d e r ) ;   t r a n s i t i o n :   t r a n s f o r m   0 . 2 s ;   }   . e c o - b t n : h o v e r   {   b a c k g r o u n d :   r g b a ( 1 8 0 ,   1 9 0 ,   2 5 4 ,   0 . 1 5 ) ;   b o r d e r - c o l o r :   v a r ( - - c - l a v e n d e r ) ;   b o x - s h a d o w :   0   0   1 0 p x   r g b a ( 1 8 0 ,   1 9 0 ,   2 5 4 ,   0 . 2 ) ;   t r a n s f o r m :   t r a n s l a t e Y ( - 2 p x ) ;   c o l o r :   # f f f ;   }   . e c o - b t n : h o v e r   i   {   t r a n s f o r m :   s c a l e ( 1 . 1 ) ;   c o l o r :   v a r ( - - c - s a p p h i r e ) ;   }  
- 
