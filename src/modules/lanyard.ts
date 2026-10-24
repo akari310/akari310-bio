@@ -324,8 +324,11 @@ export function updatePresence(d: any) {
                                 const match = extractVideoID(url);
                                 const vid = match && match[2].length === 11 ? match[2] : null;
                                 if (vid) {
+                                    // "Listen along" → chỉ phát trong web
+                                    // "Listen on YouTube Music"... → vừa mở link (tab mới) vừa phát trong web
+                                    const isListenAlong = textLower.includes("along");
                                     btn.onclick = (e) => {
-                                        e.preventDefault();
+                                        if (isListenAlong) e.preventDefault();
                                         if(ytPlayer && typeof ytPlayer.loadVideoById === 'function') {
                                             ytPlayer.loadVideoById(vid);
                                         } 
