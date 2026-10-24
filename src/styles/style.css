@@ -1,4 +1,4 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap');
 
 :root {
     --bg-dark: #11111b;
@@ -286,6 +286,41 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 .rp-button:hover { background: rgba(255, 255, 255, 0.15); }
+
+/* Listen on YouTube Music — choice menu */
+.rp-listen-menu {
+    position: fixed;
+    z-index: 10000;
+    display: flex; flex-direction: column; gap: 2px;
+    padding: 5px;
+    background: rgba(17, 17, 27, 0.75);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+    opacity: 0;
+    transform: translateY(-4px) scale(0.97);
+    transform-origin: top center;
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    pointer-events: none;
+}
+.rp-listen-menu.show { opacity: 1; transform: none; pointer-events: auto; }
+.rp-listen-option {
+    display: flex; align-items: center; gap: 10px;
+    width: 100%;
+    padding: 8px 12px;
+    background: transparent;
+    border: none; border-radius: 6px;
+    color: #fff; font: inherit; font-size: 0.78rem; font-weight: 600;
+    text-align: left; white-space: nowrap; cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+.rp-listen-option i { width: 16px; text-align: center; opacity: 0.85; }
+.rp-listen-option:hover,
+.rp-listen-option:focus-visible { background: rgba(255, 255, 255, 0.1); outline: none; }
+#rp-listen-open:hover i, #rp-listen-open:focus-visible i { color: #ff4e45; opacity: 1; }
+#rp-listen-here:hover i, #rp-listen-here:focus-visible i { color: var(--c-lavender); opacity: 1; }
 
 /* =========================================
    ENTRY SCREEN

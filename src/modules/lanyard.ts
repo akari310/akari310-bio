@@ -4,6 +4,84 @@ import { ytPlayer, updateBgmTitle, bgmCoverImg } from './youtube';
 
 const statusColors: Record<string, string> = { online: '#a6da95', idle: '#f9e2af', dnd: '#f38ba8', offline: '#a6adc8' };
 
+// Menu chọn "Open in YouTube Music" / "Play here" cho nút Listen on YouTube Music
+let activeListenMenu: { el: HTMLElement; anchor: HTMLElement; cleanup: () => void } | null = null;
+
+function closeListenMenu() {
+    if (!activeListenMenu) return;
+    const { el, cleanup } = activeListenMenu;
+    activeListenMenu = null;
+    cleanup();
+    el.classList.remove('show');
+    setTimeout(() => el.remove(), 150);
+}
+
+function showListenMenu(anchor: HTMLElement, url: string, onPlay: () => void) {
+    // Bấm lại cùng nút → đóng menu
+    if (activeListenMenu) {
+        const sameAnchor = activeListenMenu.anchor === anchor;
+        closeListenMenu();
+        if (sameAnchor) return;
+    }
+
+    const menu = document.createElement('div');
+    menu.className = 'rp-listen-menu';
+    menu.setAttribute('role', 'menu');
+    menu.innerHTML = `
+        <button type="button" role="menuitem" class="rp-listen-option" id="rp-listen-open">
+            <i class="fa-brands fa-youtube"></i><span>Open in YouTube Music</span>
+        </button>
+        <button type="button" role="menuitem" class="rp-listen-option" id="rp-listen-here">
+            <i class="fa-solid fa-headphones"></i><span>Play here</span>
+        </button>`;
+    document.body.appendChild(menu);
+
+    // Đặt vị trí ngay dưới nút (lật lên trên nếu thiếu chỗ)
+    const r = anchor.getBoundingClientRect();
+    const mw = Math.max(r.width, menu.offsetWidth);
+    const mh = menu.offsetHeight;
+    let left = r.left + r.width / 2 - mw / 2;
+    left = Math.min(Math.max(8, left), window.innerWidth - mw - 8);
+    let top = r.bottom + 6;
+    if (top + mh > window.innerHeight - 8) top = r.top - mh - 6;
+    menu.style.left = `${left}px`;
+    menu.style.top = `${top}px`;
+    menu.style.minWidth = `${r.width}px`;
+
+    menu.querySelector('#rp-listen-open')?.addEventListener('click', () => {
+        window.open(url, '_blank', 'noopener');
+        closeListenMenu();
+    });
+    menu.querySelector('#rp-listen-here')?.addEventListener('click', () => {
+        onPlay();
+        closeListenMenu();
+    });
+
+    const onDocClick = (e: MouseEvent) => {
+        if (!menu.contains(e.target as Node) && e.target !== anchor && !anchor.contains(e.target as Node)) closeListenMenu();
+    };
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') { closeListenMenu(); anchor.focus(); } };
+    const onScroll = () => closeListenMenu();
+    document.addEventListener('click', onDocClick, true);
+    document.addEventListener('keydown', onKey);
+    window.addEventListener('scroll', onScroll, true);
+    window.addEventListener('resize', onScroll);
+
+    activeListenMenu = {
+        el: menu,
+        anchor,
+        cleanup: () => {
+            document.removeEventListener('click', onDocClick, true);
+            document.removeEventListener('keydown', onKey);
+            window.removeEventListener('scroll', onScroll, true);
+            window.removeEventListener('resize', onScroll);
+        },
+    };
+
+    requestAnimationFrame(() => menu.classList.add('show'));
+    (menu.querySelector('#rp-listen-open') as HTMLElement)?.focus({ preventScroll: true });
+}
+
 export async function initLanyard() {
     try {
         const res = await fetch(`https://api.lanyard.rest/v1/users/${CONFIG.DISCORD_ID}`);
@@ -286,6 +364,7 @@ export function updatePresence(d: any) {
                 if (buttonsContainer) {
                     buttonsContainer.classList.remove('hidden');
                     buttonsContainer.innerHTML = '';
+                    closeListenMenu();
                     gameActivity.buttons.slice(0, 2).forEach((btnText: string) => {
                         const btn = document.createElement('a');
                         btn.className = 'rp-button';
@@ -324,16 +403,28 @@ export function updatePresence(d: any) {
                                 const match = extractVideoID(url);
                                 const vid = match && match[2].length === 11 ? match[2] : null;
                                 if (vid) {
-                                    // "Listen along" → chỉ phát trong web
-                                    // "Listen on YouTube Music"... → vừa mở link (tab mới) vừa phát trong web
-                                    const isListenAlong = textLower.includes("along");
-                                    btn.onclick = (e) => {
-                                        if (isListenAlong) e.preventDefault();
+                                    const playHere = () => {
                                         if(ytPlayer && typeof ytPlayer.loadVideoById === 'function') {
                                             ytPlayer.loadVideoById(vid);
                                         } 
                                         updateBgmTitle(gameActivity.details || gameActivity.name);
                                         if (bgmCoverImg && lImg) bgmCoverImg.src = lImg.src;
+                                    };
+                                    // "Listen along" → chỉ phát trong web
+                                    // "Listen on YouTube Music" → hiện menu chọn: mở YTM hoặc nghe trực tiếp
+                                    // Các nút listen khác → vừa mở link vừa phát trong web
+                                    const isListenAlong = textLower.includes("along");
+                                    const isYTM = textLower.includes("youtube music") || textLower.includes("ytm");
+                                    const linkUrl = url;
+                                    btn.onclick = (e) => {
+                                        if (isYTM && !isListenAlong) {
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            showListenMenu(btn, linkUrl, playHere);
+                                            return;
+                                        }
+                                        if (isListenAlong) e.preventDefault();
+                                        playHere();
                                     };
                                 }
                             }
