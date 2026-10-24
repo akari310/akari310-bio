@@ -29,7 +29,7 @@ function showListenMenu(anchor: HTMLElement, url: string, onPlay: () => void) {
     menu.setAttribute('role', 'menu');
     menu.innerHTML = `
         <button type="button" role="menuitem" class="rp-listen-option" id="rp-listen-open">
-            <i class="fa-brands fa-youtube"></i><span>Open in YouTube Music</span>
+            <svg class="ytm-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="12" fill="#FF0000"/><circle cx="12" cy="12" r="6.6" fill="none" stroke="#fff" stroke-width="1.3"/><path d="M10.1 9.1v5.8l4.9-2.9z" fill="#fff"/></svg><span>Open in YouTube Music</span>
         </button>
         <button type="button" role="menuitem" class="rp-listen-option" id="rp-listen-here">
             <i class="fa-solid fa-headphones"></i><span>Play here</span>
@@ -410,20 +410,18 @@ export function updatePresence(d: any) {
                                         updateBgmTitle(gameActivity.details || gameActivity.name);
                                         if (bgmCoverImg && lImg) bgmCoverImg.src = lImg.src;
                                     };
-                                    // "Listen along" → chỉ phát trong web
-                                    // "Listen on YouTube Music" → hiện menu chọn: mở YTM hoặc nghe trực tiếp
+                                    // "Listen along" / "Listen on YouTube Music" → hiện menu chọn: mở YTM hoặc nghe trực tiếp
                                     // Các nút listen khác → vừa mở link vừa phát trong web
                                     const isListenAlong = textLower.includes("along");
                                     const isYTM = textLower.includes("youtube music") || textLower.includes("ytm");
                                     const linkUrl = url;
                                     btn.onclick = (e) => {
-                                        if (isYTM && !isListenAlong) {
+                                        if (isYTM || isListenAlong) {
                                             e.preventDefault();
                                             e.stopPropagation();
                                             showListenMenu(btn, linkUrl, playHere);
                                             return;
                                         }
-                                        if (isListenAlong) e.preventDefault();
                                         playHere();
                                     };
                                 }

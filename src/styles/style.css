@@ -317,9 +317,10 @@ a:hover ~ #cursor-ring, button:hover ~ #cursor-ring, i:hover ~ #cursor-ring {
     transition: background 0.15s, color 0.15s;
 }
 .rp-listen-option i { width: 16px; text-align: center; opacity: 0.85; }
+.rp-listen-option .ytm-icon { width: 16px; height: 16px; flex-shrink: 0; transition: transform 0.15s; }
 .rp-listen-option:hover,
 .rp-listen-option:focus-visible { background: rgba(255, 255, 255, 0.1); outline: none; }
-#rp-listen-open:hover i, #rp-listen-open:focus-visible i { color: #ff4e45; opacity: 1; }
+#rp-listen-open:hover .ytm-icon, #rp-listen-open:focus-visible .ytm-icon { transform: scale(1.12); }
 #rp-listen-here:hover i, #rp-listen-here:focus-visible i { color: var(--c-lavender); opacity: 1; }
 
 /* =========================================
