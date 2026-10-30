@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://akari.nx.kg/sitemap.xml

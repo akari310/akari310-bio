@@ -1,0 +1,5 @@
+Contact: https://github.com/akari310
+Contact: https://discord.com/users/834722078489968680
+Expires: 2027-10-30T23:59:59.000Z
+Preferred-Languages: vi, en
+Canonical: https://akari.nx.kg/.well-known/security.txt
